@@ -464,7 +464,7 @@ $R_{(C,C')}$ using $k$-relational modeling.
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
 
-\begin{scope}[scale=1]
+\begin{scope}[scale=0.8]
 \draw [line] (-1.0,0) circle (0.5);
 \draw [line] (-4.0,0) circle (0.5);
 \draw [line] (2.0,1) circle (0.5);
@@ -537,7 +537,7 @@ $n$ and illustrate using examples.
 \tikzstyle{line} = [thick]
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
-\begin{scope}[scale=1]
+\begin{scope}[scale=0.5]
 
     \draw [line] (-1.0,-1.0) rectangle (1.0,1.0);
     %\draw [line] (3.0,1.0) rectangle (5.0,3.0);
@@ -563,7 +563,7 @@ $n$ and illustrate using examples.
 \draw [fill=black] (4.0,-2.0) circle (0.05);
 
 \end{scope}
-\begin{scope}[xshift=0,yshift=3.0cm,scale=1]
+\begin{scope}[xshift=0,yshift=3.0cm,scale=0.5]
     \node at (2,0) {\footnotesize $\scr{T} \equiv g_1(\x):\vx \in C
     \implies A_1\vx + \vb_1 + \delta_1$};
 \end{scope}
@@ -612,7 +612,7 @@ can contain two or more modes with differing continuous dynamics.
 \tikzstyle{line} = [thick]
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
-\begin{scope}[scale=1]
+\begin{scope}[scale=0.5]
 
     \draw [line] (-1.0,-1.0) rectangle (1.0,1.0);
     \draw [line] (3.0,1.0) rectangle (5.0,3.0);
@@ -640,8 +640,8 @@ can contain two or more modes with differing continuous dynamics.
 \draw [fill=black] (4.0,-3.5) circle (0.05);
 
 \end{scope}
-\begin{scope}[xshift=0,yshift=4.0cm,scale=1]
-    \node at (2,0) {\begin{minipage}{\textwidth}
+\begin{scope}[xshift=0,yshift=4.0cm,scale=0.5]
+    \node at (2,0) {\begin{minipage}{\linewidth}
     \footnotesize \begin{equation*}
         \scr{T} = \left\{
         \begin{array}{ll}
@@ -700,7 +700,7 @@ is at least as precise as the corresponding $0$-relational model.
 \tikzstyle{line} = [thick]
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
-\begin{scope}
+\begin{scope}[scale=0.5]
 
     \draw [line] (-1.0,-1.0) rectangle (1.0,1.0);
     \draw [line] (3.0,1.0) rectangle (5.0,3.0);
@@ -739,8 +739,8 @@ is at least as precise as the corresponding $0$-relational model.
 \draw [fill=black] (8.0,-3.5) circle (0.05);
 \end{scope}
 
-\begin{scope}[xshift=0,yshift=4.0cm,scale=1]
-    \node at (4,0) {\begin{minipage}{\textwidth}
+\begin{scope}[xshift=0,yshift=4.0cm,scale=0.5]
+    \node at (4,0) {\begin{minipage}{\linewidth}
         \footnotesize \begin{equation*}
     \scr{T} = \left\{
         \begin{array}{ll}
@@ -866,21 +866,21 @@ complete process follows.
     find a counter-example.
 \end{enumerate}
 
-\inclfig[width=0.75\textwidth]{vdp_cont_traces.png}{Van der
+\inclfig[width=0.75\linewidth]{vdp_cont_traces.png}{Van der
 Pol: continuous trajectories. Red and green boxes indicate unsafe and
 initial sets.}
 \label{fig:vdp-cont}
 
-\inclfig[width=0.75\textwidth]{vdp_abs.png}{The discovered
+\inclfig[width=0.75\linewidth]{vdp_abs.png}{The discovered
 abstraction $\scr{H}(0.1)$. Red cells are unsafe cells and green cells are
 initial cells.}
 \label{fig:vdp-abs}
 
-\inclfig[width=\textwidth]{vdp_disc_map.png}{Cells and
+\inclfig[width=\linewidth]{vdp_disc_map.png}{Cells and
 trajectory segments used by $1$-relational modeling.}
 \label{fig:vdp-map}
 
-\inclfig[width=0.40\textwidth]{vdp_graph.png}{Enriched
+\inclfig[width=0.40\linewidth]{vdp_graph.png}{Enriched
 graph $G^R$. The affine maps $f$ for the transition relations are show
 in \tabref{vdp-pwa}.}
 \label{fig:vdp-graph}
