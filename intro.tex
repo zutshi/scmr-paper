@@ -1,29 +1,43 @@
+Model based design has been quite successful in the industry. 
+Tools like \SIMULINK are often used to create models describing hybrid
+dynamical systems. Testing such systems for safety properties remains
+a hard problem, and the current approaches consist of either guided
+testing using numerical simulations or translating to hybrid automata.
+We now suggest an approach which lies in the middle.
 
+In this work we propose a two step process for searching violations of
+the properties. This involves (a) learning a piece-wise affine model
+and (b) exhaustively searching it for violations. It must be noted
+that the violation found in the model might not be valid in the
+original system, depending on the accuracy of the model.
+% concretizing the violation in the original system.
 
-%\chapter{Relational Modeling for Falsification}
-%\label{chap:rel}
+The piece-wise affine model is the aggregation of affine maps, each
+approximating observed local behavior of the system.  The model is
+discrete time and `relational'. It relates the states reachable in a
+fixed time step $\Delta$ to a given state.
 
-In \chapref{abs}, we analyzed systems by restricting ourselves to
-their black box semantics. This enabled us to reason about the
-state-space reachability of the system without a direct analysis of
-its structure. Using a coarse abstraction which we searched
-on-the-fly, we could observe the local dynamics as required. This gave
-us an efficient procedure to find abstract counter-examples.  However,
-to concretize the counter-examples, a `closer look' or refinement of
-the abstraction is required. The grid based state-space abstraction
-was refined by splitting the relevant cells (abstract states) into
-smaller ones. As noted previously, due to the curse of dimensionality,
-such a uniform splitting is an expensive operation, and can not scale to
-higher dimensions.
+In our previous work~\cite{zutshi2014multiple}, we analyzed systems by
+restricting ourselves to their black box semantics. This enabled us to
+reason about the state-space reachability of the system without a
+direct analysis of its structure. Using a coarse abstraction which we
+searched on-the-fly, we could observe the local dynamics as required.
+This gave us an efficient procedure to find abstract counter-examples.
+However, to concretize the counter-examples, a `closer look' or
+refinement of the abstraction is required. The grid based state-space
+abstraction was refined by splitting the relevant cells (abstract
+states) into smaller ones. As noted previously, due to the curse of
+dimensionality, such a uniform splitting is an expensive operation,
+and can not scale to higher dimensions.
 
-In this chapter, we further our exploration of trajectory segment
-based methods; and explore an alternative approach to overcome the
-explosion in abstract states. Instead of selectively refining the
-abstraction, we compute a model of the black box system and use
-bounded model checking to find a concrete counter-example in the
-model~\footnote{Due to modeling errors, this might not be reproducible in
-the original black-box system.}. We then use this counter-example to
-guide the search towards a counter-example in the original system.
+We further our exploration of trajectory segment based methods; and
+explore an alternative approach to overcome the explosion in abstract
+states. Instead of selectively refining the abstraction, we compute a
+model of the black box system and use bounded model checking to find a
+concrete counter-example in the model~\footnote{Due to modeling
+errors, this might not be reproducible in the original black-box
+system.}. We then use this counter-example to guide the search towards
+a counter-example in the original system.
 
 More specifically, we use regression to quantitatively estimate the
 discovered relations, which were witnessed by trajectory segments, by
