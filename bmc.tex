@@ -1,0 +1,209 @@
+
+% include an algorithm
+We now describe the entire procedure in three steps.
+\begin{enumerate}
+    \item Given a black box system $\System$ specified by
+        $\simulate_\System$, we
+        use scatter-and-simulate with ($\Delta$-length) trajectory
+        segments to sample a finite reachability graph
+        $\scr{H}(\Delta)$.
+    \item Using regression, we enrich the graph relations and annotate
+        the edges with the estimated affine maps.
+    \item Interpreting the directed reachability graph as a transition
+        system, we use a bounded model checker to find fixed length
+        violations to safety properties.
+\end{enumerate}
+
+
+\section{An Example: Van der Pol Oscillator}
+
+We now describe the above using the Van der Pol oscillator benchmark
+presented in \secref{math-dyn-sys}. Simulations generated using
+uniformly random samples are shown in \figref{vdp-cont}. We want to
+check the property $P_3$, indicated by the red box, given the initial
+set indicated by the green box. The abstraction is defined by
+$\quant_{0.2}(\x)$, which results in an evenly gridded state-space,
+where each cell is of size $0.2 \times 0.2$ units.
+Scatter-and-simulate is then used to construct the abstract graph $G$,
+using $2$ samples per cell and the time step $\Delta = 0.1s$. The
+complete process follows.
+
+\begin{enumerate}
+    \item{\emph{Abstract}} Consider an implicit abstraction induced by the quantization
+    function $\quant_\epsilon(\x)$. The corresponding reachability
+    graph $\scr{H}(\Delta)$ (with time step $\Delta$) is given by
+    $\tupleof{\scr{C},\areach{\Delta}, \scr{C}_0, \scr{C}_u}$.
+\item{\emph{Discover}}: Using scatter-and-simulate, enumerate a finite number
+    of cells (vertices) and the relations (edges) of the graph
+    $\scr{H}(\Delta)$. Associate the set of generated trajectory
+    segments with their respective originating cells using a map $D:C
+    \mapsto \setof{\pi | start(\pi) \in C}$. The discovered
+    abstraction is show in \figref{vdp-abs}. As mentioned, red cells
+    are unsafe and green cells are initial cells.
+\item{\emph{Relationalize}} For each cell $C$, perform regression analysis on
+    the respective set of trajectory segments $D(C)$, and compute a
+    set of affine relations $R_{C,C'}(\x,\x')$ between $\x \in C$ and $\x'
+    \in C'$ s.t., $\text{edge} (C,C') \in \scr{H}(\Delta)$. Annotate
+    each edge in the graph $\scr{H}(\Delta)$ with the respective
+    relation.
+
+    \figref{vdp-map} shows the cells and the trajectory segments which
+    are part of the data sets constructed using the $1$-relational
+    modeling. Against each cell, its unique identifier (integer
+    co-ordinate) is mentioned.  Finally, \figref{vdp-graph} and
+    \tabref{vdp-pwa} show the enriched graph $G^R$ with its transition
+    relations. Note that self loops result when an observed trajectory
+    segment has its $start$ and $end$ states in the same cell.
+
+\item{\emph{Model Check}} The graph $\scr{H}(\Delta)$ can now be viewed as a
+    transition system $\tupleof{C,\x,\scrT,C_0,\HybridStates_0}$,
+    where $C \in vertices(\scr{H}(\Delta))$ and $\x \in
+    \HybridStates$. A transition $\tau \in \scrT$ is of the form
+    $\tupleof{C, C',\rho_{\tau}}$, where $\rho_{\tau}(\x,\x')
+    \subseteq \setof{R_{(C,C')}(\x,\x') |( C,C') \in
+    edge(\scr{H}(\Delta))}$.
+\item{\emph{Check Counter-example}} The infinite state (but finite location) transition system can
+    be model checked to find a concrete counter-example, which if
+    exists, can indicate the existence of a similar trace in the
+    original black-box system $\System$. The latter check is carried
+    out as before, using the numerical simulation function
+    $\simulate$. For the given example, the model checker is unable to
+    find a counter-example.
+\end{enumerate}
+
+\inclfig[width=0.75\linewidth]{vdp_cont_traces.png}{Van der
+Pol: continuous trajectories. Red and green boxes indicate unsafe and
+initial sets.}
+\label{fig:vdp-cont}
+
+\inclfig[width=0.75\linewidth]{vdp_abs.png}{The discovered
+abstraction $\scr{H}(0.1)$. Red cells are unsafe cells and green cells are
+initial cells.}
+\label{fig:vdp-abs}
+
+\inclfig[width=\linewidth]{vdp_disc_map.png}{Cells and
+trajectory segments used by $1$-relational modeling.}
+\label{fig:vdp-map}
+
+\inclfig[width=0.40\linewidth]{vdp_graph.png}{Enriched
+graph $G^R$. The affine maps $f$ for the transition relations are show
+in \tabref{vdp-pwa}.}
+\label{fig:vdp-graph}
+
+\begin{table*}[!htbp]
+\centering
+\caption{PWA model computed using OLS. The affine model for each edge $(C,C')$ in the graph \figref{vdp-graph} is given by $x'\in Ax + b + \delta$, where $\delta$ is a vector of intervals.}
+\label{tab:vdp-pwa}
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+$C$ & $C'$ & $A$ & $b$ & $\delta$\\
+\midrule
+(0, -1)   & (0, -1)   & $\begin{bmatrix}0.99& 0.12 \\-0.12&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+(0, -1)   & (0, -2)   & $\begin{bmatrix}0.99& 0.12 \\-0.10&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+\midrule
+(0, -2)   & (0, -2)   & $\begin{bmatrix}0.99& 0.12 \\-0.09&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+(0, -2)   & (0, -4)   & $\begin{bmatrix}0.99& 0.12 \\-0.07&1.62\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+\midrule
+(0, -9)   & (-1, -15) & $\begin{bmatrix}0.99& 0.12 \\-0.09&1.61\end{bmatrix}$&$\begin{bmatrix}0\\-0.04\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+\midrule
+(-1, -15) & (-3, -24) & $\begin{bmatrix}0.95& 0.12 \\-1.29&1.47\end{bmatrix}$&$\begin{bmatrix}-0.01\\-0.41\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+\midrule
+(-3, -24) & (-4, -29) & $\begin{bmatrix}1.11&-0.17 \\-1.71&0.66\end{bmatrix}$&$\begin{bmatrix}-1.07\\-3.31\end{bmatrix}$&$\begin{bmatrix}[-0.04, 0.04]\\ [-0.07, 0.09]\end{bmatrix}$\\
+\midrule
+(-4, -29) & (-4, -29) & $\begin{bmatrix}0.99& 0.01 \\-0.41&1.02\end{bmatrix}$&$\begin{bmatrix}0\\-0.28\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+\midrule
+(-1, -10) & (-2, -16) & $\begin{bmatrix}0.97& 0.12 \\-0.71&1.56\end{bmatrix}$&$\begin{bmatrix}0\\-0.11\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+(-1, -10) & (-2, -15) & $\begin{bmatrix}0.97& 0.12 \\-0.70&1.58\end{bmatrix}$&$\begin{bmatrix}0\\-0.08\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+\midrule
+(-2, -16) & (-3, -23) & $\begin{bmatrix}0.92& 0.12 \\-1.84&1.39\end{bmatrix}$&$\begin{bmatrix}-0.02\\-0.73\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+\midrule
+(-3, -23) & (-5, -29) & $\begin{bmatrix}3.14&-0.81 \\-0.96&0.23\end{bmatrix}$&$\begin{bmatrix}-3.13\\-4.99\end{bmatrix}$&$\begin{bmatrix}[-0.04, 0.03]\\ [-0.03, 0.04]\end{bmatrix}$\\
+\midrule
+(-2, -15) & (-3, -22) & $\begin{bmatrix}0.93& 0.12 \\-1.75&1.40\end{bmatrix}$&$\begin{bmatrix}-0.02\\-0.68\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+\midrule
+(-3, -22) & (-5, -29) & $\begin{bmatrix}3.08&-0.72 \\-1.69&0.40\end{bmatrix}$&$\begin{bmatrix}-2.77\\-4.57\end{bmatrix}$&$\begin{bmatrix}[-0.02, 0.02]\\ [-0.01, 0.02]\end{bmatrix}$\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+
+% (0, -1)   & (0, -1)   &  \begin{bmatrix}0.9944498 & 0.12911959 \\-0.12013468&1.63250531\end{bmatrix} &\begin{bmatrix}-0.00003683\\-0.00085411\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% (0, -1)   & (0, -2)   &  \begin{bmatrix}0.99523928& 0.1290447  \\-0.10236736&1.6314103 \end{bmatrix} &\begin{bmatrix}-0.00013019\\-0.00289192\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% \midrule
+% (0, -2)   & (0, -2)   &  \begin{bmatrix}0.99565348& 0.12916002 \\-0.09352462&1.6341424 \end{bmatrix} &\begin{bmatrix}-0.00015574\\-0.00339664\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% (0, -2)   & (0, -4)   &  \begin{bmatrix}0.99668599& 0.12892455 \\-0.0725035 &1.62937613\end{bmatrix} &\begin{bmatrix}-0.00037391\\-0.00796189\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% \midrule
+% (0, -9)   & (-1, -15) &  \begin{bmatrix}0.99985362& 0.12858788 \\-0.09447884&1.61476417\end{bmatrix} &\begin{bmatrix}-0.0018997 \\-0.04200363\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.01]\end{bmatrix}\\
+% \midrule
+% (-1, -15) & (-3, -24) &  \begin{bmatrix}0.95473217& 0.12473489 \\-1.29198505&1.47155614\end{bmatrix} &\begin{bmatrix}-0.01248412\\-0.41100129\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.01]\end{bmatrix}\\
+% \midrule
+% (-3, -24) & (-4, -29) &  \begin{bmatrix}1.11789749&-0.17261206 \\-1.71017779&0.66006597\end{bmatrix} &\begin{bmatrix}-1.0745344 \\-3.31246863\end{bmatrix}&\begin{bmatrix}[-0.04, 0.04]\\ [-0.07, 0.09]\end{bmatrix}\\
+% \midrule
+% (-4, -29) & (-4, -29) &  \begin{bmatrix}0.99796588& 0.01012817 \\-0.41529747&1.02432211\end{bmatrix} &\begin{bmatrix}-0.00135199\\-0.28016983\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% \midrule
+% (-1, -10) & (-2, -16) &  \begin{bmatrix}0.97381953& 0.12768367 \\-0.71242741&1.56764585\end{bmatrix} &\begin{bmatrix}-0.00320265\\-0.11964102\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.01]\end{bmatrix}\\
+% (-1, -10) & (-2, -15) &  \begin{bmatrix}0.97373058& 0.12859163 \\-0.70173855&1.58540872\end{bmatrix} &\begin{bmatrix}-0.0015415 \\-0.08616376\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.01]\end{bmatrix}\\
+% \midrule
+% (-2, -16) & (-3, -23) &  \begin{bmatrix}0.92850123& 0.12242812 \\-1.84720528&1.39159826\end{bmatrix} &\begin{bmatrix}-0.02334236\\-0.73348865\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% \midrule
+% (-3, -23) & (-5, -29) &  \begin{bmatrix}3.14947585&-0.81150646 \\-0.96159406&0.23543254\end{bmatrix} &\begin{bmatrix}-3.13860326\\-4.99696623\end{bmatrix}&\begin{bmatrix}[-0.04, 0.03]\\ [-0.03, 0.04]\end{bmatrix}\\
+% \midrule
+% (-2, -15) & (-3, -22) &  \begin{bmatrix}0.93156623& 0.12260264 \\-1.75117219&1.40104348\end{bmatrix} &\begin{bmatrix}-0.02214125\\-0.68423569\end{bmatrix}&\begin{bmatrix}[-0.0, 0.0]\\ [-0.0, 0.0]\end{bmatrix}\\
+% \midrule
+% (-3, -22) & (-5, -29) &  \begin{bmatrix}3.08806462&-0.72332776 \\-1.69271079&0.40308293\end{bmatrix} &\begin{bmatrix}-2.77908467\\-4.57411339\end{bmatrix}&\begin{bmatrix}[-0.02, 0.02]\\ [-0.01, 0.02]\end{bmatrix}\\
+
+
+
+
+
+
+\subsection{Search Parameters}
+
+The search parameters for S3CAM-R include the parameters of S3CAM:
+$N$, $\epsilon$ and $\Delta$. Additionally, they also include the
+maximum error budget $\delta_{max}$ for OLS and the maximum length of
+segmented trajectory for building $k$-relational models.
+
+We have already discussed the effects of $N$, $\epsilon$ and $\Delta$
+on S3CAM's performance. However, they also have an effect on
+relational modeling. A finer grid with small cells produces more
+accurate models than a coarser grid with large cells. Similarly,
+small time length trajectory segments result in more accurate
+modeling.
+%An increase in the number of samples can increases the
+%accuracy of regression.
+
+\paragraph{Maximum Model Error ($\boldsymbol{\delta}_{\bold{max}}$) .}
+Given a $\delta_{max}$, we keep increasing $k$ during the
+$k$-relational modeling process till $\delta_i \le \delta_{max}$ is
+satisfied. A $k_{max}$ is introduced to bound the longest
+segmented trajectory which can be considered.
+
+% \paragraph{Bounded k relations ($\boldsymbol{k}_{\bold{max}}$.) }
+
+\subsection{Reasons for Failure}
+The approach can fail to find a counter-example, even when it exists, in
+one of three ways.
+
+\begin{itemize}
+
+    \item \emph{S3CAM Fails} No abstract counter-example is found by
+        S3CAM. We can remedy it by increasing search budgets and/or
+        restarting.
+
+    \item \emph{BMC Fails} An abstract counter-example is found, but
+        the BMC fails to find a concrete counter-example in the PWA
+        relational model. The failure can be attributed to either (a)
+        a spurious abstract counter-examples or (b) a poorly estimated
+        model. The former can be addressed by restarting but the
+        latter requires that the maximum model error $\delta_{max}$ be
+        decreased.
+
+    \item \emph{Inaccurate PWA Modeling} An abstract counter-example
+        is found, and it is successfully concretized in the PWA
+        relational model by the BMC. However, it is not reproducible
+        in the black box system. This happens when the PWA relational
+        model is not precise enough.
+
+\end{itemize}

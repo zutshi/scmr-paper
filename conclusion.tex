@@ -1,0 +1,87 @@
+
+We have presented another methodology to find falsifications in black
+box dynamical systems. Combining the ideas from abstraction based
+search (\chapref{abs}), with our previous relational
+abstractions~\cite{zutshi2012timed}, we proposed $k$-relational
+modeling to compute richer abstractions. Simple linear regression can
+be used to estimate the local dynamics of the trajectory segments and
+compute PWA relational models which can be interpreted as a transition
+system.  These can then be checked for safety violations using an
+off-the-shelf bounded model checker.  Finally, we implemented the
+ideas as a tool S3CAM-R and demonstrated its performance on a few examples.
+
+% \subsection{Improvements}
+
+% The approach seems promising as it avoids an expensive refinement
+% step. But, before it can be applied to more complex systems, we need
+% to overcome its shortcomings.  As a future extension, we are
+% investigating ideas to improve the performance of the underlying three
+% main sub-processes, namely, abstraction, modeling, and BMC. We detail
+% these below.
+
+% \begin{enumerate}
+
+% \item \emph{Abstraction} The abstract domain we have used, has been
+%     confined to the interval or rectangular domain. Such a domain is
+%     very coarse when compared to more general polyhedral domains, using
+%     which, we can gain better precision. Due to polyhedral domains
+%     being computational expensive, their integration in S3CAM needs to
+%     be explored thoroughly.
+
+% \item \emph{Modeling} We have used $k$-relational modeling to increase
+%     the precision of the enriched abstractions, however, there are
+%     several other refinement strategies that remain to be explored.
+%     This includes refining the abstract states by using guard
+%     predicates (similar to predicate abstraction), using non-linear
+%     templates in parametric regression to compute more precise
+%     quadratic relations, and using an adaptive time step instead of a
+%     fixed one to address the non-linearities due to a long time
+%     horizon.
+
+% \item \emph{Model Checking} As of now, we use SMT solvers to search
+%     for concrete counter-examples. Although they are very efficient,
+%     owing to extensive engineering effort, reachability of transition
+%     systems resulting from dynamical systems remains a difficult
+%     problem. As the time horizon of the safety property increases, the
+%     possible combinations of discrete transitions increase
+%     exponentially. Hence, to find a counterexample which is a sequence
+%     of discrete transitions over a `long' time horizon is not
+%     tractable for most, but the simplest of dynamical systems.
+%     Instead, we can use linear programming solvers, by enumerating
+%     each path in the graph $G^R$. Note that the constraints are all
+%     linear (conjunctions) along an abstract path. However, in the
+%     worst case, the number of paths in a graph can be of the order
+%     $n!$ where $n$ is the number of vertices of a graph. Hence, this
+%     will not be feasible, unless, we can prioritize paths by using a
+%     triage process similar to one used by S3CAM and using a budget on
+%     the maximum number of paths.
+
+%     Another approach to address the issue would be to use an adaptive
+%     time discretization technique, where relations over both shorter
+%     and longer time steps are computed, and the SMT solver can
+%     `select' the time step precise enough to find a counter-example.
+
+% \item \emph{SMT Solvers} One major impediment to our approach is the
+%     fact that SMT solvers use the theory of reals with \emph{exact
+%     precision}. This is important for verification approaches, but can
+%     be relaxed for the problem of falsification. An SMT solver which
+%     uses approximate reasoning but returns robust counter-examples
+%     will be as useful, and perhaps more efficient.
+
+% \end{enumerate}
+
+\subsection{Data Driven Analysis}
+
+Finally, we would like to mention that our approach is `simulation'
+driven. It can be easily modified to be `data driven', by working with
+a fixed set of data. Given a data set, we then need to automatically
+find a good abstraction and a high fidelity PWA transition system
+using which, we can summarize the black box hybrid dynamical system.
+Apart from model checking the transition system, one can extend it to
+the analysis of SDCS. More specifically, by combining the transition
+system model of a plant with the control software, a model checker
+like CBMC \cite{kroening2014cbmc} can be used to do a closed loop
+symbolic analysis of the SDCS. This can be an alternative to S3CAM-X.
+
+%which will be
+%very useful to for analyzing data for potential property violations.

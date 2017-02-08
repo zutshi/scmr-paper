@@ -1,0 +1,72 @@
+
+The implementation was prototyped as S3CAM-R, an extension to our
+previously mentioned tool S3CAM (\chapref{case}). OLS regression
+routines were used from Scikit-learn~\cite{pedregosa2011scikit}, a
+Python module for machine learning. SAL~\cite{SAL-SRI}
+with Yices2~\cite{dutertre2014yices} was the model checker and the SMT
+solver.
+
+We used S3CAM to discover the abstraction graph $G$, which was then
+trimmed of the nodes which did not contribute to the error search
+(nodes from which error nodes were not reachable). In our experiments we
+used $1$-relational modeling to create the transition system from $G$.
+Using SAL, we checked for the given safety property. If a concrete
+trace was obtained from the BMC, it was further checked for validity
+by simulating using $\simulate$ to see if it was indeed an error
+trace.  If not, $100$ samples from its associated abstract state was
+sampled to check the presence of a counter-example in it
+neighborhood. This can be further extended by obtaining different
+discrete sequences or discrete trace sequences from the model checker.
+
+We tabulate our preliminary evaluation in \tabref{res-rel}. We used
+few of the benchmarks described in \chapref{case}, including the Van
+der Pol oscillator, Brusselator, Lorenz attractor and the Navigation
+benchmark. As before, we ran S3CAM-R $10$ times with different seeds
+and averaged the results. We tabulate both the total time taken and
+the time taken by SAL to compute the counter-example and compare
+against a newer implementation of S3CAM. Note that different
+abstraction parameters are used for S3CAM and S3CAM-R, due to the
+differences in which they operate.
+
+\begin{table*}[!htbp]
+\centering
+\caption{Avg. timings for benchmarks. The \textbf{BMC} column lists
+time taken by the BMC engine. The total time in seconds (rounded off
+to an integer) is noted under \textbf{S3CAM-R} and \textbf{S3CAM}.
+$TO$ signifies time $>5hr$, after which the search was killed.}
+\label{tab:res-rel}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Benchmark & BMC & S3CAM-R & S3CAM\\
+\midrule
+Van der Pol ($\prop_3$)   &$<$1 & $130$ & $24$\\
+Brusselator               &$<$1  & $4$    & $2$\\
+Lorenz                    &$<$1 & $122$  & $35$\\
+%B.Ball                    &  &   & \\
+Nav ($\prop_P$)           &$4480$ &$9423$   &$603$ \\
+Nav ($\prop_Q$)           &$970$  &$8105$   &$546$ \\
+Nav ($\prop_R$)           &-  &$TO$   & $2003$\\
+Nav ($\prop_S$)           &-  &$TO$   & $2100$\\
+Bouncing Ball             &-  &$TO$   & $450$\\
+
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% 1m8s, 2m56.184s, 1m31.059s[f], 1m32.665s,  1m45.312s, 1m22.397s, 2m1.451s[f], 1m12.118s, 1m26.596s
+% 0.12, 0.06,         0.33       0.13,       0.22,     FAIL,       ,X           0.08        0.15
+
+The results show promise, but clearly S3CAM performs better. Also,
+S3CAM-R timed out on some benchmarks like Nav $\prop_R$, Nav $\prop_S$
+and the bouncing ball. However, we need to explore more benchmarks to
+be conclusive. S3CAM-R's performance can be explained by the
+difficulty in finding a good abstraction ($\quant_\epsilon$), which
+needs to be fine enough, to obtain good prediction models but coarse
+enough, to be manageable by the current SMT solvers. Specifically, to
+obtain a good quality counter-example from the model checker (and
+avoid false positives), the transition system should be created from
+models with high accuracy, for which a finer abstraction is required.
+However, the exploration of a finer abstraction is exponentially more
+complex and results in a much bigger transition system, which the
+current state of the art bounded model checkers (which use SMT
+solvers) can not handle under reasonable resources.
