@@ -5,12 +5,12 @@ We now briefly describe the approach. Given a numerical simulator
 $\simulate$ and an initial abstraction defined by a quantization
 function $\quant_\epsilon$ and a time step $\Delta$, we use
 scatter-and-simulate (parameterized by number of samples $n$ as
-described in \chapref{abs}) to explore the abstract graph
+described in \cite{zutshi2014multiple}) to explore the abstract graph
 $\scr{H}(\Delta)$. The result is a graph $G$, which has a finite
 number of abstract states $C$ (or cells) and edges $(C,C')$ iff $C
 \areach{\Delta} C'$.
 
-Instead of using a CEGAR like loop (as in \chapref{abs}), we use the
+Instead of using a CEGAR like loop (as in \cite{zutshi2014multiple}), we use the
 generated trajectory segments to learn quantitative models describing
 the local behavior of the system. These models are defined by a set of
 relations $R \subseteq \HybridStates \times \HybridStates$ for each
@@ -26,8 +26,8 @@ precision we iteratively refined the abstraction by state
 splitting. Instead, we now propose an `enrichment' $G^R$ of $G$ by computing a
 set of local relations $R_{(C,C')}(\x,\x')$ for every edge $(C,C')$,
 which non-deterministically describe relations between $\x \in C$ and $\x'
-\in C'$. This is illustrated in \figref{enriched-edge} (compare with
-\figref{segtraj}).
+\in C'$. This is illustrated in \figref{enriched-edge}.
+%(compare with \figref{segtraj}).
 
 The enriched graph $G^R$ captures the underlying local forward
 dynamics describing the evolution of the system in each abstract
@@ -65,7 +65,7 @@ system using $k$-relational modeling.
 
 \subsection{Abstract Enriched Graph}
 
-The existential abstraction relation in \chapref{abs} was defined as
+The existential abstraction relation in \cite{zutshi2014multiple} was defined as
 follows:
 \[
 %\exists \x\in\C. \exists \x'\in\C'. \x'=\simulate(\x, \tau) \iff \C\rel{\tau}\C'
@@ -256,7 +256,7 @@ $n$ and illustrate using examples.
 \draw [fill=black] (4.0,-2.0) circle (0.05);
 
 \end{scope}
-\begin{scope}[xshift=0,yshift=3.0cm,scale=0.5]
+\begin{scope}[xshift=0,yshift=2.0cm,scale=0.5]
     \node at (2,0) {\footnotesize $\scr{T} \equiv g_1(\x):\vx \in C
     \implies A_1\vx + \vb_1 + \delta_1$};
 \end{scope}
@@ -333,7 +333,7 @@ can contain two or more modes with differing continuous dynamics.
 \draw [fill=black] (4.0,-3.5) circle (0.05);
 
 \end{scope}
-\begin{scope}[xshift=0,yshift=4.0cm,scale=0.5]
+\begin{scope}[xshift=0,yshift=2.5cm,scale=0.5]
     \node at (2,0) {\begin{minipage}{\linewidth}
     \footnotesize \begin{equation*}
         \scr{T} = \left\{
@@ -432,7 +432,7 @@ is at least as precise as the corresponding $0$-relational model.
 \draw [fill=black] (8.0,-3.5) circle (0.05);
 \end{scope}
 
-\begin{scope}[xshift=0,yshift=4.0cm,scale=0.5]
+\begin{scope}[xshift=0,yshift=2.5cm,scale=0.5]
     \node at (4,0) {\begin{minipage}{\linewidth}
         \footnotesize \begin{equation*}
     \scr{T} = \left\{
@@ -465,13 +465,13 @@ Two $\SegTraj:\tupleof{\pi_{t_1}, \ldots, \pi_{t_k}}$ and
 $\SegTraj':\tupleof{\pi'_{t_1}, \ldots, \pi'_{t_k}}$ are
 \textit{similar} if their trajectory segments have the same sequence
 of cell traversals $\tupleof{C_1, C_2, \ldots, C_k}$, \ie
-\[
+\begin{align*}
     \forall i\in\setof{1 \ldots k}.
-    start(\pi_{t_i}) \in C_i
-    \land start(\pi'_{t_i}) \in C_i
-    \land end(\pi_{t_i}) \in C_{i+1}
+    & start(\pi_{t_i}) \in C_i          
+    \land start(\pi'_{t_i}) \in C_i \land  \\
+    & end(\pi_{t_i}) \in C_{i+1}  
     \land end(\pi'_{t_i}) \in C_{i+1}
-\]
+\end{align*}
 
 For every cell $C$ in the reachability graph, we construct a data set
 $\ds$ by collecting $\pi_{t_i}$, such that they are the first segment of $k$

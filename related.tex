@@ -1,13 +1,21 @@
+Piece-Wise Affine (PWA) models are quite popular in the modeling of
+both continuous and hybrid dynamical systems. They are very
+expressive, and can model non-linear continuous dynamics with
+arbitrary accuracy~\cite{wen2008basis} and a large family of hybrid
+systems~\cite{heemels2001equivalence}.
+
 \mypara{Falsification of Properties of Hybrid Systems.} The current
 state-of-the-art falsification approaches are based on numerical
-simulations and can be grouped into guided
-S-Taliro~\cite{annpureddy2011s}, Breach~\cite{donze2010breach}
-and randomly search RRT
-An alternative was proposed by the authors in the form of a CEGAR
-like search.
-The other common approaches involve modeling the given system using
-hybrid automata and exhaustively checking them.
-
+simulations and can be grouped into robustness guided
+S-Taliro~\cite{annpureddy2011s}, Breach~\cite{donze2010breach} and RRT
+(Rapidly-exploring Random Tree)
+based~\cite{nahhal_test_2007,Dang09,dreossi2015efficient}.  An
+alternative approach, based on multiple shooting and CEGAR
+(Counterexample Guided Abstraction Refinement) was proposed by the
+authors in ~\cite{zutshi2014multiple}.  The alternative approach is
+the verification approach, where a formal model (usually hybrid
+automata) is first constructed (often manually) and then exhaustively
+checked for violations.
 
 \mypara{Identification of hybrid systems} using Piece-Wise affine
 models is surveyed in~\cite{paoletti2007identification}.
@@ -18,4 +26,3 @@ models is surveyed in~\cite{paoletti2007identification}.
 \end{enumerate}
 
 %\mypara{Model Checking PWA Models.} Model checking transition systems
-

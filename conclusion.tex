@@ -1,7 +1,7 @@
 
 We have presented another methodology to find falsifications in black
 box dynamical systems. Combining the ideas from abstraction based
-search (\chapref{abs}), with our previous relational
+search \cite{zutshi2014multiple}, with our previous relational
 abstractions~\cite{zutshi2012timed}, we proposed $k$-relational
 modeling to compute richer abstractions. Simple linear regression can
 be used to estimate the local dynamics of the trajectory segments and
@@ -70,18 +70,18 @@ ideas as a tool S3CAM-R and demonstrated its performance on a few examples.
 
 % \end{enumerate}
 
-\subsection{Data Driven Analysis}
+% \subsection{Data Driven Analysis}
 
-Finally, we would like to mention that our approach is `simulation'
-driven. It can be easily modified to be `data driven', by working with
-a fixed set of data. Given a data set, we then need to automatically
-find a good abstraction and a high fidelity PWA transition system
-using which, we can summarize the black box hybrid dynamical system.
-Apart from model checking the transition system, one can extend it to
-the analysis of SDCS. More specifically, by combining the transition
-system model of a plant with the control software, a model checker
-like CBMC \cite{kroening2014cbmc} can be used to do a closed loop
-symbolic analysis of the SDCS. This can be an alternative to S3CAM-X.
+% Finally, we would like to mention that our approach is `simulation'
+% driven. It can be easily modified to be `data driven', by working with
+% a fixed set of data. Given a data set, we then need to automatically
+% find a good abstraction and a high fidelity PWA transition system
+% using which, we can summarize the black box hybrid dynamical system.
+% Apart from model checking the transition system, one can extend it to
+% the analysis of SDCS. More specifically, by combining the transition
+% system model of a plant with the control software, a model checker
+% like CBMC \cite{kroening2014cbmc} can be used to do a closed loop
+% symbolic analysis of the SDCS. This can be an alternative to S3CAM-X.
 
 %which will be
 %very useful to for analyzing data for potential property violations.

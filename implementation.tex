@@ -1,6 +1,6 @@
 
 The implementation was prototyped as S3CAM-R, an extension to our
-previously mentioned tool S3CAM (\chapref{case}). OLS regression
+previously mentioned tool S3CAM \cite{zutshi2014multiple}. OLS regression
 routines were used from Scikit-learn~\cite{pedregosa2011scikit}, a
 Python module for machine learning. SAL~\cite{SAL-SRI}
 with Yices2~\cite{dutertre2014yices} was the model checker and the SMT
@@ -19,7 +19,7 @@ neighborhood. This can be further extended by obtaining different
 discrete sequences or discrete trace sequences from the model checker.
 
 We tabulate our preliminary evaluation in \tabref{res-rel}. We used
-few of the benchmarks described in \chapref{case}, including the Van
+few of the benchmarks described in \cite{zutshi2014multiple}, including the Van
 der Pol oscillator, Brusselator, Lorenz attractor and the Navigation
 benchmark. As before, we ran S3CAM-R $10$ times with different seeds
 and averaged the results. We tabulate both the total time taken and
@@ -28,7 +28,7 @@ against a newer implementation of S3CAM. Note that different
 abstraction parameters are used for S3CAM and S3CAM-R, due to the
 differences in which they operate.
 
-\begin{table*}[!htbp]
+\begin{table}[!htbp]
 \centering
 \caption{Avg. timings for benchmarks. The \textbf{BMC} column lists
 time taken by the BMC engine. The total time in seconds (rounded off
@@ -51,7 +51,7 @@ Bouncing Ball             &-  &$TO$   & $450$\\
 
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 % 1m8s, 2m56.184s, 1m31.059s[f], 1m32.665s,  1m45.312s, 1m22.397s, 2m1.451s[f], 1m12.118s, 1m26.596s
 % 0.12, 0.06,         0.33       0.13,       0.22,     FAIL,       ,X           0.08        0.15

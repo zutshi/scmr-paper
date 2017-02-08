@@ -18,7 +18,7 @@ We now describe the entire procedure in three steps.
 \section{An Example: Van der Pol Oscillator}
 
 We now describe the above using the Van der Pol oscillator benchmark
-presented in \secref{math-dyn-sys}. Simulations generated using
+presented in \cite{zutshi2014multiple}. Simulations generated using
 uniformly random samples are shown in \figref{vdp-cont}. We want to
 check the property $P_3$, indicated by the red box, given the initial
 set indicated by the green box. The abstraction is defined by
@@ -90,7 +90,7 @@ graph $G^R$. The affine maps $f$ for the transition relations are show
 in \tabref{vdp-pwa}.}
 \label{fig:vdp-graph}
 
-\begin{table*}[!htbp]
+\begin{table}[!htbp]
 \centering
 \caption{PWA model computed using OLS. The affine model for each edge $(C,C')$ in the graph \figref{vdp-graph} is given by $x'\in Ax + b + \delta$, where $\delta$ is a vector of intervals.}
 \label{tab:vdp-pwa}
@@ -124,7 +124,7 @@ $C$ & $C'$ & $A$ & $b$ & $\delta$\\
 (-3, -22) & (-5, -29) & $\begin{bmatrix}3.08&-0.72 \\-1.69&0.40\end{bmatrix}$&$\begin{bmatrix}-2.77\\-4.57\end{bmatrix}$&$\begin{bmatrix}[-0.02, 0.02]\\ [-0.01, 0.02]\end{bmatrix}$\\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 
 
