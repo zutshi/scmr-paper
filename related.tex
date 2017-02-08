@@ -1,10 +1,10 @@
-Piece-Wise Affine (PWA) models are quite popular in the modeling of
-both continuous and hybrid dynamical systems. They are very
-expressive, and can model non-linear continuous dynamics with
-arbitrary accuracy~\cite{wen2008basis} and a large family of hybrid
-systems~\cite{heemels2001equivalence}.
+Discrete time and continuous state Piece-Wise Affine (PWA) models are
+quite popular in the modeling of both continuous and hybrid dynamical
+systems. They are very expressive, and can model non-linear continuous
+dynamics with arbitrary accuracy~\cite{wen2008basis} and a large
+family of hybrid systems~\cite{heemels2001equivalence}.
 
-\mypara{Falsification of Properties of Hybrid Systems.} The current
+\mypara{Falsification of properties of hybrid systems.} The current
 state-of-the-art falsification approaches are based on numerical
 simulations and can be grouped into robustness guided
 S-Taliro~\cite{annpureddy2011s}, Breach~\cite{donze2010breach} and RRT
@@ -17,12 +17,18 @@ the verification approach, where a formal model (usually hybrid
 automata) is first constructed (often manually) and then exhaustively
 checked for violations.
 
-\mypara{Identification of hybrid systems} using Piece-Wise affine
-models is surveyed in~\cite{paoletti2007identification}.
-\begin{enumerate}
-\item Expressiveness/power of PWA models?
-\item Fixed time caveats
-\item Effects of refining parameters: time step $\Delta$ and grid size $\epsilon$.
-\end{enumerate}
+\mypara{Identification of hybrid systems.} Several approaches have been put
+forth for the identification of PWA models~\cite{paoletti2007identification}.
+They are based on Bayesian methods~\cite{juloski2005bayesian}, bounded-error
+methods~\cite{bemporad2003greedy,bemporad2005bounded,roll2004identification},
+clustering based methods~\cite{ferrari2003clustering} and lastly algebraic
+methods~\cite{vidal2003algebraic}. Unlike them, we peopose a simpler
+approach based on fixed hyper-rectangular domains, but parameterized
+by the size of the rectangles ($\epsilon$) and the time discretization
+step $\Delta$.
+
+
+%\item Fixed time caveats
+%\item Effects of refining parameters: time step $\Delta$ and grid size $\epsilon$.
 
 %\mypara{Model Checking PWA Models.} Model checking transition systems
