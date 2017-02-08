@@ -1,0 +1,258 @@
+In this section, we present the basics of relational abstractions and
+fundamentals of regression analysis.
+
+\subsection{Relational Abstraction}
+
+For general hybrid dynamical systems, algorithmic ways for computing
+analytical solutions do not exist. Discretization (along with suitable
+abstractions) is often employed to transform the systems into a
+discrete transition system. Relational abstractions is one such idea,
+which abstracts continuous dynamics by discrete relations using
+appropriate \textit{reachability invariants}. Both time independent
+and time dependent relations have been proposed; the former captures
+all reachable states over all time, whereas, the latter explicitly
+includes time by relating reachable states to time. Thus it
+can prove timing properties whereas, time independent relational
+abstractions can not. In both cases, the resulting abstractions can be
+interpreted as discrete transition systems and can be analyzed using
+model checkers. We briefly discuss these two types of abstractions.
+
+\mypara{Timeless Relational Abstraction}
+
+Relational abstractions for hybrid systems were proposed in
+\cite{Sankaranarayanan+Tiwari/2011/Relational}. For a hybrid automaton
+model, they can summarize the continuous dynamics of each mode using a
+binary relation over continuous states. The resulting relations are
+timeless (independent) and hence valid for all time as long as
+the mode invariant is satisfied. The relations take the general form
+of $R(\x,\x') \bowtie 0$, where $\bowtie$ represents one of the
+relational operators $=, \ge, \le, <, >$. For example, an abstraction
+that captures the monotonicity with respect to time for the
+differential equation $\dot{x} = 2$ is $x' > x$. The abstraction
+capturing the relation between the set of ODEs: $\dot{x} = 2$,
+$\dot{y} = 5$, is $5(x' - x) = 2(y' - y)$.
+
+Such relation summaries, discretize the continuous evolution of a
+given system into an infinite state transition system, in which safety
+properties can be verified using $k$-induction, or falsified using
+bounded model checkers. The relationalization procedure involves
+finding suitable invariants in a chosen abstract domain, such as
+affine abstractions, eigen abstractions or box abstractions
+\cite{Sankaranarayanan+Tiwari/2011/Relational}.  For this, different
+techniques like template based invariant generation
+\cite{Gulwani+Tiwari/2008/Constraint,
+Colon+Sankaranarayanan+Sipma/03/Linear} can be used.
+
+\mypara{Timed and Time-Aware Relational Abstractions}
+
+As the above discussed relations are timeless, we cannot reason over
+the timing properties of the original system. Moreover, they are not
+suitable for time-triggered systems. Timed relational
+abstractions~\cite{zutshi2012timed} and time-aware relational
+abstractions~\cite{mover2013time} were proposed to overcome these
+shortcomings by explicitly including time in the relations. In
+addition, both can be more precise than their timeless counterpart,
+but unlike it, assume continuous affine dynamics.
+
+To analyze time-triggered systems like an SDCS modeled by an affine
+hybrid automata~\footnote{An affine hybrid automata is restricted to
+the ODEs, resets and guards being affine.}, timed relational
+abstractions can be computed directly from the solutions of the
+underlying affine ODEs.  Recall that the solution of an affine ODE
+$\dot{\x} = A\x$ can be represented using the matrix exponential as
+$\x(t) = e^{tA}\x(0)$. This gives us the timed relation $\x' =
+e^{tA}\x$.  Clearly, the relation is non-linear with respect to time.
+However, for the case of SDCS with a fixed sampling time period, we
+obtain linear relations in $\x$.  We demonstrated the usefulness of
+timed relational abstractions for the case of linear systems
+in \cite{zutshi2012timed}, and now incorporate the idea to discretize
+black box dynamical systems.
+
+Similar to timeless relational abstractions, time-aware relational
+abstractions \cite{mover2013time} construct binary relations between
+the current state $\x$ of the system and any future reachable state
+$\x'$. The difference lies with the latter also constructing relations
+between the current time $t$ and any future time $t'$. This is
+achieved by a case by case analysis of the eigen structure of the
+matrix $A$ (of an affine ODE). Separate abstractions are used for the
+case of linear systems with constant rate, real eigen values and complex eigenvalues.
+
+\subsection{Learning Dynamics using Simple Linear Regression}
+
+\mypara{Regression Analysis}
+
+In statistics, regression is the problem of finding a
+\textit{predictor}, which can suitably predict the relationship
+between the given set of observed input $\x$ and output $\y$ vectors.
+In other words, assuming that $\y$ depends on $\x$, regression
+strategies find either a parameterized or a non-parameterized
+prediction function to explain the dependence. We now discuss simple
+linear regression, which is parametric in nature and searches for an
+affine predictor. It is also called \textit{ordinary least squares}.
+
+\mypara{Ordinary Least Squares (OLS)}
+
+Let the data set be comprised of $N$ input and output pairs $(\x,
+y)$, where $\x\in\reals^n$ and $y\in\reals$. If $N>n$, which is
+the case in the current context of \textit{finding the best fit}, the
+problem is over-determined; there are more equations than
+unknowns. Hence, a single affine function cannot be found which
+satisfies the equation $\forall i\in\{1\ldots N\}. y_i = \vec{a}^T\x_i + b$. Instead, we
+need to find the `best' choice for $\vec{a}$ and $b$. This is formally
+defined using a loss function. For the case of simple linear
+regression or OLS, the loss function is the sum of squares of the
+errors in prediction.  The task is then to determine the vector of
+coefficients $\vec{a}$ and an offset constant $b$, such that the least
+square error of the affine predictor is minimized for the given data
+set.
+\begin{equation}
+    \operatornamewithlimits{argmin}_{\vec{a}, b}\displaystyle\sum_{i=1}^{N}{\left(\y_i - (\vec{a}^T\x_i + b)\right)^2}
+\label{reg}
+\end{equation}
+To ease the presentation, we can rewrite the above as a homogeneous
+expression by augmenting $\x$ by $\hat{\x} = \begin{bmatrix}\x \\ 1\end{bmatrix}$ and replacing $\vec{a}$ and $b$ by the vector
+$\vec{ab} = \begin{bmatrix}\vec{a} \\ b \end{bmatrix}$. The equation~\ref{reg} now becomes
+\[
+    \operatornamewithlimits{argmin}_{\vec{ab}}\displaystyle\sum_{i=1}^{N}{(\y_i - \vec{ab}^T \hat{\x}_i)^2}
+\]
+The solution of OLS can be analytically computed as
+\[ Ab = (X^TX)^{-1}X^T\y\]
+where $X$ is the matrix representing the horizontal stacking of all
+$\hat{\x}$.
+The details can be found in several texts on learning and statistics
+\cite{friedman2001elements}.
+
+Given a time invariant dynamical system $\x' = \simulate(\x, \Delta)$,
+where $\x\in\reals^n$ we can use OLS to approximate its trajectories
+at fixed time step $\Delta$ by a discrete map $\x' = A\x + \vb$, where
+$A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T \end{bmatrix}$ and $\vb =
+\begin{bmatrix}b_1 \\ \vdots \\ b_n \end{bmatrix}$. This map is a
+    global relational model for the system. The data set for the
+    regression is a set of pairs $\setof{(\x,\x') | \x' =
+    \simulate(\x, \Delta)}$ and can be generated on demand. Another
+    set can be generated to compute the error $\delta$ as an interval
+    of vectors, where each element is an interval $\delta_i \in
+    [\delta_{min}, \delta_{max}]$.
+    
+    Affine maps are poor
+    approximations for arbitrary non-linear functions. Hence, we use a
+    collection of affine maps to approximate the local behaviors (in
+    state-space) of the system $\simulate$. This results in a piece
+    wise approximation, as described in the next section.
+
+\subsection{Piecewise Affine (PWA) Transition System}
+
+We define the PWA transition system as a transition system
+(ref.~\secref{DiscSys}) $\rho:\tupleof{\pLocs,\pVars,\scrT, \pLocI,\Theta}$
+where each transition $\tau \in \scrT$, is associated with a
+transition relation of the form
+\[
+    \rho_{\tau}(\pVar,\pVar') \subseteq \setof{(\pVar,f_{\tau}(\pVar)) \;|\; g_\tau(\pVar) \land g'_\tau(f_{\tau}(\pVar))}
+\]
+where $f_{\tau}$ is an affine map relating the states and $g_{\tau}$,
+$g'_{\tau}$ are affine guards (pre and post conditions) on the states.
+The assertion on the initial states $\Theta$ is also affine.
+
+We can now use a PWA transition system $\rho$ to approximate the
+behavior of a hybrid dynamical system $\System$ defined by a simulator
+$\simulate_{\System}$~\footnote{Due to $f_\tau$ being restricted to an affine
+form, we can only approximate general hybrid systems.}. Each
+transition of $\rho$ represents a discrete time step $\Delta$. Let the
+state-space of $\System$ be given by $\x\in\HybridStates^n$, then the
+states of $\rho$ are also given by $\x\in\HybridStates^n$. The affine guard
+predicates $g_\tau$ are given by a conjunction of hyper-planes and
+hence can be represented in matrix form as a polyhedron (defined by
+$m$ constraints) in the state-space
+\[
+g:C\x - \vd \le 0
+\]
+where $C$ is an $m \times n$ matrix and $\vd$ is a vector of length
+$m$. The affine maps $f_\tau$ can be represented in matrix form as
+$f:\x \mapsto A\x+\vb$. To make $f_\tau$ `richer', we incorporate
+an error term $\delta$ which is defined by a vector of intervals
+$[\delta_{\min},\delta_{\max}]$. Hence,
+\[
+f:\x \mapsto A\x + \vb + \delta
+\]
+defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
+\in f_\tau(\x)}$.
+
+
+% Given a state vector $\x\in\reals^n$, a guarded affine map
+% $\gm:(\guard, \amap)$ defines the discretized consecution rule as a
+% pair of an affine guard predicate $\guard:C\x - \vd \le 0$ and an affine map
+% $\amap:A\x+\vb$, where $A \in \reals^{n \times n}$, $C \in
+% \reals^{m \times n}$ are matrices and $\vb \in \reals^n$, $\vd
+% \in \reals^m$ are vectors. A guarded affine map is satisfied if its
+% guard is satisfied.
+
+We now formalize the PWA affine transition system for a dynamical system.
+\begin{definition}[PWA Transition System]
+
+Given a hybrid dynamical system over a state-space
+$\HybridStates^n$, a PWA transition system $\rho$ is given by the
+tuple $\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in
+\scrT$ are affine transition relations and $\Theta$ is an affine
+predicate over $\x$ and the states $\x\in\HybridStates^n$. The
+transition relation is then defined by $\scrT$ with $n$ transition
+relations as follows
+
+\begin{equation}
+    \scrT = \left\{
+        \begin{array}{ll}
+            g_1(\x) \land g'_1(\x') \implies \x' \in f_1(\x) \\
+            \ldots\\
+            g_n(\x) \land g'_n(\x') \implies \x' \in f_n(\x) \\
+        \end{array}
+    \right.
+\end{equation}
+
+\end{definition}
+
+where $f_i:\x \mapsto A_i\x + \vb_i + \delta_i$,
+$g_i(\x):C_i\x-\vd_i\le0$, $g'_i(\x'):C'_i\x'-\vd'_i\le0$ and $\x'$
+denotes the next state of the system.
+
+A PWA model is \textit{deterministic}, iff for every state
+$\x\in\HybridStates^n$, a unique guarded affine map is satisfied and
+all errors $\delta$ are singletons. However, in practice such a case
+rarely exists. A PWA model will be usually non-deterministic, both due
+to multiple choice of transition relations and the reachable states at
+the $k^{th}$ time step (or after $k\Delta$ units of time) being a set.
+Abusing the notation, we denote the set of states reachable in a
+single step in $\rho$ by $\x' = \rho(\x)$.
+
+A PWA transition system is \textit{complete}, iff for every state
+$\x\in\HybridStates^n$, there exists at least one satisfied
+transition relation $\scrT$. If this is not the case, the system can
+deadlock, with no further executions. This usually results from
+incorrect modeling of SDCS, and from here on, we do not consider such
+cases.
+
+% Given a dynamical system over a continuous state-space
+% $\ContStates\in\reals^n$, a PWA model is a map $\ContStates \mapsto
+% \setof{\gm_1, \gm_2, \ldots, \gm_n}$ from the state-space of the
+% dynamical system to a finite set of guarded affine maps
+% $\setof{\gm_1, \gm_2, \ldots, \gm_n}$. It defines the consecution
+% rule by the affine map of the satisfied $\gm$.
+
+% \begin{equation}
+%     \pwa = \left\{
+%         \begin{array}{ll}
+%             \gm_1: \amap_1(\x) &\text{if}\; \guard_1(\x) \\
+%             \gm_2: \amap_2(\x) &\text{if}\; \guard_2(\x) \\
+%             \ldots & \ldots\\
+%             \gm_n: \amap_n(\x) &\text{if}\; \guard_n(\x) \\
+%         \end{array}
+%     \right.
+% \end{equation}
+
+% \end{definition}
+
+% where $\amap_i = A_i\x + \vb_i$, and $\guard_i(\x) \equiv C_i\x-\vd_i\le0$.
+% Abusing the notation, we denote the next state computed by the PWA
+% model as $\x' = \pwa(\x)$. A PWA model is \textit{deterministic}, iff
+% for every state $\x\in\ContStates$, a unique guarded affine map is
+% satisfied. A PWA model is \textit{complete}, iff for every state
+% $\x\in\ContStates$, there exists at least one satisfied guarded affine
+% map $\gm$.

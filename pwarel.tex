@@ -1,0 +1,55 @@
+\subsection{Overview}
+\label{sec:ovw}
+
+We now briefly describe the approach. Given a numerical simulator
+$\simulate$ and an initial abstraction defined by a quantization
+function $\quant_\epsilon$ and a time step $\Delta$, we use
+scatter-and-simulate (parameterized by number of samples $n$ as
+described in \chapref{abs}) to explore the abstract graph
+$\scr{H}(\Delta)$. The result is a graph $G$, which has a finite
+number of abstract states $C$ (or cells) and edges $(C,C')$ iff $C
+\areach{\Delta} C'$.
+
+Instead of using a CEGAR like loop (as in \chapref{abs}), we use the
+generated trajectory segments to learn quantitative models describing
+the local behavior of the system. These models are defined by a set of
+relations $R \subseteq \HybridStates \times \HybridStates$ for each
+edge of the reachability graph.
+
+\input{figs/segtraj_rel_enriched.tex}
+
+Recall that each edge $(C,C')$ of the graph $G$ denotes an observed
+trajectory segment between the respective cells. The graph abstraction
+$G$ only states that there exists a state $\x \in C$ from which the
+system can evolve to a future state $\x' \in C'$. To increase the
+precision we iteratively refined the abstraction by state
+splitting. Instead, we now propose an `enrichment' $G^R$ of $G$ by computing a
+set of local relations $R_{(C,C')}(\x,\x')$ for every edge $(C,C')$,
+which non-deterministically describe relations between $\x \in C$ and $\x'
+\in C'$. This is illustrated in \figref{enriched-edge} (compare with
+\figref{segtraj}).
+
+The enriched graph $G^R$ captures the underlying local forward
+dynamics describing the evolution of the system in each abstract
+state. We represent the dynamics using an affine model with an
+interval error. Such a model can either be approximated using learning
+methods or computed as a sound (over) approximation using reachability
+set computation methods. Because we assume black box semantics, we
+only present the former. Using regression analysis on the $start$ and
+$end$ states of the witnessed trajectory segments between two cells,
+we compute an approximate discrete map along with an error estimate.
+Moreover, using the simulation function $\simulate$, additional
+trajectory segments (or data) can be generated if required. The data
+can be separated into a training set and testing set to compute the
+map and the error respectively.  The latter case can be explored if
+the symbolic dynamics of the system are known. A tool like
+\flowstar~\cite{chen2013flow} can be used to find the reachable set
+map.
+
+Observe that $G^R$, a directed reachability graph, is rich enough to
+search for concrete behaviors in the system. We call it a time
+parameterized PWA relational abstraction. It can be interpreted as an
+infinite state discrete transition system, and we can use
+off-the-shelf bounded model checkers to find concrete violations of a
+given safety property, and even other temporal properties.  We now
+discuss the background required to present our ideas.
