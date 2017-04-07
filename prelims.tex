@@ -9,30 +9,27 @@ signals to $\System$ over a finite time horizon $T$.
 
 For the purpose of falsification, $\System$ is viewed as a black-box
 equipped with a forward simulation map $\simulate^{\System}:
-(\HybridStates, \vu, t) \mapsto \HybridStates$.  A simulation step
-computes the unique reachable state $\vx \in \HybridStates$ in time
+(\vx, \vu, t) \mapsto \vx$.  A simulation step
+involves computing the unique reachable state $\vx \in \HybridStates$ in time
 $t$ from a given state input pair $(\vx,\vu)$.  We formalize this
 using the notion of time parameterized reachability relations
 $\reach{t, \vu}_\System \subseteq \HybridStates \times \HybridStates$
-detailed in~\cite{zutshi2014multiple}.
-Hence, $\vy=\simulate^{\System}(\vx,u,t)$ \emph{iff} $\vx \reach{t,u}
-\vy$.
+detailed in~\cite{zutshi2014multiple}. Finally, $\vx'=\simulate^{\System}(\vx,u,t)$ \emph{iff} $\vx \reach{t,u} \vx'$.
 % Given the hybrid state space $\vx\in\HybridStates$ and input space $u
 % \in\Inputs$ and time step $t$, it computes the unique successor state
 % $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
 
-
-\myipara{System Assumptions:} We require that $\System$ be
-forward deterministic. This
-requires existence and uniqueness of trajectories over a finite time
-horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
-the vector field in each hybrid mode and ruling away issues such as
-finite escape times~\cite{Meiss/2007/Differential}. From a practical
-standpoint, these assumptions do not pose significant restrictions for
-the type of problems that we wish to address. Finally, we assume full
+\myipara{System Assumptions:} We require that $\System$ be forward
+deterministic. This requires existence and uniqueness of trajectories
+over a finite time horizon $[0,T]$, which can be guaranteed by
+Lipschitz continuity of the vector field in each hybrid mode and
+ruling away issues such as finite escape
+times~\cite{Meiss/2007/Differential}. From a practical standpoint,
+these assumptions do not pose significant restrictions for the type of
+problems that we wish to address. Finally, we assume full
 observability of the system state, validate our results only against
-the $\simulate$ function and {\em do not} assume that an analytic closed-form
-representation of the system dynamics is available.
+the $\simulate$ function and {\em do not} assume that an analytic
+closed-form representation of the system dynamics is available.
 
 
 As the relations abstract the solution of a continuous time,
