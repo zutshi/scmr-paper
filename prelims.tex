@@ -19,24 +19,21 @@ detailed in~\cite{zutshi2014multiple}. Finally, $\vx'=\simulate^{\System}(\vx,u,
 % \in\Inputs$ and time step $t$, it computes the unique successor state
 % $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
 
-\myipara{System Assumptions:} We require that $\System$ be forward
-deterministic. This requires existence and uniqueness of trajectories
-over a finite time horizon $[0,T]$, which can be guaranteed by
-Lipschitz continuity of the vector field in each hybrid mode and
-ruling away issues such as finite escape
-times~\cite{Meiss/2007/Differential}. From a practical standpoint,
-these assumptions do not pose significant restrictions for the type of
-problems that we wish to address. Finally, we assume full
-observability of the system state, validate our results only against
-the $\simulate$ function and {\em do not} assume that an analytic
-closed-form representation of the system dynamics is available.
-
-
-As the relations abstract the solution of a continuous time,
-foward deterministic hybrid dynamical
-system, they are deterministic, causal and satisfy the semi-group property.
-
-From here on, we drop the subscript $\System$.
+\mypara{System Assumptions:} We require that $\System$ can always be
+simulated forward in time with deterministic results. This in turn
+requires existence and uniqueness of trajectories over a finite time
+horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
+the vector field in each underlying hybrid mode and ruling away issues
+such as finite escape times~\cite{Meiss/2007/Differential}.
+Furthermore, as the relations abstract the solution of a continuous
+time, foward deterministic hybrid dynamical system, they are
+deterministic, causal and satisfy the semi-group property.  These
+assumptions are justified as for the dynamical systems we address in
+this presentation. Finally, we assume full observability of the system
+state, validate our results only against the $\simulate$ function (as
+the analytic closed-form representation of the system dynamics is
+assumed to be unavailable).  From here on, we drop the subscript
+$\System$.
 
 \begin{definition}
     The system under test $\System$ evolves in the set of infinite
