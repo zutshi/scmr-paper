@@ -1,4 +1,20 @@
-We now briefly describe the approach. Given a numerical simulator
+\subsection{PWA Relational Abstraction}
+
+Given an abstraction, we can define its enrichment
+
+We now briefly overview the approach, which consists of three
+steps
+
+Discover the abstraction 
+enriches the abstraction
+formulates a BMC query
+concretizes
+
+abstraction defined by a quantization function $\quant_\epsilon$
+time step $\Delta$
+
+
+Given a numerical simulator
 $\simulate$ and an initial abstraction defined by a quantization
 function $\quant_\epsilon$ and a time step $\Delta$, we use
 scatter-and-simulate (parameterized by number of samples $n$ as
@@ -12,6 +28,24 @@ we use the generated trajectory segments to learn quantitative models
 describing the local behavior of the system. These models are defined
 by a set of relations $R \subseteq \HybridStates \times \HybridStates$
 for each edge of the reachability graph.
+
+
+\subsection{Graph Abstraction}
+DEFINITION 3.4 (ABSTRACT STATE GRAPH). Let ∆ > 0 be
+a fixed time step. The abstract state graph H(∆) for time step ∆
+is defined by the set of vertices C, and edges (Ci, Cj ) whenever
+Ci
+∆ Cj . Let C0 denote the collection of initial cells in C, i.e., cells
+Ci such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
+cells, or cells Cj such that there is a state xj ∈ Cj that reaches
+an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
+H(∆) is given by D
+C,
+∆ , C0, Cu
+E
+.
+
+\subsection{Enriched Graph Abstraction}
 
 \input{figs/segtraj_rel_enriched.tex}
 
@@ -55,10 +89,10 @@ discuss the background required to present our ideas.
 \section{Relational Modeling}
 
 We now describe how relational models can be computed for a given
-black box system by enriching the abstract reachability graph obtained
-by scatter-and-simulate. We first formalize the notion of an enriched
-graph, and then show how they can be interpreted as a PWA transition
-system using $k$-relational modeling.
+black box system by enriching the abstract reachability graph. We
+first formalize the notion of an enriched graph, and then show how
+they can be interpreted as a PWA transition system using
+$k$-relational modeling.
 
 \subsection{Abstract Enriched Graph}
 
@@ -482,3 +516,36 @@ length \textit{connected} and \textit{similar} segmented trajectories.
 %\]
 
 \figref{k2} illustrates the $k=2$ refinement on \figref{k1}.
+
+\subsection{Learning Affine Function from Trajectory Segments}
+
+The $\simulate$ function can be used to generate a data set of
+relations parameterized by time $\Delta_t$, for different values of
+states $\x_i$ and inputs $\vu_i$ as $\ds_{\Delta_t} =
+\setof{(\x_i,\x'_i,\vu_i) | \x'_i = \simulate(\x_i,\vu_i)}$.
+Moreover, by repeatedly applying $\simulate$, a discrete time series
+of a finite length $N$ can be generated from a given state $\x_1$
+and a sequence of inputs $\tupleof{\vu_1, \vu_2,\ldots,\vu_n}$ as shown
+below.
+\[\tupleof{\x_1, \x_2, \ldots, \x_n} \;\text{where}\; \x_{i>1} =
+\simulate(\x_{i-1}, \vu_{i-1}, \Delta_t)\]
+
+We now introduce a refinement of the data set $\ds \subseteq \ds$ by
+incrementally observing the future states in the time series.
+
+
+
+\[\ds_{\Delta_t} = \setof{(\x_i,\x'_i,\vu_i) | \x'_i =
+\simulate(\x_i,\vu_i)}\]
+
+\[\ds^{C_i} \subseteq \ds_t\]
+\[\ds^{C_i}\]
+
+
+$k$-Refinement of the data set $\ds^k$.
+$\ds_k = \setof{(\x,\x',\vu) | \x' =  \simulate(\x,\vu,k\Delta_t)}$
+
+state-input pairs of the form
+$(\x,\x')$
+data set equivalence traj segment
+$D_c, $

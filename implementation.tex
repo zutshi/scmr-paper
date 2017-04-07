@@ -35,19 +35,19 @@ time taken by the BMC engine. The total time in seconds (rounded off
 to an integer) is noted under \textbf{S3CAM-R} and \textbf{S3CAM}.
 $TO$ signifies time $>5hr$, after which the search was killed.}
 \label{tab:res-rel}
-\begin{tabular}{@{}lllll@{}}
+\begin{tabular}{@{}llll@{}}
 \toprule
-    Benchmark & BMC & LP & S3CAM-R & S3CAM\\
+    Benchmark & PWA Rel + BMC & PWA Rel + LP & S3CAM\\
 \midrule
-    Van der Pol ($\prop_3$)   &$<$1 & $0$ & $130$ & $24$\\
-    Brusselator               &$<$1 & $0$ & $4$    & $2$\\
-    Lorenz                    &$<$1 & $0$ & $122$  & $35$\\
+    Van der Pol ($\prop_3$)   &$130$ & $0$ & $24$\\
+    Brusselator               &$4$ & $0$ & $2$\\
+    Lorenz                    &$122$ & $0$ & $35$\\
 %B.Ball                    &  &   & \\
-    Nav ($\prop_P$)           &$4480$ & $0$ & $9423$   &$603$ \\
-    Nav ($\prop_Q$)           &$970$ & $0$ & $8105$   &$546$ \\
-    Nav ($\prop_R$)           &-  & $0$ &$TO$ & $2003$\\
-    Nav ($\prop_S$)           &-  & $0$ &$TO$ & $2100$\\
-    Bouncing Ball             &-  & $0$ &$TO$ & $450$\\
+    Nav ($\prop_P$)           &$TO$ & $2100$  & $603$ \\%9423 + 4480
+    Nav ($\prop_Q$)           &$TO$ & $25m$   & $546$ \\%8105 + 970
+    Nav ($\prop_R$)           &$TO$ & $0$  & $2003$\\
+    Nav ($\prop_S$)           &$TO$ & $0$  & $2100$\\
+    Bouncing Ball             &$TO$ & $0$  & $450$\\
 
 \bottomrule
 \end{tabular}

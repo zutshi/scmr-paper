@@ -1,31 +1,47 @@
 In this section, we present the model of the hybrid dynamical system
-under test and the basics of pwa relational abstraction.
+under test, and the background for pwa relational abstractions.
 
-We now use the family of reachability relations presented
-in~\cite{zutshi2014multiple} to charecterize the system $\System$
-under test. We denote the states of the hybrid system $\System$, by $\HybridStates \subseteq \Modes \times \Reals^n$ be the (infinite)
-set of hybrid states of the system $\System$, where $\Modes$ is a
-finite set of discrete modes, and $\Inputs$ be the set of input
-signals to $\System$ of the form $[0,T] \rightarrow \reals^k$ for some
-given time horizon $T$. The family of
-relations $\reach{t,u} \subseteq \HybridStates \times \HybridStates$,
-parameterized by time $t \geq 0$ and input signal $u \in \Inputs$
-defined over time $[0,T]$.  We use the notation $\vx\ \reach{t,u} \vy$
-to denote $(\vx,\vy) \in \reach{t,u}$. The relations $\reach{t,u}$
-satisfy the following basic properties:
+\mypara{The System under test $\System$} is assumed to be a hybrid
+dynamical system. Its state is denoted by $\HybridStates \subseteq
+\Modes \times \Reals^n$, where $\Modes$ is a finite set of discrete
+modes. Let $\Inputs: [0,T] \rightarrow \reals^k$ be the set of input
+signals to $\System$ over a finite time horizon $T$.
 
-
-We assume a black-box model
-equipped with a forward simulation map $\simulate^{\System}$ that can
-be used to compute the discrete time traces of the system. Let
-$\reach{}$ Given the
-hybrid state space $\vx\in\HybridStates$ and input space $u
-\in\Inputs$ and time step $\Delta_t$, it computes the unique successor
-state $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u}
+For the purpose of falsification, $\System$ is viewed as a black-box
+equipped with a forward simulation map $\simulate^{\System}:
+(\HybridStates, \vu, t) \mapsto \HybridStates$.  A simulation step
+computes the unique reachable state $\vx \in \HybridStates$ in time
+$t$ from a given state input pair $(\vx,\vu)$.  We formalize this
+using the notion of time parameterized reachability relations
+$\reach{t, \vu}_\System \subseteq \HybridStates \times \HybridStates$
+detailed in~\cite{zutshi2014multiple}.
+Hence, $\vy=\simulate^{\System}(\vx,u,t)$ \emph{iff} $\vx \reach{t,u}
 \vy$.
+% Given the hybrid state space $\vx\in\HybridStates$ and input space $u
+% \in\Inputs$ and time step $t$, it computes the unique successor state
+% $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
+
+
+\myipara{System Assumptions:} We require that $\System$ be
+forward deterministic. This
+requires existence and uniqueness of trajectories over a finite time
+horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
+the vector field in each hybrid mode and ruling away issues such as
+finite escape times~\cite{Meiss/2007/Differential}. From a practical
+standpoint, these assumptions do not pose significant restrictions for
+the type of problems that we wish to address. Finally, we assume full
+observability of the system state, validate our results only against
+the $\simulate$ function and {\em do not} assume that an analytic closed-form
+representation of the system dynamics is available.
+
+
+As the relations abstract the solution of a continuous time,
+foward deterministic hybrid dynamical
+system, they are deterministic, causal and satisfy the semi-group property.
+
+From here on, we drop the subscript $\System$.
 
 \begin{definition}
-
     The system under test $\System$ evolves in the set of infinite
     hybrid state-space $\HybridStates$ under the effect of inputs $\vu
     \in \Inputs$. Its evolution is defined by a simulation function
@@ -33,28 +49,19 @@ state $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u}
     \HybridStates$, where $\simulate^\System(\x,\vu,\Delta_t)$ maps a
     current state $\x$ at time $t$ to a new state $\x'$ at time
     $t+\Delta_t$, under a constant input $\vu$.
-
 \end{definition}
 
-The subscript $\System$ will be dropped whenever the system $\System$
-being referred to is clear from the context.
-
-
-\myipara{Black-Box Assumptions:} For above properties of the
-$\reach{t,u}$ relation to hold, we require that $\System$ be
-deterministic. We also assume that $\System$ can be simulated from a
-given initial state using function $\simulate^{\System}$. This
-requires existence and uniqueness of trajectories over a finite time
-horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
-the vector field in each hybrid mode and ruling away issues such as
-finite escape times~\cite{Meiss/2007/Differential}. From a practical
-standpoint, these assumptions do not pose significant restrictions for
-the type of problems that we wish to address.  Finally, we assume full
-observability of the system state, ignore numerical errors due to
-simulation and {\em do not} assume that an analytic closed-form
-representation of the system dynamics is available.
 
 \subsection{Learning Dynamics using Simple Linear Regression}
+
+Best effor falsification works by enumerating the reachability
+relations $\reach{}$ within a given budget. Depending upon the
+specific instance of the problem, the budget can be prohibhitive,
+requiring exponential computational and storage resources. Instead, we
+proceed by summarizing these relations by their corresponding affine
+maps using linear regression. The learnt analytical forms are
+represented as $\vx' = A\vx + B\vu + \delta$, where $A$ and $B$ are
+matrices and $\delta$ the estimated error.
 
 In statistics, linear regression is the problem of finding an affine
 function or \textit{predictor}, which can `best' summarize the
@@ -65,14 +72,13 @@ function \textit{ordinary least squares} (OLS) for this presentation.
 
 \mypara{Ordinary Least Squares (OLS)}
 
-The
 Let the data set be comprised of $N$ input and output pairs $(\x, y)$,
 where $\x\in\reals^n$ and $y\in\reals$. If $N>n$, which is the case in
 the current context of \textit{finding the best fit}, the problem is
-over-determined; there are more equations than unknowns. Hence, a
+over-determined: there are more equations than unknowns. Hence, a
 single affine function cannot be found which satisfies the equation
 $\forall i\in\{1\ldots N\}. y_i = \vec{a}^T\x_i + b$. Instead, we need
-to find the `best' choice for $\vec{a}$ and $b$. This is formally
+to find the `best' choice for $\vec{a}$ and $b$. This choice is formally
 defined using a loss function. For the case of simple linear
 regression or OLS, the loss function is the sum of squares of the
 errors in prediction.  The task is then to determine the vector of
@@ -93,7 +99,7 @@ The solution of OLS can be analytically computed as
 \[ Ab = (X^TX)^{-1}X^T\y\]
 where $X$ is the matrix representing the horizontal stacking of all
 $\hat{\x}$.
-The details can be found in several texts on learning and statistics
+The details can be found in standard texts on learning and statistics
 \cite{friedman2001elements}.
 
 Given a time invariant dynamical system $\x' = \simulate(\x, \Delta)$,
@@ -178,17 +184,17 @@ $A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T \end{bmatrix}$ and $\vb
 
 
 
-\subsection{Relational Abstractions}
-For a hybrid automaton model, they can summarize the continuous
-dynamics of each mode using a binary relation over continuous states.
-The resulting relations are timeless (independent) and hence valid for
-all time as long as the mode invariant is satisfied. The relations
-take the general form of $R(\x,\x') \bowtie 0$, where $\bowtie$
-represents one of the relational operators $=, \ge, \le, <, >$. For
-example, an abstraction that captures the monotonicity with respect to
-time for the differential equation $\dot{x} = 2$ is $x' > x$. The
-abstraction capturing the relation between the set of ODEs: $\dot{x} =
-2$, $\dot{y} = 5$, is $5(x' - x) = 2(y' - y)$.
+% \subsection{Relational Abstractions}
+% For a hybrid automaton model, they can summarize the continuous
+% dynamics of each mode using a binary relation over continuous states.
+% The resulting relations are timeless (independent) and hence valid for
+% all time as long as the mode invariant is satisfied. The relations
+% take the general form of $R(\x,\x') \bowtie 0$, where $\bowtie$
+% represents one of the relational operators $=, \ge, \le, <, >$. For
+% example, an abstraction that captures the monotonicity with respect to
+% time for the differential equation $\dot{x} = 2$ is $x' > x$. The
+% abstraction capturing the relation between the set of ODEs: $\dot{x} =
+% 2$, $\dot{y} = 5$, is $5(x' - x) = 2(y' - y)$.
 
 %%  Similar to timeless relational abstractions, time-aware relational
 %%  abstractions \cite{mover2013time} construct binary relations between
@@ -209,11 +215,13 @@ $\rho:\tupleof{\pLocs,\pVars,\scrT, \pLocI,\Theta}$
 where each transition $\tau \in \scrT$, is associated with a
 transition relation of the form
 \[
-    \rho_{\tau}(\pVar,\pVar') \subseteq \setof{(\pVar,f_{\tau}(\pVar)) \;|\; g_\tau(\pVar) \land g'_\tau(f_{\tau}(\pVar))}
+    \rho_{\tau}(\pVar,\pVar') \subseteq \setof{(\pVar,\pVar')) \;|\;
+    g_\tau(\pVar) \land g'_\tau(\pVar') \land f_{\tau}(\pVar, \pVar')}
 \]
-where $f_{\tau}$ is an affine map relating the states and $g_{\tau}$,
-$g'_{\tau}$ are affine guards (pre and post conditions) on the states.
-The assertion on the initial states $\Theta$ is also affine.
+where $f_{\tau}$ is an affine relation on the pre and post states
+$\pVar,\pVar'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
+post conditions) on the states and $\Theta$ is an affine assertion on
+the initial states.
 
 We can now use a PWA transition system $\rho$ to approximate the
 behavior of a hybrid dynamical system $\System$ defined by a simulator
@@ -229,15 +237,16 @@ $m$ constraints) in the state-space
 g:C\x - \vd \le 0
 \]
 where $C$ is an $m \times n$ matrix and $\vd$ is a vector of length
-$m$. The affine maps $f_\tau$ can be represented in matrix form as
-$f:\x \mapsto A\x+\vb$. To make $f_\tau$ `richer', we incorporate
-an error term $\delta$ which is defined by a vector of intervals
-$[\delta_{\min},\delta_{\max}]$. Hence,
+$m$. The affine relation $f_\tau$ can be represented using matrix $A$
+and an offset vector $\vb$ as $f_\tau \subseteq \setof{(\x,\x') | \x'
+= A\x+\vb}$. Finaly, we incorporte an approximate non-deterministic
+error term $\delta$, defined as a vector of intervals
+$[\delta_{\min},\delta_{\max}]$.
 \[
-f:\x \mapsto A\x + \vb + \delta
+    f_\tau \subseteq \setof{(\x,\x') | \x' = A\x+\vb}.
 \]
-defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
-\in f_\tau(\x)}$.
+%defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
+%\in f_\tau(\x)}$.
 
 
 % Given a state vector $\x\in\reals^n$, a guarded affine map
@@ -262,18 +271,19 @@ relations as follows
 \begin{equation}
     \scrT = \left\{
         \begin{array}{ll}
-            g_1(\x) \land g'_1(\x') \implies \x' \in f_1(\x) \\
+            g_1(\x) \land g'_1(\x') \implies f_1(\x,\x') \\
             \ldots\\
-            g_n(\x) \land g'_n(\x') \implies \x' \in f_n(\x) \\
+            g_n(\x) \land g'_n(\x') \implies f_n(\x,\x') \\
         \end{array}
     \right.
 \end{equation}
 
 \end{definition}
 
-where $f_i:\x \mapsto A_i\x + \vb_i + \delta_i$,
-$g_i(\x):C_i\x-\vd_i\le0$, $g'_i(\x'):C'_i\x'-\vd'_i\le0$ and $\x'$
-denotes the next state of the system.
+%where $f_i:\x \mapsto A_i\x + \vb_i + \delta_i$,
+%$g_i(\x):C_i\x-\vd_i\le0$, $g'_i(\x'):C'_i\x'-\vd'_i\le0$ and $\x'$
+where $g_i$ and $g'_i$ are affine predicates and $f_i$ are affine
+relations and $\x'$ denotes the next state of the system.
 
 A PWA model is \textit{deterministic}, iff for every state
 $\x\in\HybridStates^n$, a unique guarded affine map is satisfied and
@@ -288,7 +298,7 @@ A PWA transition system is \textit{complete}, iff for every state
 $\x\in\HybridStates^n$, there exists at least one satisfied
 transition relation $\scrT$. If this is not the case, the system can
 deadlock, with no further executions. This usually results from
-incorrect modeling of SDCS, and from here on, we do not consider such
+modeling errors, and from here on, we do not consider such
 cases.
 
 % Given a dynamical system over a continuous state-space
@@ -319,35 +329,3 @@ cases.
 % $\x\in\ContStates$, there exists at least one satisfied guarded affine
 % map $\gm$.
 
-\subsection{Learning Affine Function from Trajectory Segments}
-
-The $\simulate$ function can be used to generate a data set of
-relations parameterized by time $\Delta_t$, for different values of
-states $\x_i$ and inputs $\vu_i$ as $\ds_{\Delta_t} =
-\setof{(\x_i,\x'_i,\vu_i) | \x'_i = \simulate(\x_i,\vu_i)}$.
-Moreover, by repeatedly applying $\simulate$, a discrete time series
-of a finite length $N$ can be generated from a given state $\x_1$
-and a sequence of inputs $\tupleof{\vu_1, \vu_2,\ldots,\vu_n}$ as shown
-below.
-\[\tupleof{\x_1, \x_2, \ldots, \x_n} \;\text{where}\; \x_{i>1} =
-\simulate(\x_{i-1}, \vu_{i-1}, \Delta_t)\]
-
-We now introduce a refinement of the data set $\ds \subseteq \ds$ by
-incrementally observing the future states in the time series.
-
-
-
-\[\ds_{\Delta_t} = \setof{(\x_i,\x'_i,\vu_i) | \x'_i =
-\simulate(\x_i,\vu_i)}\]
-
-\[\ds^{C_i} \subseteq \ds_t\]
-\[\ds^{C_i}\]
-
-
-$k$-Refinement of the data set $\ds^k$.
-$\ds_k = \setof{(\x,\x',\vu) | \x' =  \simulate(\x,\vu,k\Delta_t)}$
-
-state-input pairs of the form
-$(\x,\x')$
-data set equivalence traj segment
-$D_c, $

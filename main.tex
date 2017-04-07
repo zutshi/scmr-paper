@@ -1,62 +1,21 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%2345678901234567890123456789012345678901234567890123456789012345678901234567890
-%        1         2         3         4         5         6         7         8
-
-\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
-
-%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
-
-\IEEEoverridecommandlockouts                              % This command is only needed if 
-                                                          % you want to use the \thanks command
-
-\overrideIEEEmargins                                      % Needed to meet printer requirements.
-
-% See the \addtolength command later in the file to balance the column lengths
-% on the last page of the document
-
-% The following packages can be found on http:\\www.ctan.org
-%\usepackage{graphics} % for pdf, bitmapped graphics files
-%\usepackage{epsfig} % for postscript graphics files
-%\usepackage{mathptmx} % assumes new font selection scheme installed
-%\usepackage{times} % assumes new font selection scheme installed
-%\usepackage{amsmath} % assumes amsmath package installed
-%\usepackage{amssymb}  % assumes amsmath package installed
-
-
-\usepackage{tikz}
-\usepackage{framed}
-\usepackage{stmaryrd}
-\usepackage{amsmath}
-\usepackage{ragged2e}
-\usepackage{varwidth}
-
-\usetikzlibrary{arrows,backgrounds,positioning,fit,automata,shapes,snakes,patterns}
-\usetikzlibrary{arrows,backgrounds,decorations,decorations.pathmorphing,positioning,fit,automata,shapes,snakes,patterns}
-\usetikzlibrary{shapes.geometric, arrows, positioning, calc, matrix}
-\tikzset{block/.style = {draw, fill=blue!20, rectangle,
-                         minimum height=3em, minimum width=6em},
-        sum/.style = {draw, fill=blue!20, circle, node distance=1cm},
-        input/.style = {coordinate},
-        output/.style = {coordinate},
-        pinstyle/.style = {pin edge={to-,thin,black}}
-}
+\documentclass{sig-alternate}
 
 \usepackage{balance}
 \usepackage{cite}
 
-%\renewcommand{\baselinestretch}{0.97}
+\usepackage{tikz}
+\usetikzlibrary{arrows,backgrounds,decorations,decorations.pathmorphing,positioning,fit,automata,shapes,snakes,patterns}
+
+
+\makeatletter
+\newif\if@restonecol
+\makeatother
+\let\algorithm\relax
+\let\endalgorithm\relax
 
 \usepackage{times}
-%\usepackage{graphicx,enumerate}
-\usepackage{graphicx}
-
-% gives an error for some reason, hopefully not important
-%\usepackage{enumitem}
-
-%\usepackage{enumerate}
+\usepackage{graphicx,enumerate}
 \usepackage{subfig}
-%\usepackage{caption}
-%\usepackage{subcaption}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{fancyhdr}
 \usepackage{balance}
@@ -64,14 +23,12 @@
 \usepackage{color}
 \usepackage{wrapfig}
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
-%\usepackage{booktabs}
-\usepackage{booktabs,siunitx}
+\usepackage{booktabs}
 \usepackage{xcolor,colortbl}
 \usepackage{times}
 \usepackage{microtype}
+\usepackage{tikz}
 \usepackage{url}
-\usepackage{listings}
-\usepackage{multirow}
 %\usepackage{tablefootnote}
 
 % \usepackage{hyperref}
@@ -79,76 +36,36 @@
 %     colorlinks=false,
 %     pdfborder={0 0 0},
 % }
-
+\usetikzlibrary{arrows,backgrounds,positioning,fit,automata,shapes,snakes,patterns}
 %%\usepackage{abstract}
-
-\makeatletter
-\def\url@mystyle{%
-  %\@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small\ttfamily}}}
-  \@ifundefined{selectfont}{\def\UrlFont{\mathtt}}{\def\UrlFont{}}}
-  %\@ifundefined{selectfont}{\def\UrlFont{\sf}}{\def\UrlFont{\small}}}
-\makeatother
-%\urlstyle{mystyle}
-\urlstyle{rm}
-
-
-\definecolor{mygreen}{rgb}{0,0.6,0}
-\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-\definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 \newtheorem{example}{Example}[section]
 \newtheorem{definition}{Definition}[section]
-\newtheorem{assumption}{Assumption}[section]
 \newtheorem{lemma}{Lemma}[section]
 \newtheorem{theorem}{Theorem}[section]
 
-%TODO: Fix line 738 of sig-alternate-05-2015.cls for the copyright
-%notice to appear
-\DeclareCaptionType{copyrightbox}
+\begin{document}
+
+%\conferenceinfo{...}{BD}
+
+% \title{Multiple Shooting, CEGAR-based \\ Falsification for Hybrid
+% Systems}
+
+
+\title{Piece-Wise Relational Models for \\ Falsifying Safety
+Properties in Hybrid Systems.
+}
+
 
 \input{generic_macros.tex}
 \input{specific_macros.tex}
 
-%\clubpenalty=10000
-%\widowpenalty = 10000
-
-
-
-
-
-\title{\LARGE \bf Piece-Wise Relational Models for Falsification of Safety Properties in Hybrid Systems.}
-
-
-\author{Aditya Zutshi$^{1}$, Sriram Sankaranarayanan$^{1}$, Sergio Mover$^{1}$ and Jyotirmoy V. Deshmukh$^{2}$% <-this % stops a space
-\thanks{*This work was not supported by any organization}% <-this % stops a space
-\thanks{$^{1}$Dept. of Computer Science, University of Colorado, Boulder \newline
-        {\tt\small \{zutshi,srirams,sergio.mover\}@colorado.edu}}%
-\thanks{$^{2}$Toyota Technical Center, LA \newline
-        {\tt\small jyotirmoy.deshmukh@toyota.com}}%
-}
-%\thanks{$^{1}$Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
-%        University of Twente, 7500 AE Enschede, The Netherlands
-%        {\tt\small albert.author@papercept.net}}%
-%\thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
-%        Dayton, OH 45435, USA
-%        {\tt\small b.d.researcher@ieee.org}}%
-
-
-\begin{document}
-
-
-
 \maketitle
-\thispagestyle{empty}
-\pagestyle{empty}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-
-\input{abstract}
-
+  \input{abstract.tex}
 \end{abstract}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -205,23 +122,13 @@
 \input{conclusion.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \bibliographystyle{abbrv}
-\bibliography{refs}
+\bibliography{refs}  % sigproc.bib is the name of the Bibliography in this case
 
-
-\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
-                                  % on the last page of the document manually. It shortens
-                                  % the textheight of the last page by a suitable amount.
-                                  % This command does not take effect until the next page
-                                  % so it should come on the page before the last. Make
-                                  % sure that you do not shorten the textheight too much.
-
-
-% \section*{ACKNOWLEDGMENT}
-
-% The preferred spelling of the word ÒacknowledgmentÓ in America is without an ÒeÓ after the ÒgÓ. Avoid the stilted expression, ÒOne of us (R. B. G.) thanks . . .Ó  Instead, try ÒR. B. G. thanksÓ. Put sponsor acknowledgments in the unnumbered footnote on the first page.
-
-
-
-
+\footnotetext[6]{out of 1,000 simulations}
+% \newpage
+% \appendix
+% \input{appendix.tex}
 \end{document}
+

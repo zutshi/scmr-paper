@@ -1,18 +1,40 @@
-Sampling based falsification techniques for black box hybrid dynamical
-systems use numerical simulations to search for violations of
-properties (specified in temporal logic). This constraints them to a
-`best effort' category unlike rigorous verification techniques, which
-however require a white box model. This work tries to bridge the gap
-by presenting an automatic falsification technique which models the
-black box system before searching for a violation. It proceeds by (a)
-modeling the behavior of the system using a piecewise affine (PWA)
-discrete time model and, (b) encoding the search for a violation as a
-standard bounded model checking problem. The resulting problem is a
-disjunction of linear programs and can be solved directly using
-off-the-shelf SMT solvers or by multiple runs of a linear programming
-solver. If a counter-example is found, the existence of a
-corresponding violation in the original system is checked for
-reproducibility.
+% Sampling based falsification techniques for black box hybrid dynamical
+% systems use numerical simulations to search for violations of
+% properties (specified in temporal logic). This constraints them to a
+% `best effort' category unlike rigorous verification techniques, which
+% however require a white box model. This work tries to bridge the gap
+% by presenting an automatic falsification technique which models the
+% black box system before searching for a violation. It proceeds by (a)
+% modeling the behavior of the system using a piecewise affine (PWA)
+% discrete time model and, (b) encoding the search for a violation as a
+% standard bounded model checking problem. The resulting problem is a
+% disjunction of linear programs and can be solved directly using
+% off-the-shelf SMT solvers or by multiple runs of a linear programming
+% solver. If a counter-example is found, the existence of a
+% corresponding violation in the original system is checked for
+% reproducibility.
+
+Models of embedded control systems are often so complex that they can
+be treated as effectively black-box systems. Sampling-based methods
+for testing such systems use numerical simulations to search for
+violations of properties (specified in a suitable requirement
+formalism, such as temporal logic). This constrains them to a `best
+effort' category unlike rigorous verification techniques, which
+however require a model amenable to symbolic analysis. This work tries
+to bridge the gap by presenting an automatic falsification technique
+which learns a data-driven abstraction of the black box system before
+searching for a violation. It proceeds by (a) modeling the behavior of
+the system using a piecewise affine (PWA) discrete-time {\em
+relational} model and, (b) encoding the search for a violation in the
+abstract model as a bounded model checking problem. The bounded model
+checking query in this instance can be viewed as a disjunction of
+conjunctions of linear constraints (i.e. linear programs) and can be
+solved directly using off-the-shelf SMT solvers or by multiple runs of
+a linear programming solver. For any counter-example found in the
+abstraction, we check the existence of a corresponding violation in
+the original system. We demonstrate the efficacy of our technique on a
+few dynamical systems examples.
+
 
 % In this work we address the problem of finding unsafe behaviors with
 % given a safety property for a hybrid dynamical system. We treat the
