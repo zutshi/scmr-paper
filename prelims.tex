@@ -14,10 +14,23 @@ involves computing the unique reachable state $\vx \in \HybridStates$ in time
 $t$ from a given state input pair $(\vx,\vu)$.  We formalize this
 using the notion of time parameterized reachability relations
 $\reach{t, \vu}_\System \subseteq \HybridStates \times \HybridStates$
-detailed in~\cite{zutshi2014multiple}. Finally, $\vx'=\simulate^{\System}(\vx,u,t)$ \emph{iff} $\vx \reach{t,u} \vx'$.
+detailed in~\cite{zutshi2014multiple}.
 % Given the hybrid state space $\vx\in\HybridStates$ and input space $u
 % \in\Inputs$ and time step $t$, it computes the unique successor state
 % $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
+
+
+\begin{definition}[System Evolution]
+    The system under test $\System$ evolves in the set of infinite
+    hybrid state-space $\HybridStates$ under the effect of inputs $\vu
+    \in \Inputs$. Its evolution is defined by the simulation function
+    $\simulate^\System : \HybridStates \times \Inputs \times \Reals^+ \mapsto
+    \HybridStates$, where $\simulate^\System(\x,\vu,\Delta_t)$ maps a
+    current state $\x$ at time $t$ to a new state $\x'$ at time
+    $t+\Delta_t$, under a constant input $\vu$.
+    Finally, $\vx'=\simulate^{\System}(\vx,u,t)$ \emph{iff} $\vx
+    \reach{t,u} \vx' \in \reach{t, \vu}_\System$.
+\end{definition}
 
 \mypara{System Assumptions:} We require that $\System$ can always be
 simulated forward in time with deterministic results. This in turn
@@ -35,15 +48,6 @@ the analytic closed-form representation of the system dynamics is
 assumed to be unavailable).  From here on, we drop the subscript
 $\System$.
 
-\begin{definition}
-    The system under test $\System$ evolves in the set of infinite
-    hybrid state-space $\HybridStates$ under the effect of inputs $\vu
-    \in \Inputs$. Its evolution is defined by a simulation function
-    $\simulate^\System : \HybridStates \times \Inputs \Reals^+ \mapsto
-    \HybridStates$, where $\simulate^\System(\x,\vu,\Delta_t)$ maps a
-    current state $\x$ at time $t$ to a new state $\x'$ at time
-    $t+\Delta_t$, under a constant input $\vu$.
-\end{definition}
 
 
 \subsection{Learning Dynamics using Simple Linear Regression}
