@@ -1,42 +1,86 @@
-\mypara{Automatic falsification techniques for hybrid systems} bridge
-the gap between the manual (and random) testing approaches and
-formal verification approaches.
+% related work
 
-The current state-of-the-art approaches (Cf. related
-work~\cite{nghiem2010monte}) for testing hybrid systems are based on
-numerical simulations. These can be further classified into robustness
-guided testing: S-Taliro~\cite{annpureddy2011s} and
-Breach~\cite{donze2010breach}, and RRT (Rapidly-exploring Random Tree)
-based:~\cite{nahhal_test_2007,Dang09,dreossi2015efficient}. An
-alternative approach based on multiple shooting and CEGAR
-(Counterexample Guided Abstraction Refinement), was proposed by the
-authors in~\cite{zutshi2014multiple}. Unlike the previous approaches,
-which directly use numerical simulations, it used the computed
-trajectories to explore an implicit state-space abstraction and guided the
-search towards abstract counter-examples. In this paper, we add
-another step which identifies the affine dynamics associated with each
-relation of the abstraction. This is akin to identifying a pwa model
-from simulations.
+\mypara{Sampling based falsification techniques for hybrid systems}
+improve upon the commonly used testing approaches. However, a wide gap
+between falsification and verification approaches. The current
+state-of-the-art approaches (Cf. related work~\cite{nghiem2010monte})
+for testing hybrid systems are based on numerical simulations and are
+guided by robustness: S-Taliro~\cite{annpureddy2011s} and
+Breach~\cite{donze2010breach}, and RRT (Rapidly-exploring Random
+Tree):~\cite{nahhal_test_2007,Dang09} or
+both~\cite{dreossi2015efficient}. An alternative approach based on
+multiple shooting and CEGAR (Counterexample Guided Abstraction
+Refinement), was proposed in~\cite{zutshi2014multiple}. Unlike the
+previous approaches which directly use numerical simulations, it
+searches an implicit abstraction by using the computed trajectories to
+enumerate the relations between abstract states. The resulting graph
+over relations is searched for paths corresponding to abstract
+counter-examples. In this paper, we show how this search procedure can
+be combined with the identification of the affine dynamics associated
+with each relation of the abstraction, effectively computing a
+`relational abstraction'. We now overview the several existing PWA
+identification techniques for hybrid systems.
 
-\mypara{Formal analysis of pwa systems.} Discrete time, continuous
+%another step to identify the affine dynamics
+%associated with each relation of the abstraction, effectively
+%computing a `relational abstraction'. This is akin to identifying a
+%pwa model from simulations.
+
+\mypara{Identification of hybrid systems.} Discrete time - continuous
 state piece-wise affine models are often used to model both continuous
-and hybrid dynamical systems. They are very expressive, and can model
-non-linear continuous dynamics with arbitrary
-accuracy~\cite{wen2008basis} and a large family of hybrid
-systems~\cite{heemels2001equivalence}. Several approaches have been
-proposed formal analysis of pwa systems,
-including~\cite{batt2007model, yordanov2007model, yordanov2010formal,
-koutsoukos2003safety, asarin2000approximate}
+and hybrid dynamical systems. They are very expressive and can model
+non-linear continuous dynamics (with arbitrary
+accuracy)~\cite{wen2008basis} and a large family of hybrid
+systems~\cite{heemels2001equivalence}. In the past, several approaches
+have been put forth for the identification of PWA
+models~\cite{paoletti2007identification}.  They are based on Bayesian
+methods~\cite{juloski2005bayesian}, bounded-error
+methods~\cite{bemporad2003greedy, bemporad2005bounded,
+roll2004identification}, clustering based
+methods~\cite{ferrari2003clustering} and algebraic
+methods~\cite{vidal2003algebraic}. We propose a simpler approach based
+on fixed hyper-rectangular domains, also explored
+in~\cite{billings1987piecewise}, but parameterized by the size of the
+rectangles $\epsilon$ and the time discretization step $\Delta$.
+%Other identification approaches have been explored in~\cite{saha2015alchemist}.
+%nimit singhania
 
-\mypara{Identification of hybrid systems.} Several approaches have been put
-forth for the identification of PWA models~\cite{paoletti2007identification}.
-They are based on Bayesian methods~\cite{juloski2005bayesian}, bounded-error
-methods~\cite{bemporad2003greedy,bemporad2005bounded,roll2004identification},
-clustering based methods~\cite{ferrari2003clustering} and algebraic
-methods~\cite{vidal2003algebraic}. Unlike them, we peopose a simpler approach
-based on fixed hyper-rectangular domains~\cite{billings1987piecewise}, but
-parameterized by the size of the rectangles ($\epsilon$) and the time
-discretization step $\Delta$.
+\mypara{Formal analysis of pwa systems.} Formal verification of pwa
+systems using reachability analysis has been proposed
+in~\cite{yordanov2010formal, koutsoukos2003safety,
+asarin2000approximate}, and extended to model checking temporal
+properties in~\cite{yordanov2007model, batt2007model}. PWA systems can
+be equivalently translated to non-deterministic infinite state
+transition systems and then model checked.  Related approaches using a
+bisimilar quotient have been proposed in~\cite{pappas2003bisimilar,
+tabuada2006linear, yordanov2007model}. Finally, because hybrid
+automata models can equivalently represent pwa systems, existing
+falsification and verification tools can be used for their analysis.
+
+\mypara{Relational abstractions} were first introduced
+by~\cite{Sankaranarayanan+Tiwari/2011/Relational} for abstracting away the
+continuous dynamics in hybrid automata by discrete relations, %using suitable abstractions,
+resulting in an infinite state transition system.  Both time
+independent~\cite{Sankaranarayanan+Tiwari/2011/Relational} and time
+dependent relations~\cite{zutshi2012timed, mover2013time} have been
+proposed; the former captures all reachable states over all time,
+whereas, the latter explicitly includes time by relating reachable
+states to time. Thus it can prove timing properties whereas, time
+independent relational abstractions can not. Properties of relational
+abstractions can be verified using $k$-induction or falsified
+using bounded model checkers.
+
+%For general hybrid dynamical
+%systems, algorithmically computing analytical solutions do not exist.
+
+
+% Similar to timeless relational abstractions, time-aware relational
+% abstractions \cite{mover2013time} construct binary relations between
+% the current state $\x$ of the system and any future reachable state
+% $\x'$. The difference lies with the latter also constructing relations
+% between the current time $t$ and any future time $t'$.
+
+
 
 % Alternatively, verification approaches have also been used, where a
 % formal model (usually hybrid automata) is first constructed, often
@@ -45,9 +89,88 @@ discretization step $\Delta$.
 
 %Model checking of pwa systems.
 
-
-
 %\item Fixed time caveats
 %\item Effects of refining parameters: time step $\Delta$ and grid size $\epsilon$.
 
 %\mypara{Model Checking PWA Models.} Model checking transition systems
+
+% Mention yan's work
+
+
+
+% \subsection{Relational Abstractions}
+
+% For general hybrid dynamical systems, algorithmic ways for computing
+% analytical solutions do not exist. Discretization (along with suitable
+% abstractions) is often employed to transform the systems into a
+% discrete transition system. Relational abstractions is one such idea,
+% which abstracts continuous dynamics by discrete relations using
+% appropriate \textit{reachability invariants}. Both time independent
+% and time dependent relations have been proposed; the former captures
+% all reachable states over all time, whereas, the latter explicitly
+% includes time by relating reachable states to time. Thus it can prove
+% timing properties whereas, time independent relational abstractions
+% can not. In both cases, the resulting abstractions can be interpreted
+% as discrete transition systems and can be analyzed using model
+% checkers. We briefly discuss these two types of abstractions.
+
+% \mypara{Timeless Relational Abstraction}
+
+% Relational abstractions for hybrid systems were proposed in
+% \cite{Sankaranarayanan+Tiwari/2011/Relational}. For a hybrid automaton
+% model, they can summarize the continuous dynamics of each mode using a
+% binary relation over continuous states. The resulting relations are
+% timeless (independent) and hence valid for all time as long as the
+% mode invariant is satisfied. The relations take the general form of
+% $R(\x,\x') \bowtie 0$, where $\bowtie$ represents one of the
+% relational operators $=, \ge, \le, <, >$. For example, an abstraction
+% that captures the monotonicity with respect to time for the
+% differential equation $\dot{x} = 2$ is $x' > x$. The abstraction
+% capturing the relation between the set of ODEs: $\dot{x} = 2$,
+% $\dot{y} = 5$, is $5(x' - x) = 2(y' - y)$.
+
+% Such relation summaries, discretized the continuous evolution of a
+% given system into an infinite state transition system, in which safety
+% properties can be verified using $k$-induction, or falsified using
+% bounded model checkers. The relationalization procedure involves
+% finding suitable invariants in a chosen abstract domain, such as
+% affine abstractions, eigen abstractions or box abstractions
+% \cite{Sankaranarayanan+Tiwari/2011/Relational}.  For this, different
+% techniques like template based invariant generation
+% \cite{Gulwani+Tiwari/2008/Constraint,
+% Colon+Sankaranarayanan+Sipma/03/Linear} can be used.
+
+% \mypara{Timed and Time-Aware Relational Abstractions}
+
+% As the above discussed relations are timeless, we cannot reason over
+% the timing properties of the original system. Moreover, they are not
+% suitable for time-triggered systems. Timed relational
+% abstractions~\cite{zutshi2012timed} and time-aware relational
+% abstractions~\cite{mover2013time} were proposed to overcome these
+% shortcomings by explicitly including time in the relations. In
+% addition, both can be more precise than their timeless counterpart,
+% but unlike it, assume continuous affine dynamics.
+
+% To analyze time-triggered systems like an SDCS modeled by an affine
+% hybrid automata~\footnote{An affine hybrid automata is restricted to
+% the ODEs, resets and guards being affine.}, timed relational
+% abstractions can be computed directly from the solutions of the
+% underlying affine ODEs.  Recall that the solution of an affine ODE
+% $\dot{\x} = A\x$ can be represented using the matrix exponential as
+% $\x(t) = e^{tA}\x(0)$. This gives us the timed relation $\x' =
+% e^{tA}\x$.  Clearly, the relation is non-linear with respect to time.
+% However, for the case of SDCS with a fixed sampling time period, we
+% obtain linear relations in $\x$.  We demonstrated the usefulness of
+% timed relational abstractions for the case of linear systems in
+% \cite{zutshi2012timed}, and now incorporate the idea to discretized
+% black box dynamical systems.
+
+% Similar to timeless relational abstractions, time-aware relational
+% abstractions \cite{mover2013time} construct binary relations between
+% the current state $\x$ of the system and any future reachable state
+% $\x'$. The difference lies with the latter also constructing relations
+% between the current time $t$ and any future time $t'$. This is
+% achieved by a case by case analysis of the eigen structure of the
+% matrix $A$ (of an affine ODE). Separate abstractions are used for the
+% case of linear systems with constant rate, real eigen values and
+% complex eigenvalues.

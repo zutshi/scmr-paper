@@ -1,14 +1,30 @@
-In this work we address the problem of finding unsafe behaviors with
-given a safety property for a hybrid dynamical system. We treat the
-system as a black box and approach the problem in two distinct steps.
-First, we model the behavior of the system using a piecewise affine
-discrete time model. Such a model is incomplete in nature and is
-computed with respect to the given property. Next, we encode the
-search for falsification as a bounded model checking query and use an
-SMT solver to find a counter example. If found, we check the existance
-of the violation in the original system to ensure reproducibility.
+Sampling based falsification techniques for black box hybrid dynamical
+systems use numerical simulations to search for violations of
+properties (specified in temporal logic). This constraints them to a
+`best effort' category unlike rigorous verification techniques, which
+however require a white box model. This work tries to bridge the gap
+by presenting an automatic falsification technique which models the
+black box system before searching for a violation. It proceeds by (a)
+modeling the behavior of the system using a piecewise affine (PWA)
+discrete time model and, (b) encoding the search for a violation as a
+standard bounded model checking problem. The resulting problem is a
+disjunction of linear programs and can be solved directly using
+off-the-shelf SMT solvers or by multiple runs of a linear programming
+solver. If a counter-example is found, the existence of a
+corresponding violation in the original system is checked for
+reproducibility.
 
-%Time bounded LTL property in 
-%Models from verificaiton
+% In this work we address the problem of finding unsafe behaviors with
+% given a safety property for a hybrid dynamical system. We treat the
+% system as a black box and approach the problem in two distinct steps.
+% First, we model the behavior of the system using a piecewise affine
+% discrete time model. Such a model is incomplete in nature and is
+% computed with respect to the given property. Next, we encode the
+% search for falsification as a bounded model checking query and use an
+% SMT solver to find a counter example. If found, we check the existence
+% of the violation in the original system to ensure reproducibility.
+
+%Time bounded LTL property in
+%Models from verification
 %model without data
 %black box model/data -> structured model
