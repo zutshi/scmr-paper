@@ -1,5 +1,5 @@
 
-The implementation was prototyped as S3CAM-Rel,
+The implementation was prototyped as PWA-Rel,
 %an extension to our
 %previously mentioned tool S3CAM \cite{zutshi2014multiple}.
 OLS regression
@@ -21,20 +21,20 @@ neighborhood. This can be further extended by obtaining different
 discrete sequences or discrete trace sequences from the model checker.
 
 We tabulate our preliminary evaluation in \tabref{res-rel}. We used
-few of the benchmarks described in \cite{zutshi2014multiple}, including the Van
-der Pol oscillator, Brusselator, Lorenz attractor and the Navigation
-benchmark. As before, we ran S3CAM-R $10$ times with different seeds
-and averaged the results. We tabulate both the total time taken and
-the time taken by SAL to compute the counter-example and compare
-against a newer implementation of S3CAM. Note that different
-abstraction parameters are used for S3CAM and S3CAM-R, due to the
-differences in which they operate.
+few of the benchmarks described in \cite{zutshi2014multiple},
+including the Van der Pol oscillator, Brusselator, Lorenz attractor
+and the Navigation benchmark. As before, we ran PWA-Rel $10$ times
+with different seeds and averaged the results. We tabulate both the
+total time taken and the time taken by SAL to compute the
+counter-example and compare against an implementation of S3CAM. Note
+that different abstraction parameters are used for S3CAM and
+PWA-Rel, due to the differences in which they operate.
 
 \begin{table}[!htbp]
 \centering
 \caption{Avg. timings for benchmarks. The \textbf{BMC} column lists
 time taken by the BMC engine. The total time in seconds (rounded off
-to an integer) is noted under \textbf{S3CAM-R} and \textbf{S3CAM}.
+to an integer) is noted under \textbf{PWA-Rel} and \textbf{S3CAM}.
 $TO$ signifies time $>5hr$, after which the search was killed.}
 \label{tab:res-rel}
 \begin{tabular}{@{}llll@{}}
@@ -58,10 +58,10 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 % 1m8s, 2m56.184s, 1m31.059s[f], 1m32.665s,  1m45.312s, 1m22.397s, 2m1.451s[f], 1m12.118s, 1m26.596s
 % 0.12, 0.06,         0.33       0.13,       0.22,     FAIL,       ,X           0.08        0.15
 
-The results show promise, but clearly S3CAM performs better. Also,
-S3CAM-R timed out on some benchmarks like Nav $\prop_R$, Nav $\prop_S$
+The results show promise, but the performance is comparable. Also,
+PWA-Rel timed out on some benchmarks like Nav $\prop_R$, Nav $\prop_S$
 and the bouncing ball. However, we need to explore more benchmarks to
-be conclusive. S3CAM-R's performance can be explained by the
+be conclusive. PWA-Rel's performance can be explained by the
 difficulty in finding a good abstraction ($\quant_\epsilon$), which
 needs to be fine enough, to obtain good prediction models but coarse
 enough, to be manageable by the current SMT solvers. Specifically, to
