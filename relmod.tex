@@ -444,7 +444,7 @@ trajectories which have their end points in the same cells.
 
 \figref{k2} illustrates the $k=2$ refinement on \figref{k1}.
 
-\subsection{Learning Affine Function from Trajectory Segments}
+\subsection{Learning Affine Function from Trajectories}
 
 The $\simulate$ function can be used to generate a data set of
 relations parameterized by time $\Delta_t$, for different values of
@@ -457,22 +457,22 @@ below.
 \[\tupleof{\x_1, \x_2, \ldots, \x_n} \;\text{where}\; \x_{i>1} =
 \simulate(\x_{i-1}, \vu_{i-1}, \Delta_t)\]
 
-We now introduce a refinement of the data set $\ds \subseteq \ds$ by
-incrementally observing the future states in the time series.
+% We now introduce a refinement of the data set $\ds \subseteq \ds$ by
+% incrementally observing the future states in the time series.
 
 
 
-\[\ds_{\Delta_t} = \setof{(\x_i,\x'_i,\vu_i) | \x'_i =
-\simulate(\x_i,\vu_i)}\]
+% \[\ds_{\Delta_t} = \setof{(\x_i,\x'_i,\vu_i) | \x'_i =
+% \simulate(\x_i,\vu_i)}\]
 
-\[\ds^{C_i} \subseteq \ds_t\]
-\[\ds^{C_i}\]
+% \[\ds^{C_i} \subseteq \ds_t\]
+% \[\ds^{C_i}\]
 
 
-$k$-Refinement of the data set $\ds^k$.
-$\ds_k = \setof{(\x,\x',\vu) | \x' =  \simulate(\x,\vu,k\Delta_t)}$
+% $k$-Refinement of the data set $\ds^k$.
+% $\ds_k = \setof{(\x,\x',\vu) | \x' =  \simulate(\x,\vu,k\Delta_t)}$
 
-state-input pairs of the form
-$(\x,\x')$
-data set equivalence traj segment
-$D_c, $
+% state-input pairs of the form
+% $(\x,\x')$
+% data set equivalence traj segment
+% $D_c, $
