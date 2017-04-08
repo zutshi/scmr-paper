@@ -226,7 +226,7 @@ We use regression to estimate the dynamics for the outgoing trajectory
 segments form a cell $C$. Hence, the data set $\ds$ for the regression
 includes all trajectory segments beginning from the same cell
 \[
-    \ds = \setof{\pi_t | start(\pi_t) \in C}.
+    \ds = \setof{(\vx,\vx') | \vx \in C}.
 \]
 This includes trajectory segments ending in different cells, as shown
 in ~\figref{k0}. For $N$ cells, this results in a $\rho$ with $N$ transition relations.
@@ -322,7 +322,7 @@ regression. For every relation $C\areach{t}C'$, the data set $\ds$ is
 comprised only of trajectory segments $\pi_t$ which start and end in
 the same set of cells.
 \[
-    \ds = \setof{\pi_t | start(\pi_t) \in C \land end(\pi_t) \in C'}.
+    \ds = \setof{(\vx,\vx') | \vx \in C \land \vx' \in C'}.
 \]
 For $N$ edges in $G$, $1$-relationalization results in a $\rho$ with
 $N$ transition relations.
