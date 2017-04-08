@@ -177,7 +177,7 @@ $n$ and illustrate using examples.
 \tikzstyle{line} = [thick]
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
-\begin{scope}[scale=0.5]
+\begin{scope}[scale=0.8]
 
     \draw [line] (-1.0,-1.0) rectangle (1.0,1.0);
     %\draw [line] (3.0,1.0) rectangle (5.0,3.0);
@@ -203,7 +203,7 @@ $n$ and illustrate using examples.
 \draw [fill=black] (4.0,-2.0) circle (0.05);
 
 \end{scope}
-\begin{scope}[xshift=0,yshift=2.0cm,scale=0.5]
+\begin{scope}[xshift=0,yshift=2.1cm,scale=0.5]
     \node at (2,0) {\footnotesize $\scr{T} \equiv g_1(\x):\vx \in C
     \implies A_1\vx + \vb_1 + \delta_1$};
 \end{scope}
@@ -252,7 +252,7 @@ can contain two or more modes with differing continuous dynamics.
 \tikzstyle{line} = [thick]
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
-\begin{scope}[scale=0.5]
+\begin{scope}[scale=0.8]
 
     \draw [line] (-1.0,-1.0) rectangle (1.0,1.0);
     \draw [line] (3.0,1.0) rectangle (5.0,3.0);
@@ -280,7 +280,7 @@ can contain two or more modes with differing continuous dynamics.
 \draw [fill=black] (4.0,-3.5) circle (0.05);
 
 \end{scope}
-\begin{scope}[xshift=0,yshift=2.5cm,scale=0.5]
+\begin{scope}[xshift=1cm,yshift=3.1cm,scale=0.5]
     \node at (2,0) {\begin{minipage}{\linewidth}
     \footnotesize \begin{equation*}
         \scr{T} = \left\{
@@ -340,7 +340,7 @@ is at least as precise as the corresponding $0$-relational model.
 \tikzstyle{line} = [thick]
 \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 \begin{tikzpicture}
-\begin{scope}[scale=0.5]
+\begin{scope}[xshift=0cm, scale=0.75]
 
     \draw [line] (-1.0,-1.0) rectangle (1.0,1.0);
     \draw [line] (3.0,1.0) rectangle (5.0,3.0);
@@ -379,7 +379,7 @@ is at least as precise as the corresponding $0$-relational model.
 \draw [fill=black] (8.0,-3.5) circle (0.05);
 \end{scope}
 
-\begin{scope}[xshift=0,yshift=2.5cm,scale=0.5]
+\begin{scope}[xshift=1cm,yshift=3.0cm,scale=0.5]
     \node at (4,0) {\begin{minipage}{\linewidth}
         \footnotesize \begin{equation*}
     \scr{T} = \left\{
@@ -424,15 +424,16 @@ trajectories which have their end points in the same cells.
 % of cell traversals $\tupleof{C_1, C_2, \ldots, C_k}$, \ie
 % \begin{align*}
 %     \forall i\in\setof{1 \ldots k}.
-%     & start(\pi_{t_i}) \in C_i          
+%     & start(\pi_{t_i}) \in C_i
 %     \land start(\pi'_{t_i}) \in C_i \land  \\
-%     & end(\pi_{t_i}) \in C_{i+1}  
+%     & end(\pi_{t_i}) \in C_{i+1}
 %     \land end(\pi'_{t_i}) \in C_{i+1}
 % \end{align*}
 
-For every cell $C$ in the reachability graph, we construct a data set
-$\ds$ by collecting $\pi_{t_i}$, such that they are the first segment of $k$
-length \textit{connected} and \textit{similar} segmented trajectories.
+% For every cell $C$ in the reachability graph, we construct a data set
+% $\ds$ by collecting $\pi_{t_i}$, such that they are the first segment of $k$
+% length \textit{connected} and \textit{similar} segmented trajectories.
+
 %\[
 %    \ds = \setof{\pi_{\tau_i} |
 %        \pi_{\tau_i}
