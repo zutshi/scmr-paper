@@ -30,10 +30,10 @@ that, every element $b_i$ of the vector $\vb$ is contained in the
 respective scalar interval $b_i\in[b^l_i,b^h_i]$.
 
 For the case of black box systems, such a sound approximation is not
-possible. Instead, we rely on a statistical method like simple linear
-regression to estimate the affine map $\amap: A\x + \vb$. We then
+possible. Instead, we rely on statistical methods like simple linear
+regression to estimate the affine relation $f(\vx,\vx'): \x'=A\x + \vb$. We then
 estimate the error $\delta$ and generalize $\amap$ to an interval
-affine map as before $\amap: A\x + \vb + \delta$.  Finally, we get an
+affine map as before $f(\vx,\vx'): \x' \in A\x + \vb + \delta$.  Finally, we get an
 abstraction with the below relation
 \[
     C \areach{f} C' \iff \exists \x \in C.\ \exists \x' \in C'.\ \x' \in A\x + \vb \pm \delta.
