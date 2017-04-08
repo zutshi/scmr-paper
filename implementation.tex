@@ -57,8 +57,8 @@ involved.
 \begin{table}[!htbp]
 \centering
 \caption{Avg. timings for benchmarks. The \textbf{BMC} column lists
-time taken by the BMC engine. The total time in seconds (rounded off
-to an integer) is noted under \textbf{PWA-Rel} and \textbf{S3CAM}.
+time taken by the BMC engine. The total time in minutes is noted under
+    \textbf{PWA-Rel+BMC solver} and \textbf{S3CAM}.
 $TO$ signifies time $>5hr$, after which the search was killed.}
 \label{tab:res-rel}
 \begin{tabular}{@{}llll@{}}
@@ -82,14 +82,16 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 % 1m8s, 2m56.184s, 1m31.059s[f], 1m32.665s,  1m45.312s, 1m22.397s, 2m1.451s[f], 1m12.118s, 1m26.596s
 % 0.12, 0.06,         0.33       0.13,       0.22,     FAIL,       ,X           0.08        0.15
 
-As apparent form the results, the performance is comparable in all
-benchmarks, but the last one: bouncing ball. PWA-Rel determines it to
-be `safe' as it can not find a counter-example in the PWA relational
-model. Also, apparent from the results, PWA-Rel is more scalable with
-the LP solver and PWA-Rel+SAL times out on most of the benchmarks.
-The efficiency of the naive LP solver can be attributed to the careful
-selection of the parameters for S3CAM (finer abstraction), resulting in
-a small subgraph which can be easily explored for all paths.
+In all the runs of both the tools, a falsification was found. As
+apparent form the results, the performance is comparable in all
+benchmarks, but the last benchmark: bouncing ball. PWA-Rel determines
+it to be `safe' as it can not find a counter-example in the PWA
+relational model. Also, apparent from the results, PWA-Rel is more
+scalable with the LP solver and PWA-Rel+SAL times out on most of the
+benchmarks.  The efficiency of the naive LP solver can be attributed
+to the careful selection of the parameters for S3CAM (finer
+abstraction), resulting in a small subgraph which can be easily
+explored for all paths.
 
 However, we need to explore more benchmarks to be conclusive on the
 tool's performance on real world examples. Although, PWA-Rel does not
