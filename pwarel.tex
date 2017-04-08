@@ -65,13 +65,15 @@ abstract states $C$ (or cells) and edges $(C,C')$ iff $C
 \input{figs/segtraj_rel_enriched.tex}
 
 Recall that each edge $(C,C')$ of the graph $G$ denotes an observed
-trajectory between the respective cells. The graph abstraction
-$G$ only states that there exists a state $\x \in C$ from which the
-system can evolve to a future state $\x' \in C'$. To increase the
-precision we iteratively refined the abstraction by state
-splitting. Instead, we now propose an `enrichment' $G^R$ of $G$ by computing a
-set of local relations $R_{(C,C')}(\x,\x')$ for every edge $(C,C')$,
-which non-deterministically describe relations between $\x \in C$ and $\x'
+trajectory between the respective cells. The graph abstraction $G$
+only states that there exists a state $\x \in C$ from which the system
+can evolve to a future state $\x' \in C'$. To increase the precision,
+iterative refinement of the abstraction by state splitting was
+proposed in~\cite{zutshi2014multiple}. Due to the curse of
+dimensionality, state splitting is not scalable. Instead, we propose
+an `enrichment' $G^R$ of $G$ by computing a set of local relations
+$R_{(C,C')}(\x,\x')$ for every edge $(C,C')$, which
+non-deterministically describe relations between $\x \in C$ and $\x'
 \in C'$. This is illustrated in \figref{enriched-edge}.
 %(compare with \figref{segtraj}).
 
