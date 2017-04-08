@@ -15,30 +15,52 @@ transition system.
 
 \subsection{Graph Abstraction}
 
+% The abstraction of the hybrid dynamical system is a a
+% paritioning of the combined state-input space $\HybridStates \times
+% \Inputs$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
+% pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
+% their union $\bigcup_{C_i\in\Cells}C_i$ is the state-input
+% space $\HybridStates \times \Inputs$. The paritions over
+% the continuous input-state space are implicitly defined using a quantization
+% function $Q_\epsilon$ parameterized by the precision $\epsilon$.
+% This further defines an equivalence relations such that
+% \[
+%     (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q_\epsilon(\vx_i,
+%     \vu_i) = Q_\epsilon(\vx_j, \vu_j)
+% \]
+% In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
+% Q_\epsilon(\vx_i, \vu_i)$.
+
+% \begin{definition}[Graph Abstraction]
+%     The quantization function $Q_\epsilon$ induces a DAG on the discrete
+%     abstraction given by a graph $G(V, E)$, where each vertex
+%     corresponds to a cell $V_i = C$, and an edge exists between two
+%     cells $(C, C') \in E_i$ iff there exist state-input pairs
+%     $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
+%     \simulate(\vx, \vu )$.
+% \end{definition}
+
 The abstraction of the hybrid dynamical system is a a
-paritioning of the combined state-input space $\HybridStates \times
-\Inputs$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
+paritioning of the hybrid state space $\HybridStates$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
 pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
-their union $\bigcup_{C_i\in\Cells}C_i$ is the state-input
-space $\HybridStates \times \Inputs$. The paritions over
-the continuous input-state space are implicitly defined using a quantization
+their union $\bigcup_{C_i\in\Cells}C_i$ is the state space $\HybridStates$. The paritions over
+the continuous state space are implicitly defined using a quantization
 function $Q_\epsilon$ parameterized by the precision $\epsilon$.
 This further defines an equivalence relations such that
 \[
-    (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q_\epsilon(\vx_i,
-    \vu_i) = Q_\epsilon(\vx_j, \vu_j)
+    (\vx_i) \equiv (\vx_j) \;\text{iff}\; Q_\epsilon(\vx_i) = Q_\epsilon(\vx_j)
 \]
-In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
-Q_\epsilon(\vx_i, \vu_i)$.
+In other words, $(\vx_i) \in C_i \; \text{iff} \; C_i = Q_\epsilon(\vx_i)$.
 
 \begin{definition}[Graph Abstraction]
     The quantization function $Q_\epsilon$ induces a DAG on the discrete
     abstraction given by a graph $G(V, E)$, where each vertex
     corresponds to a cell $V_i = C$, and an edge exists between two
     cells $(C, C') \in E_i$ iff there exist state-input pairs
-    $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
-    \simulate(\vx, \vu )$.
+    $(\vx) \in C$, $(\vx') \in C'$ such that $\vx' =
+    \simulate(\vx)$.
 \end{definition}
+
 
 
 Given a numerical simulator $\simulate$ and an initial abstraction
