@@ -13,28 +13,8 @@ between two abstract states. We then show how associating the computed
 maps with the relations transforms a discrete abstraction into a PWA
 transitions system.
 
-
-abstraction defined by a quantization function $\quant_\epsilon$
-time step $\Delta$
-
-
-Given a numerical simulator
-$\simulate$ and an initial abstraction defined by a quantization
-function $\quant_\epsilon$ and a time step $\Delta$, we use
-scatter-and-simulate (parameterized by number of samples $n$ as
-described in \cite{zutshi2014multiple}) to explore the abstract graph
-$\scr{H}(\Delta)$. The result is a graph $G$, which has a finite
-number of abstract states $C$ (or cells) and edges $(C,C')$ iff $C
-\areach{\Delta} C'$.
-
-Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
-we use the generated trajectory segments to learn quantitative models
-describing the local behavior of the system. These models are defined
-by a set of relations $R \subseteq \HybridStates \times \HybridStates$
-for each edge of the reachability graph.
-
-
 \subsection{Graph Abstraction}
+
 The abstraction of the hybrid dynamical system is defined by
 paritioning the combiend state-input space $\HybridStates \times
 \Inputs$ into hyper-rectangles or cells $C_i \in \C$. The cells are
@@ -42,9 +22,8 @@ pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
 their union $\bigcup_{C_i\in\C}C_i$ is the state-input
 space $\HybridStates \times \Inputs$. This discrete abstraction over
 the continuous space is implicit and defined using a quantization
-function $Q_d$ parameterized by the precision $d$.
-This further
-defines an equivalence relations such that
+function $Q_\epsilon$ parameterized by the precision $\epsilon$.
+This further defines an equivalence relations such that
 \[
     (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q()
 \]
@@ -58,6 +37,15 @@ $(\vx_i, \vu_i) \in C_i \; \text{iff} \; \C_i = Q(\vx_i, \vu_i)$
 state-input pair (x 0 , u) ∈ Ck such that x 0 = SIM(x, u, τ ).
 \end{definition}
 
+
+Given a numerical simulator $\simulate$ and an initial abstraction
+defined by a quantization function $\quant_\epsilon$ and a time step
+$\Delta$, we pick samples and simulate them to explore the abstraction
+on the fly to obtain a graph $G$, which has a finite number of
+abstract states $C$ (or cells) and edges $(C,C')$ iff $C
+\areach{\Delta} C'$.
+
+
 \begin{definition}[Abstract State Graph]. Let ∆ > 0 be a fixed time
     step. The abstract state graph H(∆) for time step ∆ is defined by
     the set of vertices C, and edges (Ci, Cj ) whenever Ci ∆ Cj . Let
@@ -66,6 +54,8 @@ state-input pair (x 0 , u) ∈ Ck such that x 0 = SIM(x, u, τ ).
     cells, or cells Cj such that there is a state xj ∈ Cj that reaches
     an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
 H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
+
+
 
 \subsection{Enriched Abstraction}
 
@@ -108,3 +98,9 @@ given safety property, and even other temporal properties.  We now
 discuss the background required to present our ideas.
 
 
+
+Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
+we use the generated trajectory segments to learn quantitative models
+describing the local behavior of the system. These models are defined
+by a set of relations $R \subseteq \HybridStates \times \HybridStates$
+for each edge of the reachability graph.
