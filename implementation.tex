@@ -3,7 +3,7 @@ We compared it against S3CAM~\cite{zutshi2014multiple} on several academic
 benchmarks.
 
 PWA-Rel was implemented in Python. Its different parts comprised of
-the (a) abstraction graph generation, (b) regeression analysis and (c)
+the (a) abstraction graph generation, (b) regression analysis and (c)
 BMC. S3CAM was used to compute (a). To compute (b), OLS regression
 routines were used from Scikit-learn~\cite{pedregosa2011scikit}, a
 Python module for machine learning. Finally, the The bounded model
@@ -39,8 +39,8 @@ both the total time taken by PWA-Rel+SAL and PWA-Rel+LP to compute the
 counter-example and compare against an implementation of S3CAM.
 Different abstraction parameters are used for S3CAM and PWA-Rel, due
 to the differences in which they operate. PWA-Rel requires a finer
-abstraction to begni with in order to minimize the modeling errors.
-On the other hand, a coarser abstraction as the intital abstraction is
+abstraction to begin with in order to minimize the modeling errors.
+On the other hand, a coarser abstraction as the initial abstraction is
 works better for S3CAM due to the expensive refinement procedure
 involved.
 
@@ -75,10 +75,10 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 As apparent form the results, the performance is comparable in all
 benchmarks, but the last one: bouncing ball. PWA-Rel determines it to
 be `safe' as it can not find a counter-example in the PWA relational
-model. Also, apparent froom the results, PWA-Rel is more scalale with
+model. Also, apparent from the results, PWA-Rel is more scalable with
 the LP solver and PWA-Rel+SAL times out on most of the benchmarks.
 The efficiency of the naive LP solver can be attributed to the careful
-selection of the pareters for S3CAM (finer abstraction), resulting in
+selection of the parameters for S3CAM (finer abstraction), resulting in
 a small subgraph which can be easily explored for all paths.
 
 However, we need to explore more benchmarks to be conclusive on the
