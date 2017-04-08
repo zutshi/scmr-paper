@@ -4,7 +4,8 @@ black box system by enriching the abstract reachability graph. We
 first formalize the notion of an enriched graph, and then show how
 they can be interpreted as a PWA transition system using relational
 modeling. Finally, we show how the generlization of relational
-modeling: $k$-relational modeling can be used as a refinement.
+modeling: $k$-relational modeling can be used to refine the relational
+abstraction.
 
 \subsection{Abstract Enriched Graph}
 
@@ -42,9 +43,9 @@ abstraction with the below relation
 However, in the presence of complex non-linear behavior, using a
 single affine map can lead to a poor approximation. To increase the
 precision, one can use more than one affine map. Let us denote this set as
-$R_{(C,C')}$ (ref.~\secref{ovw}).
+$R_{(C,C')}$.% (ref.~\secref{ovw}).
 \[
-    R_{(C,C')}(\x,\x'): \setof{f_i \;|\; \exists \x \in C.\ \exists \x' \in C'.\ \x' \in f_i(\x)}
+    R_{(C,C')}(\x,\x'): \setof{(\vx,\vx') \;|\; \exists \x \in C.\ \exists \x' \in C'.\ f_i(\x,\x')}
 \]
 
 \begin{figure}[!htbp]
