@@ -48,33 +48,38 @@ we can answer this question.
 In many settings, we may not have a physics-based model derived from
 first principles, but may just have time-series data of the system
 behavior. In such a setting, a data-driven model allows us to
-generalize individual time-series behaviors through an abstract, PWA
-relational model. There are several approaches in the literature to
-perform data-driven modeling, system identification techniques that
-learn dynamic models from data \cite{ljung1999system}, auto-regressive
-models for forecasting \cite{wei1994time}, machine learning techniques
-that learn static or dynamic models from data
-\cite{narendra1990identification,lu2009linear}. However, in the second
-step of our technique, \ie, symbolic analysis of the learned mode, we
-need to have models that can be digested by existing symbolic tools,
-which is harder to do with some of the aforementioned heavier
-data-driven modeling methods. Hence, we use a lighter flavor of
-data-driven modeling such as the one proposed for learning relational
-models from data
-\cite{zutshi2012timed,sankaranarayanan2011relational}. By learning
-what is essentially a discrete-time dynamical system with PWA updates,
-our technique permits us to use software analysis approaches such as
-bounded model checking assisted by SMT and linear programming solvers.
+generalize individual time-series behaviors. But, there are several
+approaches in the literature to perform data-driven modeling; e.g.,
+system identification techniques that learn dynamic models from data
+\cite{ljung1999system}, auto-regressive models for forecasting
+\cite{wei1994time}, machine learning techniques that learn static or
+dynamic models from data
+\cite{narendra1990identification,lu2009linear}.  Why then do we need a
+new modeling technique? The answer to this question lies in our goal
+for the second step, \ie, symbolic analysis of the learned model. For
+this step, we need to have models that can be digested by existing
+symbolic tools, which is harder to do with some of the aforementioned
+heavier data-driven modeling methods. Hence, we use a lighter flavor
+of data-driven modeling such as the one proposed for learning
+relational models from data
+\cite{zutshi2012timed,sankaranarayanan2011relational}. By learning a
+{\em PWA relational model}, \ie, essentially a PWA discrete-time
+dynamical system, we can use software analysis approaches such as
+bounded model checking assisted by SMT solvers and linear programming
+solvers.
 
-The other perspective is when we have a model that is highly complex.
-We note that the ultimate goal for our technique is to find violations
-of safety properties in the {\em actual embedded control system}, and
-not, per se, in the model. The aphorism attributed to mathematician
-George E.P. Box is worth repeating,  ``all models are wrong, some
-models are useful.'' Thus, we can sidestep analyzing a highly complex
-model by approximating its behavior with a simpler relational model,
-which in turn gives us promising tests to run on the actual system,
-then our technique has intrinsic value.
+The other perspective for our technique is the context when we have an
+effectively black-box model, \ie, a model that has features such as
+nonlinearities, delays or look-up tables that make symbolic analysis
+rather challenging.  We note that the ultimate goal for our technique
+is to find violations of safety properties in the {\em actual embedded
+control system}, and not, per se, in the model. The aphorism
+attributed to mathematician George E.P. Box is quite apt for our
+context, and bears worth repeating,  ``all models are wrong, some
+models are useful.'' We can sidestep analyzing a highly complex model
+by approximating its behavior with a simpler relational model, which
+in turn can give us promising tests to run on the actual system. This
+gives our technique intrinsic value as a debugging tool.
 
 % In our previous work~\cite{zutshi2014multiple}, we analyzed systems by
 % restricting ourselves to their black box semantics. This enabled us to
