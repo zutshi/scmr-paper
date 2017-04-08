@@ -25,17 +25,19 @@ the continuous space is implicit and defined using a quantization
 function $Q_\epsilon$ parameterized by the precision $\epsilon$.
 This further defines an equivalence relations such that
 \[
-    (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q(\vx_i,
-    \vu_i) = Q(\vx_j, \vu_j)
+    (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q_\epsilon(\vx_i,
+    \vu_i) = Q_\epsilon(\vx_j, \vu_j)
 \]
 In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
-Q(\vx_i, \vu_i)$.
+Q_\epsilon(\vx_i, \vu_i)$.
 
-\begin{definition}[] Let C be a d-quantized tiling. The d-quantized
-    tiling-based plant abstraction (denoted Pd) is given by a graph
-    (V, E), where V = C, and the set of edges E is defined such that
-    (Cj, Ck) ∈ E iff: there is a state-input pair (x, u) ∈ Cj and a
-state-input pair (x 0 , u) ∈ Ck such that x 0 = SIM(x, u, τ ).
+\begin{definition}[Graph Abstraction]
+    The quantization function $Q_\epsilon$ induces a DAG on the discrete
+    abstraction given by a graph $G(V, E)$, where each vertex
+    corresponds to a cell $V_i = C_i$, and an edge exists between two
+    cells $(C_j, C_k) \in E$ iff there exist state-input pairs
+    $(\vx,\vu) \in C_j$, $(\vx', \vu) \in C_k$ such that $\vx =
+    \simulate(\vx, \vu )$.
 \end{definition}
 
 
@@ -47,14 +49,14 @@ abstract states $C$ (or cells) and edges $(C,C')$ iff $C
 \areach{\Delta} C'$.
 
 
-\begin{definition}[Abstract State Graph]. Let ∆ > 0 be a fixed time
-    step. The abstract state graph H(∆) for time step ∆ is defined by
-    the set of vertices C, and edges (Ci, Cj ) whenever Ci ∆ Cj . Let
-    C0 denote the collection of initial cells in C, i.e., cells Ci
-    such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
-    cells, or cells Cj such that there is a state xj ∈ Cj that reaches
-    an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
-H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
+% \begin{definition}[Abstract State Graph]. Let ∆ > 0 be a fixed time
+%     step. The abstract state graph H(∆) for time step ∆ is defined by
+%     the set of vertices C, and edges (Ci, Cj ) whenever Ci ∆ Cj . Let
+%     C0 denote the collection of initial cells in C, i.e., cells Ci
+%     such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
+%     cells, or cells Cj such that there is a state xj ∈ Cj that reaches
+%     an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
+% H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
 
 
 
