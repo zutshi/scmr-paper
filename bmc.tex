@@ -189,11 +189,11 @@ one of three ways.
 
 \begin{itemize}
 
-    \item \emph{S3CAM Fails} No abstract counter-example is found by
+    \item \emph{S3CAM Fails}: No abstract counter-example is found by
         S3CAM. We can remedy it by increasing search budgets and/or
         restarting.
 
-    \item \emph{BMC Fails} An abstract counter-example is found, but
+    \item \emph{BMC Fails}: An abstract counter-example is found, but
         the BMC fails to find a concrete counter-example in the PWA
         relational model. The failure can be attributed to either (a)
         a spurious abstract counter-examples or (b) a poorly estimated
@@ -201,10 +201,9 @@ one of three ways.
         latter requires that the maximum model error $\delta_{max}$ be
         decreased.
 
-    \item \emph{Inaccurate PWA Modeling} An abstract counter-example
+    \item \emph{Inaccurate PWA Modeling}: An abstract counter-example
         is found, and it is successfully concretized in the PWA
         relational model by the BMC. However, it is not reproducible
         in the black box system. This happens when the PWA relational
         model is not precise enough.
-
 \end{itemize}
