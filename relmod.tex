@@ -74,8 +74,8 @@ $R_{(C,C')}$ for each edge of $G$.}
 As shown in \figref{enrichment}, we use OLS to compute an enrichment
 of the abstraction graph $G$. For every edge $(C,C') \in edges(G)$,
 the set of relations $R_{(C,C')}(\x,\x')$ is computed. The semantics
-of the enriched edge are clearly non-deterministic. Form a state $\x
-\in C$, any $f_i\in R_{(C,C')}$ can be taken as long as $\x' \in C$'
+of the enriched edge are non-deterministic. Form a state $\x
+\in C$, any $f\in R_{(C,C')}$ can be taken as long as $\x' \in C$'
 is satisfied. This interpretation results in an infinite state
 transition system. We now detail the construction of the set
 $R_{(C,C')}$ using $k$-relational modeling.
@@ -131,7 +131,7 @@ $R_{(C,C')}$ using $k$-relational modeling.
 \vspace*{-.3cm}
 \end{figure}
 
-Given a $G$, when computing the set of relations for an edge $R$, we
+Given $G$, when computing the set of relations $R$ for an edge, we
 consider only the set of abstract states reachable at a specific time
 step.  Intuitively, one might consider the states reachable in one
 time step $\Delta$.  However, such a process can be generalized by
@@ -140,8 +140,8 @@ k\Delta}$ time steps.
 
 Using \figref{k-rel}, we illustrate this notion. To compute
 $R_{(C,C')}$, we
-split the data set $D(C,C')$ consisting of trajectory segments (of time lengths
-$k\Delta$) as follows.  We observe the local behavior of the system by
+split the data set $D(C,C')$ consisting of trajectory segments of time lengths
+$k\Delta$ as follows.  We observe the local behavior of the system by
 noting the evolution of the system $\System$ from a state $\x(t)
 \in C$ for a time length dependant on $k$. For
 \begin{itemize}
