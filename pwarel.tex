@@ -4,41 +4,62 @@ describe the behavior of the system over time. Such relations abstract
 the underlying relation between concrete states, and concrete paths
 can no longer be constructed directly. Instead, search procedueres
 like Counter-Example Guided Refinement must be used to find concrete
-paths. In general, search techniques are exponential with respect to
+paths. In general, such search techniques are exponential with respect to
 computational resources and memory. As an alternative, we introduce
 data driven `enrichment' of abstractions to approximate the concrete
 relations underlying the abstract relations. Informally, we use linear
 regression to compute affine maps associated with the relations
 between two abstract states. We then show how associating the computed
 maps with the relations transforms a discrete abstraction into a PWA
-transitions system.
+transition system.
 
 \subsection{Graph Abstraction}
 
+% The abstraction of the hybrid dynamical system is a a
+% paritioning of the combined state-input space $\HybridStates \times
+% \Inputs$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
+% pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
+% their union $\bigcup_{C_i\in\Cells}C_i$ is the state-input
+% space $\HybridStates \times \Inputs$. The paritions over
+% the continuous input-state space are implicitly defined using a quantization
+% function $Q_\epsilon$ parameterized by the precision $\epsilon$.
+% This further defines an equivalence relations such that
+% \[
+%     (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q_\epsilon(\vx_i,
+%     \vu_i) = Q_\epsilon(\vx_j, \vu_j)
+% \]
+% In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
+% Q_\epsilon(\vx_i, \vu_i)$.
+
+% \begin{definition}[Graph Abstraction]
+%     The quantization function $Q_\epsilon$ induces a DAG on the discrete
+%     abstraction given by a graph $G(V, E)$, where each vertex
+%     corresponds to a cell $V_i = C$, and an edge exists between two
+%     cells $(C, C') \in E_i$ iff there exist state-input pairs
+%     $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
+%     \simulate(\vx, \vu )$.
+% \end{definition}
+
 The abstraction of the hybrid dynamical system is a a
-paritioning of the combined state-input space $\HybridStates \times
-\Inputs$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
+paritioning of the hybrid state space $\HybridStates$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
 pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
-their union $\bigcup_{C_i\in\Cells}C_i$ is the state-input
-space $\HybridStates \times \Inputs$. The paritions over
-the continuous input-state space are implicitly defined using a quantization
+their union $\bigcup_{C_i\in\Cells}C_i$ is the state space $\HybridStates$. The paritions over
+the continuous state space are implicitly defined using a quantization
 function $Q_\epsilon$ parameterized by the precision $\epsilon$.
-This further defines an equivalence relations such that
-\[
-    (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q_\epsilon(\vx_i,
-    \vu_i) = Q_\epsilon(\vx_j, \vu_j)
-\]
-In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
-Q_\epsilon(\vx_i, \vu_i)$.
+This further defines an equivalence relations such that $(\vx_i)
+\equiv (\vx_j) \;\text{iff}\; Q_\epsilon(\vx_i) = Q_\epsilon(\vx_j)$.
+In other words, $(\vx_i) \in C_i \; \text{iff} \; C_i = Q_\epsilon(\vx_i)$.
 
 \begin{definition}[Graph Abstraction]
-    The quantization function $Q_\epsilon$ induces a DAG on the discrete
+    The quantization function $Q_\epsilon$ induces a directed acyclic
+    graph (DAG) on the discrete
     abstraction given by a graph $G(V, E)$, where each vertex
     corresponds to a cell $V_i = C$, and an edge exists between two
     cells $(C, C') \in E_i$ iff there exist state-input pairs
-    $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
-    \simulate(\vx, \vu )$.
+    $(\vx) \in C$, $(\vx') \in C'$ such that $\vx' =
+    \simulate(\vx)$.
 \end{definition}
+
 
 
 Given a numerical simulator $\simulate$ and an initial abstraction
@@ -58,6 +79,12 @@ abstract states $C$ (or cells) and edges $(C,C')$ iff $C
 %     an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
 % H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
 
+Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
+we use the generated trajectories to learn quantitative models
+describing the local behavior of the system. These models are defined
+by a set of relations $R \subseteq \HybridStates \times \HybridStates$
+for each edge of the reachability graph. In the next section, we
+summarize this idea.
 
 
 \subsection{Enriched Abstraction}
@@ -83,12 +110,12 @@ state. We represent the dynamics using an affine model with an
 interval error. Such a model can either be approximated using learning
 methods or computed as a sound (over) approximation using reachability
 set computation methods. Because we assume black box semantics, we
-only present the former. Using regression analysis on a witnessed trajectory between two cells,
-we compute an approximate discrete map along with an error estimate.
-Moreover, using the simulation function $\simulate$, additional
-trajectories (or data) can be generated if required. The data
-can be separated into a training set and testing set to compute the
-map and the error respectively.
+only present the former. Using regression analysis on a witnessed
+trajectory between two cells, we compute an approximate discrete map
+along with an error estimate.  Moreover, using the simulation function
+$\simulate$, additional trajectories (or data) can be generated if
+required. The data can be separated into a training set and testing
+set to compute the map and the error respectively.
 
 %The latter case can be explored if
 %the symbolic dynamics of the system are known. A tool like
@@ -100,13 +127,5 @@ search for concrete behaviors in the system. We call it a time
 parameterized PWA relational abstraction. It can be interpreted as an
 infinite state discrete transition system, and we can use
 off-the-shelf bounded model checkers to find concrete violations of a
-given safety property, and even other temporal properties.  We now
-discuss the background required to present our ideas.
+given safety property, and even other temporal properties.
 
-
-
-Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
-we use the generated trajectories to learn quantitative models
-describing the local behavior of the system. These models are defined
-by a set of relations $R \subseteq \HybridStates \times \HybridStates$
-for each edge of the reachability graph.
