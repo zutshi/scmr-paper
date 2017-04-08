@@ -11,8 +11,11 @@ routines were used from Scikit-learn~\cite{pedregosa2011scikit}, a
 Python module for machine learning. Finally, the The bounded model
 checking (c) was done using the SAL model checker~\cite{SAL-SRI},
 which used Yices2~\cite{dutertre2014yices} as the SMT solver. A naive
-alternative linear programming (LP) based model checker specific to the PWA
-relational abstractions was implemented utilizing PyGLPK.
+alternative linear programming (LP) based model checker, specific to
+the PWA relational abstractions was implemented utilizing PyGLPK.
+Specifically, each path of the graph $G^R$ was sent to the lp solver
+PyGLPK and checked for feasibility. If feasible, the checker returned
+a concrete counter-example.
 
 PWA-Rel uses S3CAM to discover the abstraction graph $G$, which is
 then filtered to remove the nodes from which error nodes are not
@@ -40,8 +43,8 @@ model checker by requesting distinct counter-examples.
 We tabulate our preliminary evaluation in \tabref{res-rel}. We used
 the more difficult benchmarks described in \cite{zutshi2014multiple},
 including the Van der Pol oscillator, Brusselator, Lorenz attractor
-and the Navigation benchmark. PWA-Rel and S3CAM were ran $10$ times
-with different seeds and the running times were averaged. We tabulate
+and the Navigation benchmark. PWA-Rel and S3CAM were tested $10$ times
+with different seeds and their running times were averaged. We tabulate
 both the total time taken by PWA-Rel+SAL and PWA-Rel+LP to compute the
 counter-example and compare against an implementation of S3CAM.
 Different abstraction parameters are used for S3CAM and PWA-Rel, due
