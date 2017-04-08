@@ -74,17 +74,25 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 
 As apparent form the results, the performance is comparable in all
 benchmarks, but the last one: bouncing ball. PWA-Rel determines it to
-be `safe' as it can not find a counter-example. Also, PWA-Rel performs
-better with the LP solver as PWA-Rel+SAL times out on most of the
-benchmarks. However, we need to explore more benchmarks to
-be conclusive. PWA-Rel's performance can be explained by the
-difficulty in finding a good abstraction ($\quant_\epsilon$), which
-needs to be fine enough, to obtain good prediction models but coarse
-enough, to be manageable by the current SMT solvers. Specifically, to
-obtain a good quality counter-example from the model checker (and
-avoid false positives), the transition system should be created from
-models with high accuracy, for which a finer abstraction is required.
-However, the exploration of a finer abstraction is exponentially more
-complex and results in a much bigger transition system, which the
-current state of the art bounded model checkers (which use SMT
-solvers) can not handle under reasonable resources.
+be `safe' as it can not find a counter-example in the PWA relational
+model. Also, apparent froom the results, PWA-Rel is more scalale with
+the LP solver and PWA-Rel+SAL times out on most of the benchmarks.
+The efficiency of the naive LP solver can be attributed to the careful
+selection of the pareters for S3CAM (finer abstraction), resulting in
+a small subgraph which can be easily explored for all paths.
+
+However, we need to explore more benchmarks to be conclusive on the
+tool's performance on real world examples. Although, PWA-Rel does not
+need to refine like S3CAM, and should be more scalable, it is still
+constrained by the accuracy of the pwa models. Its performance can be
+explained by the difficulty in finding an abstraction
+($\quant_\epsilon$), which is fine enough, to result in accurate
+prediction models but coarse enough to be manageable by the current
+bmc tools.  To obtain a reproducible counter-example from the model
+checker (and avoid false positives), the transition system should be
+created from models with high accuracy, for which a finer abstraction
+is required.  However, the exploration of a finer abstraction is
+exponentially more complex and results in a much bigger transition
+system, which the current state of the art bounded model checkers
+(which use generic SMT solvers) can not handle under reasonable
+resources.
