@@ -205,7 +205,7 @@ $n$ and illustrate using examples.
 \end{scope}
 \begin{scope}[xshift=0,yshift=2.1cm,scale=0.5]
     \node at (2,0) {\footnotesize $\scr{T} \equiv g_1(\x):\vx \in C
-    \implies A_1\vx + \vb_1 + \delta_1$};
+    \implies \vx' \in A_1\vx + \vb_1 + \delta_1$};
 \end{scope}
 
 \end{tikzpicture}
@@ -233,9 +233,9 @@ in ~\figref{k0}. For $N$ cells, this results in a $\rho$ with $N$ transition rel
 \begin{equation*}
     \scr{T} = \left\{
         \begin{array}{ll}
-            g_1(\x):\vx \in C_1 \implies A_1\vx + \vb_1 + \delta_1\\
+            g_1(\x):\vx \in C_1 \implies \vx' \in A_1\vx + \vb_1 + \delta_1\\
             \ldots \\
-            g_n(\x):\vx \in C_n \implies A_n\vx + \vb_n + \delta_n\\
+            g_n(\x):\vx \in C_n \implies \vx' \in A_n\vx + \vb_n + \delta_n\\
         \end{array}
     \right.
 \end{equation*}
@@ -285,8 +285,8 @@ can contain two or more modes with differing continuous dynamics.
     \footnotesize \begin{equation*}
         \scr{T} = \left\{
         \begin{array}{ll}
-            g_1(\x):\vx \in C \land g'_1(\x):\vx \in C'_1 \implies A_1\vx + \vb_1 + \delta_1\\
-            g_2(\x):\vx \in C \land g'_2(\x):\vx \in C'_2 \implies A_2\vx + \vb_2 + \delta_2
+            g_1(\x):\vx \in C \land g'_1(\x):\vx \in C'_1 \implies \vx' \in A_1\vx + \vb_1 + \delta_1\\
+            g_2(\x):\vx \in C \land g'_2(\x):\vx \in C'_2 \implies \vx' \in A_2\vx + \vb_2 + \delta_2
         \end{array}
     \right.
 \end{equation*}

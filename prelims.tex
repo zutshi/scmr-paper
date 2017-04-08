@@ -274,8 +274,11 @@ For a given $\tau$, we call the affine relation $f_\tau$ its update
 relation, and the predicates $g_\tau$ and $g'_\tau$ as pre- and
 post-conditions on the transition. The machine starts its operation in
 location $\pLocI$ with an initial valuation $\nu_0$ to the variable
-$\vx$ such that $\nu_0(\vx)$ satisfies $\Theta$.
-
+$\vx$ such that $\nu_0(\vx)$ satisfies $\Theta$. For convenience, we
+abuse notation, and use the name a variable as a proxy for a certain
+valuation, and use the primed version of the variable as a proxy for
+its valuation after a transition, \ie, $\vx$ is used instead of
+$\nu(\vx)$ and $\vx'$ is used instead of $\nu'(\vx)$.
 
 % We define the PWA transition system as a discrete transition system
 % $\rho:\tupleof{\pLocs,\vx,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
@@ -349,9 +352,9 @@ for the $N$ tuples $(v,v')$ discovered by simulation, if $v' = Av
 linear regression, and if $h$ is the convex hull of all the $v$
 states across all tuples and $h'$ is the convex hull of all the $v'$
 states across all tuples, then $f_\tau \subseteq
-\setof{(\nu(\x),\nu'(\x)) \mid \nu'(\x) \in A\x + B + \vec{\delta}}$,
-and $g$ states that $\nu(\x)$ is in $h$, and $g'$ states that
-$\nu'(\x) \in h'$.
+\setof{(\x,\x') \mid \x' \in A\x + B + \vec{\delta}}$,
+and $g$ states that $\x$ is in $h$, and $g'$ states that
+$\x' \in h'$.
 \end{itemize}
 
 Note that the guard predicates $g_\tau$ represent a conjunction of $m$
