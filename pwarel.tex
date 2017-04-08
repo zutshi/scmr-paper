@@ -34,9 +34,9 @@ Q_\epsilon(\vx_i, \vu_i)$.
 \begin{definition}[Graph Abstraction]
     The quantization function $Q_\epsilon$ induces a DAG on the discrete
     abstraction given by a graph $G(V, E)$, where each vertex
-    corresponds to a cell $V_i = C_i$, and an edge exists between two
-    cells $(C_j, C_k) \in E$ iff there exist state-input pairs
-    $(\vx,\vu) \in C_j$, $(\vx', \vu) \in C_k$ such that $\vx =
+    corresponds to a cell $V_i = C$, and an edge exists between two
+    cells $(C, C') \in E_i$ iff there exist state-input pairs
+    $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
     \simulate(\vx, \vu )$.
 \end{definition}
 
@@ -65,7 +65,7 @@ abstract states $C$ (or cells) and edges $(C,C')$ iff $C
 \input{figs/segtraj_rel_enriched.tex}
 
 Recall that each edge $(C,C')$ of the graph $G$ denotes an observed
-trajectory segment between the respective cells. The graph abstraction
+trajectory between the respective cells. The graph abstraction
 $G$ only states that there exists a state $\x \in C$ from which the
 system can evolve to a future state $\x' \in C'$. To increase the
 precision we iteratively refined the abstraction by state
@@ -82,10 +82,10 @@ interval error. Such a model can either be approximated using learning
 methods or computed as a sound (over) approximation using reachability
 set computation methods. Because we assume black box semantics, we
 only present the former. Using regression analysis on the $start$ and
-$end$ states of the witnessed trajectory segments between two cells,
+$end$ states of the witnessed trajectory between two cells,
 we compute an approximate discrete map along with an error estimate.
 Moreover, using the simulation function $\simulate$, additional
-trajectory segments (or data) can be generated if required. The data
+trajectories (or data) can be generated if required. The data
 can be separated into a training set and testing set to compute the
 map and the error respectively.  The latter case can be explored if
 the symbolic dynamics of the system are known. A tool like
@@ -103,7 +103,7 @@ discuss the background required to present our ideas.
 
 
 Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
-we use the generated trajectory segments to learn quantitative models
+we use the generated trajectories to learn quantitative models
 describing the local behavior of the system. These models are defined
 by a set of relations $R \subseteq \HybridStates \times \HybridStates$
 for each edge of the reachability graph.
