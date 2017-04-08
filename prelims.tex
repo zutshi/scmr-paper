@@ -283,7 +283,7 @@ $\vx$ such that $\nu_0(\vx)$ satisfies $\Theta$.
 % is a finite set of transitions of the form $\tupleof{l, \tau,
 % l'}$, where $l\in\pLocs$ is the pre-location, $l'\in\pLocs$ the
 % post-location and $\tau \in \scrT$ is the transition. $\tau$
-% is labled by the transition relation $\rho_{\tau}$
+% is labeled by the transition relation $\rho_{\tau}$
 % over the current states and the next states. The transition relation
 % is defined in terms of affine predicates on the current and next
 % states and an affine update between them.
@@ -403,7 +403,7 @@ modeling errors, and from here on, we do not consider such cases.
 The PWA transition system is a finite location, infinite state
 transition system. As all the guards and transitions are affine, a
 bounded reachability query is equivalent to checking all
-combinaions of discrete locations, where each combination can be
+combinations of discrete locations, where each combination can be
 summarized as a linear program. As the time is bounded, the number of
 combinations are finite, but, exponential in number.
 
@@ -411,7 +411,7 @@ It should be noted that an explicit execution of the transition system
 represents a directed acyclic graph, with each location being a node,
 and a directed edge from each node to all nodes reachable in forward
 time. A path on this graph is then a linear program, with each
-branching node corresponsing to a logical disjunction.
+branching node corresponding to a logical disjunction.
 
 Temporal properties of pwa transitions systems can be checked using
 off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason

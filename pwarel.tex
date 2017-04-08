@@ -2,7 +2,7 @@
 A discrete abstraction over a continuous space uses relations to
 describe the behavior of the system over time. Such relations abstract
 the underlying relation between concrete states, and concrete paths
-can no longer be constructed directly. Instead, search procedueres
+can no longer be constructed directly. Instead, search procedures
 like Counter-Example Guided Refinement must be used to find concrete
 paths. In general, such search techniques are exponential with respect to
 computational resources and memory. As an alternative, we introduce
@@ -16,11 +16,11 @@ transition system.
 \subsection{Graph Abstraction}
 
 % The abstraction of the hybrid dynamical system is a a
-% paritioning of the combined state-input space $\HybridStates \times
+% partitioning of the combined state-input space $\HybridStates \times
 % \Inputs$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
 % pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
 % their union $\bigcup_{C_i\in\Cells}C_i$ is the state-input
-% space $\HybridStates \times \Inputs$. The paritions over
+% space $\HybridStates \times \Inputs$. The partitions over
 % the continuous input-state space are implicitly defined using a quantization
 % function $Q_\epsilon$ parameterized by the precision $\epsilon$.
 % This further defines an equivalence relations such that
