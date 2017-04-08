@@ -15,13 +15,13 @@ transitions system.
 
 \subsection{Graph Abstraction}
 
-The abstraction of the hybrid dynamical system is defined by
-paritioning the combiend state-input space $\HybridStates \times
+The abstraction of the hybrid dynamical system is a a
+paritioning of the combined state-input space $\HybridStates \times
 \Inputs$ into hyper-rectangles or cells $C_i \in \C$. The cells are
 pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
 their union $\bigcup_{C_i\in\C}C_i$ is the state-input
-space $\HybridStates \times \Inputs$. This discrete abstraction over
-the continuous space is implicit and defined using a quantization
+space $\HybridStates \times \Inputs$. The paritions over
+the continuous input-state space are implicitly defined using a quantization
 function $Q_\epsilon$ parameterized by the precision $\epsilon$.
 This further defines an equivalence relations such that
 \[
