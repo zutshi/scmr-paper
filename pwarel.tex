@@ -83,8 +83,7 @@ state. We represent the dynamics using an affine model with an
 interval error. Such a model can either be approximated using learning
 methods or computed as a sound (over) approximation using reachability
 set computation methods. Because we assume black box semantics, we
-only present the former. Using regression analysis on the $start$ and
-$end$ states of the witnessed trajectory between two cells,
+only present the former. Using regression analysis on a witnessed trajectory between two cells,
 we compute an approximate discrete map along with an error estimate.
 Moreover, using the simulation function $\simulate$, additional
 trajectories (or data) can be generated if required. The data
