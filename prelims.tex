@@ -239,19 +239,39 @@ section.
 %%  complex eigenvalues.
 
 
+% A configuration of the PWATS is
+% a pair (l,\nu(v)), where \nu is a valuation function assigning values to
+% variables.
+
+% A run of the PWA TS is as follows: the PWA TS starts in the initial
+% location from a valuation \nu(v) \in theta.
+
+% A move of the PWA TS is described by the function mu: from (L,R^n) to
+% (L,R^n), and mu follows the rules that
+% mu(l,\nu(v)) = (l',\nu'(v)), iff (l,g,g',f,l') in T, and
+% \nu(v) satisfies g, \nu(v') satisfies g', and \nu(v') = f(\nu(v)).
+
+
+
+
 \subsection{Piecewise Affine (PWA) Transition System}
 
-We define the PWA transition system as a transition system
-$\rho:\tupleof{\pLocs,\pVars,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
-a nonempty set of locations, $\pVars$ is a set of variables, $\scrT$
-is a finite subset of $\pLocs \times \pLocs$, and each transition
-$\tau \in \scrT$ is associated with a transition relation of the form
+We define the PWA transition system as a discrete transition system
+$\rho:\tupleof{\pLocs,\vx,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
+a nonempty set of locations, $\vx$ is a set of variables, $\scrT$
+is a finite set of transitions of the form $\tupleof{l, \tau,
+l'}$, where $l\in\pLocs$ is the pre-location, $l'\in\pLocs$ the
+post-location and $\tau(\vx,\vx') \in \scrT$ is the transition. $\tau$
+is labled by the transition relation $\rho_{\tau}$
+over the current states and the next states. The transition relation
+is defined in terms of affine predicates on the current and next
+states and an affine update between them.
 \[
-    \rho_{\tau}(\pVar,\pVar') \subseteq \setof{(\pVar,\pVar')) \;|\;
-    g_\tau(\pVar) \land g'_\tau(\pVar') \land f_{\tau}(\pVar, \pVar')}
+    \rho_{\tau}(\vx,\vx') \subseteq \setof{(\vx,\vx')) \;|\;
+    g_\tau(\vx) \land g'_\tau(\vx') \land f_{\tau}(\vx, \vx')}
 \]
 where $f_{\tau}$ is an affine relation on the pre and post states
-$\pVar,\pVar'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
+$\vx,\vx'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
 post conditions) on the states. Finally, $\pLocI$ is an initial
 location $\Theta$ is an affine assertion characterizing the initial
 states included in $\pLocI$.
