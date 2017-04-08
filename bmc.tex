@@ -1,51 +1,55 @@
 \section{Model Checking}
 
-% include an algorithm
-We now describe the entire procedure in three steps.
-\begin{enumerate}
-    \item Given a black box system $\System$ specified by
-        $\simulate^\System$, we
-        use scatter-and-simulate with ($\Delta$-length) trajectory
-        segments to sample a finite reachability graph
-        $\scr{H}(\Delta)$.
-    \item Using regression, we enrich the graph relations and annotate
-        the edges with the estimated affine maps.
-    \item Interpreting the directed reachability graph as a transition
-        system, we use a bounded model checker to find fixed length
-        violations to safety properties.
-\end{enumerate}
+As a final step, the enriched graph is model checked for the given
+safety property. If a counter-example is found, it is simulated using
+the $\simulate$ function and if reproducible, a violation is
+concluded. In all other cases the falsification results in an
+`unknown' result.
 
+% % include an algorithm
+% We now describe the entire procedure in three steps.
+% \begin{enumerate}
+%     \item Given a black box system $\System$ specified by
+%         $\simulate^\System$, we
+%         use scatter-and-simulate with ($\Delta$-length) trajectory
+%         segments to sample a finite reachability graph
+%         $\scr{H}(\Delta)$.
+%     \item Using regression, we enrich the graph relations and annotate
+%         the edges with the estimated affine maps.
+%     \item Interpreting the directed reachability graph as a transition
+%         system, we use a bounded model checker to find fixed length
+%         violations to safety properties.
+% \end{enumerate}
 
 \section{An Example: Van der Pol Oscillator}
 
-We now describe the above using the Van der Pol oscillator benchmark
-presented in \cite{zutshi2014multiple}. Simulations generated using
-uniformly random samples are shown in \figref{vdp-cont}. We want to
-check the property $P_3$, indicated by the red box, given the initial
-set indicated by the green box. The abstraction is defined by
-$\quant_{0.2}(\x)$, which results in an evenly gridded state-space,
-where each cell is of size $0.2 \times 0.2$ units.
-Scatter-and-simulate is then used to construct the abstract graph $G$,
-using $2$ samples per cell and the time step $\Delta = 0.1s$. The
-complete process follows.
+We now describe the pesented technique using the Van der Pol
+oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
+generated using uniformly random samples are shown in
+\figref{vdp-cont}. We want to check the property $P_3$, indicated by
+the red box, given the initial set indicated by the green box. The
+abstraction is defined by $\quant_{0.2}(\x)$, which results in an
+evenly gridded state-space, where each cell is of size $0.2 \times
+0.2$ units.  Scatter-and-simulate is then used to construct the
+abstract graph $G$, using $2$ samples per cell and the time step
+$\Delta = 0.1s$. The complete process follows.
 
 \begin{enumerate}
-    \item{\emph{Abstract}} Consider an implicit abstraction induced by the quantization
-    function $\quant_\epsilon(\x)$. The corresponding reachability
-    graph $\scr{H}(\Delta)$ (with time step $\Delta$) is given by
-    $\tupleof{\scr{C},\areach{\Delta}, \scr{C}_0, \scr{C}_u}$.
+    \item{\emph{Abstract}}: Assume an implicit abstraction using the quantization
+        function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
+    graph is $\scr{H}(\Delta=0.1)$.
 \item{\emph{Discover}}: Using scatter-and-simulate, enumerate a finite number
     of cells (vertices) and the relations (edges) of the graph
-    $\scr{H}(\Delta)$. Associate the set of generated trajectory
-    segments with their respective originating cells using a map $D:C
-    \mapsto \setof{\pi | start(\pi) \in C}$. The discovered
-    abstraction is show in \figref{vdp-abs}. As mentioned, red cells
+    $\scr{H}(0.1)$. Associate the set of generated trajectory
+    segments with their respective originating cells using a map $\ds:C
+        \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
+    abstraction is show in \figref{vdp-abs}. The red cells
     are unsafe and green cells are initial cells.
-\item{\emph{Relationalize}} For each cell $C$, perform regression analysis on
+\item{\emph{Relationalize}}: For each cell $C$, perform regression analysis on
     the respective set of trajectory segments $D(C)$, and compute a
     set of affine relations $R_{C,C'}(\x,\x')$ between $\x \in C$ and $\x'
-    \in C'$ s.t., $\text{edge} (C,C') \in \scr{H}(\Delta)$. Annotate
-    each edge in the graph $\scr{H}(\Delta)$ with the respective
+    \in C'$ s.t., $\text{edge} (C,C') \in \scr{H}(0.1)$. Annotate
+    each edge in the graph $\scr{H}(0.1)$ with the respective
     relation.
 
     \figref{vdp-map} shows the cells and the trajectory segments which
@@ -56,14 +60,14 @@ complete process follows.
     relations. Note that self loops result when an observed trajectory
     segment has its $start$ and $end$ states in the same cell.
 
-\item{\emph{Model Check}} The graph $\scr{H}(\Delta)$ can now be viewed as a
+\item{\emph{Model Check}}: The graph $\scr{H}(0.1)$ can now be viewed as a
     transition system $\tupleof{C,\x,\scrT,C_0,\HybridStates_0}$,
-    where $C \in vertices(\scr{H}(\Delta))$ and $\x \in
+    where $C \in vertices(\scr{H}(0.1))$ and $\x \in
     \HybridStates$. A transition $\tau \in \scrT$ is of the form
     $\tupleof{C, C',\rho_{\tau}}$, where $\rho_{\tau}(\x,\x')
     \subseteq \setof{R_{(C,C')}(\x,\x') |( C,C') \in
-    edge(\scr{H}(\Delta))}$.
-\item{\emph{Check Counter-example}} The infinite state (but finite location) transition system can
+    edge(\scr{H}(0.1))}$.
+\item{\emph{Check Counter-example}}: The infinite state (but finite location) transition system can
     be model checked to find a concrete counter-example, which if
     exists, can indicate the existence of a similar trace in the
     original black-box system $\System$. The latter check is carried
@@ -72,21 +76,21 @@ complete process follows.
     find a counter-example.
 \end{enumerate}
 
-\inclfig[width=0.75\linewidth]{vdp_cont_traces.png}{Van der
+\inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
 Pol: continuous trajectories. Red and green boxes indicate unsafe and
 initial sets.}
 \label{fig:vdp-cont}
 
-\inclfig[width=0.75\linewidth]{vdp_abs.png}{The discovered
+\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
 abstraction $\scr{H}(0.1)$. Red cells are unsafe cells and green cells are
 initial cells.}
 \label{fig:vdp-abs}
 
-\inclfig[width=\linewidth]{vdp_disc_map.png}{Cells and
+\inclfig[width=0.95\linewidth]{vdp_disc_map.pdf}{Cells and
 trajectory segments used by $1$-relational modeling.}
 \label{fig:vdp-map}
 
-\inclfig[width=0.40\linewidth]{vdp_graph.png}{Enriched
+\inclfig[width=0.50\linewidth]{vdp_graph.pdf}{Enriched
 graph $G^R$. The affine maps $f$ for the transition relations are show
 in \tabref{vdp-pwa}.}
 \label{fig:vdp-graph}
