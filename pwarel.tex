@@ -79,6 +79,11 @@ abstract states $C$ (or cells) and edges $(C,C')$ iff $C
 %     an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
 % H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
 
+Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
+we use the generated trajectories to learn quantitative models
+describing the local behavior of the system. These models are defined
+by a set of relations $R \subseteq \HybridStates \times \HybridStates$
+for each edge of the reachability graph.
 
 
 \subsection{Enriched Abstraction}
@@ -104,12 +109,12 @@ state. We represent the dynamics using an affine model with an
 interval error. Such a model can either be approximated using learning
 methods or computed as a sound (over) approximation using reachability
 set computation methods. Because we assume black box semantics, we
-only present the former. Using regression analysis on a witnessed trajectory between two cells,
-we compute an approximate discrete map along with an error estimate.
-Moreover, using the simulation function $\simulate$, additional
-trajectories (or data) can be generated if required. The data
-can be separated into a training set and testing set to compute the
-map and the error respectively.
+only present the former. Using regression analysis on a witnessed
+trajectory between two cells, we compute an approximate discrete map
+along with an error estimate.  Moreover, using the simulation function
+$\simulate$, additional trajectories (or data) can be generated if
+required. The data can be separated into a training set and testing
+set to compute the map and the error respectively.
 
 %The latter case can be explored if
 %the symbolic dynamics of the system are known. A tool like
@@ -121,13 +126,8 @@ search for concrete behaviors in the system. We call it a time
 parameterized PWA relational abstraction. It can be interpreted as an
 infinite state discrete transition system, and we can use
 off-the-shelf bounded model checkers to find concrete violations of a
-given safety property, and even other temporal properties.  We now
-discuss the background required to present our ideas.
+given safety property, and even other temporal properties.
 
+%We now
+%discuss the background required to present our ideas.
 
-
-Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
-we use the generated trajectories to learn quantitative models
-describing the local behavior of the system. These models are defined
-by a set of relations $R \subseteq \HybridStates \times \HybridStates$
-for each edge of the reachability graph.
