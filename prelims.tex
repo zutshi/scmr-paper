@@ -148,7 +148,7 @@ $i^{th}$ state in $\x'$.
 
 Affine maps are poor approximations for arbitrary non-linear
 functions. Hence, we use a collection of affine maps to approximate
-the local behaviors (in state-space) of the system $\simulate$. This
+the local behaviors (in state-space) of the system $\System$. This
 results in a piece wise approximation, as described in the next
 section.
 
@@ -242,18 +242,19 @@ section.
 \subsection{Piecewise Affine (PWA) Transition System}
 
 We define the PWA transition system as a transition system
-%(ref.~\secref{DiscSys})
-$\rho:\tupleof{\pLocs,\pVars,\scrT, \pLocI,\Theta}$
-where each transition $\tau \in \scrT$, is associated with a
-transition relation of the form
+$\rho:\tupleof{\pLocs,\pVars,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
+a nonempty set of locations, $\pVars$ is a set of variables, $\scrT$
+is a finite subset of $\pLocs \times \pLocs$, and each transition
+$\tau \in \scrT$ is associated with a transition relation of the form
 \[
     \rho_{\tau}(\pVar,\pVar') \subseteq \setof{(\pVar,\pVar')) \;|\;
     g_\tau(\pVar) \land g'_\tau(\pVar') \land f_{\tau}(\pVar, \pVar')}
 \]
 where $f_{\tau}$ is an affine relation on the pre and post states
 $\pVar,\pVar'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
-post conditions) on the states and $\Theta$ is an affine assertion on
-the initial states.
+post conditions) on the states. Finally, $\pLocI$ is an initial
+location $\Theta$ is an affine assertion characterizing the initial
+states included in $\pLocI$.
 
 We can now use a PWA transition system $\rho$ to approximate the
 behavior of a hybrid dynamical system $\System$ defined by a simulator
@@ -289,16 +290,15 @@ $[\delta_{\min},\delta_{\max}]$.
 % \in \reals^m$ are vectors. A guarded affine map is satisfied if its
 % guard is satisfied.
 
-We now formalize the PWA affine transition system for a dynamical system.
-\begin{definition}[PWA Transition System]
+We now formalize the PWA relational model for a dynamical system.
+\begin{definition}[PWA Relational Model]
 
-Given a hybrid dynamical system over a state-space
-$\HybridStates^n$, a PWA transition system $\rho$ is given by the
-tuple $\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in
-\scrT$ are affine transition relations and $\Theta$ is an affine
-predicate over $\x$ and the states $\x\in\HybridStates^n$. The
-transition relation is then defined by $\scrT$ with $n$ transition
-relations as follows
+Given a hybrid dynamical system over a state-space $\reals^n$, a PWA
+relational model $\rho$ is given by the tuple
+$\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in \scrT$ is a
+collection of affine transitions  and $\Theta$ is an affine predicate
+over $\x\in\real^n$. The transition relation is then defined by
+$\scrT$ with $n$ transition relations as follows
 
 \begin{equation}
     \scrT = \left\{
@@ -309,22 +309,20 @@ relations as follows
         \end{array}
     \right.
 \end{equation}
-
 \end{definition}
 
-%where $f_i:\x \mapsto A_i\x + \vb_i + \delta_i$,
-%$g_i(\x):C_i\x-\vd_i\le0$, $g'_i(\x'):C'_i\x'-\vd'_i\le0$ and $\x'$
 where $g_i$ and $g'_i$ are affine predicates and $f_i$ are affine
 relations and $\x'$ denotes the next state of the system.
 
 A PWA model is \textit{deterministic}, iff for every state
-$\x\in\HybridStates^n$, a unique guarded affine map is satisfied and
-all errors $\delta$ are singletons. However, in practice such a case
-rarely exists. A PWA model will be usually non-deterministic, both due
-to multiple choice of transition relations and the reachable states at
-the $k^{th}$ time step (or after $k\Delta$ units of time) being a set.
-Abusing the notation, we denote the set of states reachable in a
-single step in $\rho$ by $\x' = \rho(\x)$.
+$\x\in\reals^n$, a unique guarded affine map is satisfied and if all
+entries in the error interval vector $\vec{\delta}$ are singletons.
+However, in practice such a case rarely exists. A PWA model will be
+usually non-deterministic, both due to multiple choices of transitions
+from any location and the reachable states at the $k^{th}$ time step
+(or after $k\Delta$ units of time) being a set.  Abusing the notation,
+we denote the set of states reachable in a single step in $\rho$ by
+$\x' = \rho(\x)$.
 
 A PWA transition system is \textit{complete}, iff for every state
 $\x\in\HybridStates^n$, there exists at least one satisfied
