@@ -31,14 +31,18 @@ model checker by requesting distinct counter-examples.
 % model checker.
 
 We tabulate our preliminary evaluation in \tabref{res-rel}. We used
-few of the benchmarks described in \cite{zutshi2014multiple},
+the more difficult benchmarks described in \cite{zutshi2014multiple},
 including the Van der Pol oscillator, Brusselator, Lorenz attractor
-and the Navigation benchmark. As before, we ran PWA-Rel $10$ times
-with different seeds and averaged the results. We tabulate both the
-total time taken and the time taken by SAL to compute the
-counter-example and compare against an implementation of S3CAM. Note
-that different abstraction parameters are used for S3CAM and
-PWA-Rel, due to the differences in which they operate.
+and the Navigation benchmark. PWA-Rel and S3CAM were ran $10$ times
+with different seeds and the running times were averaged. We tabulate
+both the total time taken by PWA-Rel+SAL and PWA-Rel+LP to compute the
+counter-example and compare against an implementation of S3CAM.
+Different abstraction parameters are used for S3CAM and PWA-Rel, due
+to the differences in which they operate. PWA-Rel requires a finer
+abstraction to begni with in order to minimize the modeling errors.
+On the other hand, a coarser abstraction as the intital abstraction is
+works better for S3CAM due to the expensive refinement procedure
+involved.
 
 \begin{table}[!htbp]
 \centering
@@ -49,17 +53,17 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 \label{tab:res-rel}
 \begin{tabular}{@{}llll@{}}
 \toprule
-    Benchmark & PWA Rel + BMC & PWA Rel + LP & S3CAM\\
+    Benchmark & PWA Rel + SAL & PWA Rel + LP & S3CAM\\
 \midrule
-    Van der Pol ($\prop_3$)   &$14$ & $20$ & $24$\\
-    Brusselator               &$4$ & $4$ & $2$\\
-    Lorenz                    &$122$ & $120$ & $35$\\
+    Van der Pol ($\prop_3$)   &$0.2$ & $0.34$ & $0.4$\\
+    Brusselator               &$0.06$ & $0.06$ & $0.03$\\
+    Lorenz                    &$0.4$ & $0.33$ & $0.58$\\
 %B.Ball                    &  &   & \\
-    Nav ($\prop_P$)           &$TO$ & $1710$  & $603$ \\%9423 + 4480
-    Nav ($\prop_Q$)           &$TO$ & $1560$   & $546$ \\%8105 + 970
-    Nav ($\prop_R$)           &$TO$ & $2352$  & $2003$\\
-    Nav ($\prop_S$)           &$TO$ & $0$  & $2100$\\
-    Bouncing Ball             &$Safe$ & $Safe$  & $450$\\
+    Nav ($\prop_P$)           &$TO$ & $28.5$  & $10$ \\%9423 + 4480
+    Nav ($\prop_Q$)           &$TO$ & $26$   & $9.1$ \\%8105 + 970
+    Nav ($\prop_R$)           &$TO$ & $39.2$  & $33.3$\\
+    Nav ($\prop_S$)           &$TO$ & $71$  & $35$\\
+    Bouncing Ball             &$Safe$ & $Safe$  & $7.5$\\
 
 \bottomrule
 \end{tabular}
@@ -68,9 +72,11 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 % 1m8s, 2m56.184s, 1m31.059s[f], 1m32.665s,  1m45.312s, 1m22.397s, 2m1.451s[f], 1m12.118s, 1m26.596s
 % 0.12, 0.06,         0.33       0.13,       0.22,     FAIL,       ,X           0.08        0.15
 
-The results show promise, but the performance is comparable. Also,
-PWA-Rel timed out on some benchmarks like Nav $\prop_R$, Nav $\prop_S$
-and the bouncing ball. However, we need to explore more benchmarks to
+As apparent form the results, the performance is comparable in all
+benchmarks, but the last one: bouncing ball. PWA-Rel determines it to
+be `safe' as it can not find a counter-example. Also, PWA-Rel performs
+better with the LP solver as PWA-Rel+SAL times out on most of the
+benchmarks. However, we need to explore more benchmarks to
 be conclusive. PWA-Rel's performance can be explained by the
 difficulty in finding a good abstraction ($\quant_\epsilon$), which
 needs to be fine enough, to obtain good prediction models but coarse
