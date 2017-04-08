@@ -241,25 +241,60 @@ section.
 
 \subsection{PWA Transition System}
 
-We define the PWA transition system as a discrete transition system
-$\rho:\tupleof{\pLocs,\vx,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
-a nonempty set of locations, $\vx$ is a set of variables, $\scrT$
-is a finite set of transitions of the form $\tupleof{l, \tau,
-l'}$, where $l\in\pLocs$ is the pre-location, $l'\in\pLocs$ the
-post-location and $\tau \in \scrT$ is the transition. $\tau$
-is labled by the transition relation $\rho_{\tau}$
-over the current states and the next states. The transition relation
-is defined in terms of affine predicates on the current and next
-states and an affine update between them.
-\[
-    \rho_{\tau}(\vx,\vx') \subseteq \setof{(\vx,\vx')) \;|\;
-    g_\tau(\vx) \land g'_\tau(\vx') \land f_{\tau}(\vx, \vx')}
-\]
-where $f_{\tau}$ is an affine relation on the pre and post states
-$\vx,\vx'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
-post conditions) on the states. Finally, $\pLocI$ is an initial
-location $\Theta$ is an affine assertion characterizing the initial
-states included in $\pLocI$.
+We define a PWA transition system $A$ as a tuple
+$\tupleof{\pLocs,\vx,\scrT, G, U, \pLocI,\Theta}$, where:
+\begin{itemize}[noitemsep, leftmargin= 1.5 em]
+\item
+$\pLocs$ is a set of locations,
+\item
+$\vx$ is a variable that takes values in $\reals^m$,
+\item
+$\scrT$ is a finite subset of $\pLocs \times G \times U \times G \times \pLocs$, 
+\item
+$G$ is a set of conjunctions of affine predicates, 
+\item
+$U$ is a set of affine relations,
+\item
+$\pLocI$ is an initial location, and,
+\item
+$\Theta$ is an initial affine predicate.
+\end{itemize}
+
+The operation of $A$ is described in terms of its configuration and
+its moves. A configuration of $A$ is a pair $(\ell, \nu)$, where $\ell
+\in \pLocs$, and $\nu$ is a valuation function assigning values in
+$\reals^m$ to the variable $\vx$.  The move function $\mu$ maps a
+configuration $(\ell,\nu)$ to the next configuration $(\ell',\nu')$,
+iff there is a transition $\tau$ of the form $(\ell,g,f,g',\ell')$,
+and $\nu(\vx)$ satisfies predicate $g$, $\nu'(\vx)$ satisfies
+predicate $g'$ and $\nu'(\vx) \in f(\nu(\vx))$.
+
+For a given $\tau$, we call the affine relation $f_\tau$ its update
+relation, and the predicates $g_\tau$ and $g'_\tau$ as pre- and
+post-conditions on the transition. The machine starts its operation in
+location $\pLocI$ with an initial valuation $\nu_0$ to the variable
+$\vx$ such that $\nu_0(\vx)$ satisfies $\Theta$.
+
+
+% We define the PWA transition system as a discrete transition system
+% $\rho:\tupleof{\pLocs,\vx,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
+% a nonempty set of locations, $\vx$ is a set of variables, $\scrT$
+% is a finite set of transitions of the form $\tupleof{l, \tau,
+% l'}$, where $l\in\pLocs$ is the pre-location, $l'\in\pLocs$ the
+% post-location and $\tau \in \scrT$ is the transition. $\tau$
+% is labled by the transition relation $\rho_{\tau}$
+% over the current states and the next states. The transition relation
+% is defined in terms of affine predicates on the current and next
+% states and an affine update between them.
+% \[
+%     \rho_{\tau}(\vx,\vx') \subseteq \setof{(\vx,\vx')) \;|\;
+%     g_\tau(\vx) \land g'_\tau(\vx') \land f_{\tau}(\vx, \vx')}
+% \]
+% where $f_{\tau}$ is an affine relation on the pre and post states
+% $\vx,\vx'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
+% post conditions) on the states. Finally, $\pLocI$ is an initial
+% location $\Theta$ is an affine assertion characterizing the initial
+% states included in $\pLocI$.
 
 
 % A configuration of the PWATS is
@@ -274,28 +309,13 @@ states included in $\pLocI$.
 % mu(l,\nu(v)) = (l',\nu'(v)), iff (l,g,g',f,l') in T, and
 % \nu(v) satisfies g, \nu(v') satisfies g', and \nu(v') = f(\nu(v)).
 
-We can now use a PWA transition system $\rho$ to approximate the
-behavior of a hybrid dynamical system $\System$ defined by a simulator
-$\simulate^{\System}$~\footnote{Due to $f_\tau$ being restricted to an affine
-form, we can only approximate general hybrid systems.}. Each
-transition of $\rho$ represents a discrete time step $\Delta$. Let the
-state-space of $\System$ be given by $\x\in\HybridStates^n$, then the
-states of $\rho$ are also given by $\x\in\HybridStates^n$. The affine guard
-predicates $g_\tau$ are given by a conjunction of hyper-planes and
-hence can be represented in matrix form as a polyhedron (defined by
-$m$ constraints) in the state-space
-\[
-g:C\x - \vd \le 0
-\]
-where $C$ is an $m \times n$ matrix and $\vd$ is a vector of length
-$m$. The affine relation $f_\tau$ can be represented using matrix $A$
-and an offset vector $\vb$ as $f_\tau \subseteq \setof{(\x,\x') | \x'
-= A\x+\vb}$. Finaly, we incorporte an approximate non-deterministic
-error term $\delta$, defined as a vector of intervals
-$[\delta_{\min},\delta_{\max}]$.
-\[
-    f_\tau \subseteq \setof{(\x,\x') | \x' = A\x+\vb}.
-\]
+We how we can use the formal machinery of a PWA transition system $A$
+to approximate the behavior of a hybrid dynamical system $\System$
+defined by a simulator $\simulate^{\System}$~\footnote{Due to $f_\tau$
+being restricted to an affine form, we can only approximate general
+hybrid systems.}. 
+
+
 %defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
 %\in f_\tau(\x)}$.
 
@@ -311,28 +331,58 @@ $[\delta_{\min},\delta_{\max}]$.
 We now formalize the PWA relational model for a dynamical system.
 \begin{definition}[PWA Relational Model]
 
-Given a hybrid dynamical system over a state-space $\reals^n$, a PWA
-relational model $\rho$ is given by the tuple
-$\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in \scrT$ is a
-collection of affine transitions  and $\Theta$ is an affine predicate
-over $\x\in\real^n$. The transition relation is then defined by
-$\scrT$ with $n$ transition relations as follows
+A PWA relational model $A(\System)$ of a hybrid dynamical system
+$\System$ is simply a PWA transition system, where:
 
-\begin{equation}
-    \scrT = \left\{
-        \begin{array}{ll}
-            g_1(\x) \land g'_1(\x') \implies f_1(\x,\x') \\
-            \ldots\\
-            g_n(\x) \land g'_n(\x') \implies f_n(\x,\x') \\
-        \end{array}
-    \right.
-\end{equation}
+\begin{itemize}[noitemsep, leftmargin= 1.5 em]
+\item
+each transition of $A$ represents a discrete time step $\Delta$ of the
+system $\System$,
+\item
+if the state-space of $\System$ is $\reals^n$, the the valuation
+function for variable $\x$ in $A$ assigns $\x$ some value in
+$\reals^n$,
+\item
+for the $N$ tuples $(v,v')$ discovered by simulation, if $v' = Av
++ B + \vec{\delta}$ represents the affine relation discovered using
+linear regression, and if $h$ is the convex hull of all the $v$
+states across all tuples and $h'$ is the convex hull of all the $v'$
+states across all tuples, then $f_\tau \subseteq
+\setof{(\nu(\x),\nu'(\x)) \mid \nu'(\x) \in A\x + B + \vec{\delta}}$,
+and $g$ states that $\nu(\x)$ is in $h$, and $g'$ states that
+$\nu'(\x) \in h'$.
+\end{itemize}
+
+Note that the guard predicates $g_\tau$ represent a conjunction of $m$
+affine inequalities, then we can represent $g_\tau$ as follows:
+\[
+g_\tau  \equiv C\x - \vd \le 0
+\]
+where $C$ is an $m \times n$ matrix and $\vd$ is $m \times 1$ matrix.
+
+
+% Given a hybrid dynamical system over a state-space $\reals^n$, a PWA
+% relational model $\rho$ is given by the tuple
+% $\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in \scrT$ is a
+% collection of affine transitions  and $\Theta$ is an affine predicate
+% over $\x\in\real^n$. The transition relation is then defined by
+% $\scrT$ with $n$ transition relations as follows
+% 
+% \begin{equation}
+%     \scrT = \left\{
+%         \begin{array}{ll}
+%             g_1(\x) \land g'_1(\x') \implies f_1(\x,\x') \\
+%             \ldots\\
+%             g_n(\x) \land g'_n(\x') \implies f_n(\x,\x') \\
+%         \end{array}
+%     \right.
+% \end{equation}
 \end{definition}
 
-where $g_i$ and $g'_i$ are affine predicates and $f_i$ are affine
-relations and $\x'$ denotes the next state of the system.
+% where $g_i$ and $g'_i$ are affine predicates and $f_i$ are affine
+% relations and $\x'$ denotes the next state of the system.
 
-A PWA model is \textit{deterministic}, iff for every state
+A PWA relational model is \textit{deterministic}, iff for every state
 $\x\in\reals^n$, a unique guarded affine map is satisfied and if all
 entries in the error interval vector $\vec{\delta}$ are singletons.
 However, in practice such a case rarely exists. A PWA model will be
@@ -342,12 +392,11 @@ from any location and the reachable states at the $k^{th}$ time step
 we denote the set of states reachable in a single step in $\rho$ by
 $\x' = \rho(\x)$.
 
-A PWA transition system is \textit{complete}, iff for every state
-$\x\in\HybridStates^n$, there exists at least one satisfied
+A PWA relational model system is \textit{complete}, iff for every
+state $\x\in\HybridStates^n$, there exists at least one satisfied
 transition relation $\scrT$. If this is not the case, the system can
 deadlock, with no further executions. This usually results from
-modeling errors, and from here on, we do not consider such
-cases.
+modeling errors, and from here on, we do not consider such cases.
 
 \subsection{Bounded Model Checking (BMC)}
 The PWA transition system is a finite location, infinite state

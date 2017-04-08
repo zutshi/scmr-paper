@@ -25,7 +25,7 @@ wish to control, and a model for the embedded controllers.  Automatic
 approaches for testing the safety and performance of such closed-loop
 systems is challenging, and current approaches focus mostly on guided
 testing using numerical simulations
-\cite{annpureddy2011s},\cite{donze2010breach},\cite{deshmukh2015stochastic},\cite{dreossi2015efficient},\cite{akazaki}.
+\cite{annpureddy2011s,donze2010breach,deshmukh2015stochastic,dreossi2015efficient,akazaki}.
 On the other hand, theoretical research on hybrid and timed systems
 focusses on formal guarantees for restricted classes of dynamical
 systems such as hybrid automata where the system state evolves
@@ -52,16 +52,20 @@ generalize individual time-series behaviors. But, there are several
 approaches in the literature to perform data-driven modeling; e.g.,
 system identification techniques that learn dynamic models from data
 \cite{ljung1999system}, auto-regressive models for forecasting
-\cite{wei1994time}, machine learning techniques that learn static or
-dynamic models from data
-\cite{narendra1990identification,lu2009linear}.  Why then do we need a
-new modeling technique? The answer to this question lies in our goal
-for the second step, \ie, symbolic analysis of the learned model. For
-this step, we need to have models that can be digested by existing
-symbolic tools, which is harder to do with some of the aforementioned
-heavier data-driven modeling methods. Hence, we use a lighter flavor
-of data-driven modeling such as the one proposed for learning
-relational models from data
+\cite{wei1994time}, bounded-error hybrid systems identification
+methods \cite{bemporad2003greedy,bemporad2005bounded}, clustering
+based methods \cite{ferrari2003clustering}, methods to identify
+piecewise affine dynamics \cite{paoletti2007identification}, and
+machine learning techniques that learn static or dynamic models from
+data
+\cite{narendra1990identification,lu2009linear,juloski2005bayesian}.
+Why then do we need a new modeling technique? The answer to this
+question lies in our goal for the second step, \ie, symbolic analysis
+of the learned model. For this step, we need to have models that can
+be digested by existing symbolic tools, which is harder to do with
+some of the aforementioned heavier data-driven modeling methods.
+Hence, we use a lighter flavor of data-driven modeling such as the one
+proposed for learning relational models from data
 \cite{zutshi2012timed,sankaranarayanan2011relational}. By learning a
 {\em PWA relational model}, \ie, essentially a PWA discrete-time
 dynamical system, we can use software analysis approaches such as
@@ -95,34 +99,36 @@ gives our technique intrinsic value as a debugging tool.
 % and can not scale to higher dimensions.
 
 In \cite{zutshi2014multiple}, the authors investigate an on-the-fly
-abstraction technique that is close to the approach we propose. A key
-difference is that the abstraction explored in this work is an
-existential {\em relational} abstraction. The approximate model
-learned is a directed acyclic graph, where nodes represent regions of
-the state-space, and an edge between two regions indicates a
-transition between states in the regions. Our approach further
-improves the existential abstraction by annotating the edges in the
-graph-based abstraction with affine relations between the source and
-destination states.
+abstraction technique that is close to the approach we propose.  Both
+approaches use an existential abstraction of the state-space of the
+hybrid dynamical system. The abstract model learned is a directed
+acyclic graph, where nodes represent regions of the state-space, and
+an edge between two regions indicates a transition between states in
+the regions.  A key difference in this work is that the model being
+learned in addition to being an existential graph-based abstraction is
+also a {\em relational} abstraction.  In other words, the approach
+presented here improves the existential abstraction by annotating the
+edges in the graph-based abstraction with affine relations between the
+source and destination states.  More specifically, we use linear
+regression to quantitatively estimate the discovered edges in the
+graph-based abstraction of the state-space. These linear maps
+approximate locally observed behaviors, and the resulting graph or the
+Piece-Wise Affine (PWA) relational model can be interpreted as an
+infinite state discrete transition system and model checked for time
+bounded safety properties. A counter-example if found, can indicate
+the presence of a violation in the system.  We then use this
+counter-example to guide the search towards a counter-example in the
+original system. 
 
-% We further our exploration of trajectory segment based methods; and
-% explore an alternative approach to overcome the explosion in abstract
-% states. Instead of selectively refining the abstraction, we compute a
-% model of the black box system and use bounded model checking to find a
-% concrete counter-example in the model. Due to modeling errors, this
-% might not be reproducible in the original black-box system. 
-
-
-More specifically, we use linear regression to quantitatively estimate
-the discovered edges in the graph-based abstraction of the
-state-space. These linear maps approximate locally observed behaviors,
-and the resulting graph or the Piece-Wise Affine (PWA) relational
-model can be interpreted as an infinite state discrete transition
-system and model checked for time bounded safety properties. A
-counter-example if found, can indicate the presence of a violation in
-the system.  We then use this counter-example to guide the search
-towards a counter-example in the original system.
-
+We remark that our work focusses on building discrete PWA models, and
+is unrelated to work on analyzing dynamical systems that have PWA
+vector fields. Techniques to analyze PWA dynamical systems using
+bisimulation relations translate the system into a non-deterministic
+infinite state transition system, and use model checking approaches to
+verify them \cite{asarin2000approximate}. Related approaches using
+bisimulation relations \cite{pappas2003bisimilar,tabuada2006linear,
+yordanov2007model} have interesting parallels with the work presented
+here.
 
 %Furthermore, using linear programming, we can over-approximate the
 %neighbhourhood of the counter-example in the model.
