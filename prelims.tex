@@ -302,24 +302,25 @@ cases.
 \subsection{Bounded Model Checking (BMC)}
 The PWA transition system is a finite location, infinite state
 transition system. As all the guards and transitions are affine, a
-bounded time reachability query is equivalent to checking all
+bounded reachability query is equivalent to checking all
 combinaions of discrete locations, where each combination can be
 summarized as a linear program. As the time is bounded, the number of
-combinations are finite, although exponential in number.
+combinations are finite, but, exponential in number.
 
 It should be noted that an explicit execution of the transition system
 represents a directed acyclic graph, with each location being a node,
-and a directed edge (in the direction of time advance) from each node
-to its reachable node. A path on this graph is then a linear program,
-with each branching corresponsing to a logical disjunction.
+and a directed edge from each node to all nodes reachable in forward
+time. A path on this graph is then a linear program, with each
+branching node corresponsing to a logical disjunction.
 
 Temporal properties of pwa transitions systems can be checked using
-off-the-shelf model checkers like SAL~\cite{SAL-SRI} which can verify
-infinite state transitions systems.  Furthermore, lazy SMT solvers can
-be used for this specific problem~\cite{shoukry2017smc}. We now show
-how relational pwa abstractions can be viewed as pwa transition
-systems and subsequenly, the problem of falsification can be answered
-by a BMC query.
+off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason
+over infinite state transitions systems using SMT solvers.
+Furthermore, lazy SMT solvers can be employed for this specific
+problem instance to achieve better efficiency~\cite{shoukry2017smc}.
+We now show how relational pwa abstractions can be viewed as pwa
+transition systems, and how the problem of falsification can
+be answered by a BMC query.
 
 % Given a dynamical system over a continuous state-space
 % $\ContStates\in\reals^n$, a PWA model is a map $\ContStates \mapsto
