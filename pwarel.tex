@@ -83,7 +83,8 @@ Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
 we use the generated trajectories to learn quantitative models
 describing the local behavior of the system. These models are defined
 by a set of relations $R \subseteq \HybridStates \times \HybridStates$
-for each edge of the reachability graph.
+for each edge of the reachability graph. In the next section, we
+summarize this idea.
 
 
 \subsection{Enriched Abstraction}
@@ -127,7 +128,4 @@ parameterized PWA relational abstraction. It can be interpreted as an
 infinite state discrete transition system, and we can use
 off-the-shelf bounded model checkers to find concrete violations of a
 given safety property, and even other temporal properties.
-
-%We now
-%discuss the background required to present our ideas.
 
