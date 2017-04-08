@@ -1,6 +1,7 @@
-The presented technique was prototyped as a tool: PWA-Rel.
-We compared it against S3CAM~\cite{zutshi2014multiple} on several academic
-benchmarks.
+The presented technique was prototyped as a tool: PWA-Rel.  We
+compared it against S3CAM~\cite{zutshi2014multiple} on several
+academic benchmarks. Below, we present the details of the
+implementation and the benchmarks used.
 
 PWA-Rel was implemented in Python. Its different parts comprised of
 the (a) abstraction graph generation, (b) regression analysis and (c)
@@ -12,14 +13,18 @@ which used Yices2~\cite{dutertre2014yices} as the SMT solver. A naive
 alternative linear programming (LP) based model checker specific to the PWA
 relational abstractions was implemented utilizing PyGLPK.
 
-We used S3CAM to discover the abstraction graph $G$, which was then
-filtered to remove the nodes from which error nodes were not
-reachable. In our experiments we used $1$-relational modeling to
-create the transition system from $G$. Using the BMC, we checked for
-the given safety property. If a concrete trace was obtained, it was
-further checked for reproducibility by sampling and simulating its `neighborhood' with the
-$\simulate$ function. We define `neighborhood' as the abstract states
-corresponding to the returned concrete trace. Specifically, $100$
+PWA-Rel uses S3CAM to discover the abstraction graph $G$, which is
+then filtered to remove the nodes from which error nodes are not
+reachable. In all our experiments we used $1$-relational modeling to
+create the transition system from $G$. This was determined to be a
+good trade-off between longer simulations and increase in precision,
+with respect to the mentioned benchmarks.
+
+Using the BMC, we checked for the given safety property. If a concrete
+trace was obtained, it was further checked for reproducibility by
+sampling and simulating its `neighborhood' with the $\simulate$
+function. We define `neighborhood' as the abstract states
+corresponding to the returned concrete trace.  Specifically, $100$
 samples were uniformly randomly chosen and simulated and tested for
 error traces. This procedure can also be extended to obtaining
 different discrete sequences or discrete trace sequences from the
