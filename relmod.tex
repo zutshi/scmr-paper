@@ -142,17 +142,19 @@ Using \figref{k-rel}, we illustrate this notion. To compute
 $R_{(C,C')}$, we
 split the data set $D(C,C')$ consisting of trajectory segments of time lengths
 $k\Delta$ as follows.  We observe the local behavior of the system by
-noting the evolution of the system $\System$ from a state $\x(t)
-\in C$ for a time length dependant on $k$. For
+noting the evolution of the system $\System$ from a state $\vx \in C$
+reachable at time $t$ for a time length dependant on $k$. For
 \begin{itemize}
     \item{$k=0$}: we observe all trajectory segments of length $\Delta$.
-    \item{$k=1$}: we observe trajectory segments of length $\Delta$, which satisfy $\x(t+\Delta) \in C'$.
+    \item{$k=1$}: we observe trajectory segments of length $\Delta$,
+        which satisfy $\vx'\in C'$, where $\vx'$ is reachable from
+        $\vx$ in time $\Delta$.
     \item{$k=2$}: we observe trajectory segments of length $2\Delta$,
         and split them in two sets (a) and (b) on the basis of the
         cells reached at time $(t+\Delta)$ and $(t+2\Delta)$.
         \begin{enumerate}[(a)]
-            \item $\x(t+\Delta) \in C' \land \x(t+2\Delta) \in C''_1$
-            \item $\x(t+\Delta) \in C' \land \x(t+2\Delta) \in C''_2$
+            \item $\x' \in C' \land \x''\in C''_1$
+            \item $\x' \in C' \land \x'' \in C''_2$
         \end{enumerate}
     \item{$k=n$}: we observe trajectory segments of length $n\Delta$,
         and split them in to multiple sets on the basis of the cells
