@@ -1,56 +1,71 @@
-\subsection{PWA Relational Abstraction}
 
-Given an abstraction, we can define its enrichment
-
-We now briefly overview the approach, which consists of three
-steps
-
-Discover the abstraction 
-enriches the abstraction
-formulates a BMC query
-concretizes
-
-abstraction defined by a quantization function $\quant_\epsilon$
-time step $\Delta$
-
-
-Given a numerical simulator
-$\simulate$ and an initial abstraction defined by a quantization
-function $\quant_\epsilon$ and a time step $\Delta$, we use
-scatter-and-simulate (parameterized by number of samples $n$ as
-described in \cite{zutshi2014multiple}) to explore the abstract graph
-$\scr{H}(\Delta)$. The result is a graph $G$, which has a finite
-number of abstract states $C$ (or cells) and edges $(C,C')$ iff $C
-\areach{\Delta} C'$.
-
-Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
-we use the generated trajectory segments to learn quantitative models
-describing the local behavior of the system. These models are defined
-by a set of relations $R \subseteq \HybridStates \times \HybridStates$
-for each edge of the reachability graph.
-
+A discrete abstraction over a continuous space uses relations to
+describe the behavior of the system over time. Such relations abstract
+the underlying relation between concrete states, and concrete paths
+can no longer be constructed directly. Instead, search procedueres
+like Counter-Example Guided Refinement must be used to find concrete
+paths. In general, search techniques are exponential with respect to
+computational resources and memory. As an alternative, we introduce
+data driven `enrichment' of abstractions to approximate the concrete
+relations underlying the abstract relations. Informally, we use linear
+regression to compute affine maps associated with the relations
+between two abstract states. We then show how associating the computed
+maps with the relations transforms a discrete abstraction into a PWA
+transitions system.
 
 \subsection{Graph Abstraction}
-DEFINITION 3.4 (ABSTRACT STATE GRAPH). Let ∆ > 0 be
-a fixed time step. The abstract state graph H(∆) for time step ∆
-is defined by the set of vertices C, and edges (Ci, Cj ) whenever
-Ci
-∆ Cj . Let C0 denote the collection of initial cells in C, i.e., cells
-Ci such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
-cells, or cells Cj such that there is a state xj ∈ Cj that reaches
-an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
-H(∆) is given by D
-C,
-∆ , C0, Cu
-E
-.
 
-\subsection{Enriched Graph Abstraction}
+The abstraction of the hybrid dynamical system is a a
+paritioning of the combined state-input space $\HybridStates \times
+\Inputs$ into hyper-rectangles or cells $C_i \in \C$. The cells are
+pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
+their union $\bigcup_{C_i\in\C}C_i$ is the state-input
+space $\HybridStates \times \Inputs$. The paritions over
+the continuous input-state space are implicitly defined using a quantization
+function $Q_\epsilon$ parameterized by the precision $\epsilon$.
+This further defines an equivalence relations such that
+\[
+    (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q_\epsilon(\vx_i,
+    \vu_i) = Q_\epsilon(\vx_j, \vu_j)
+\]
+In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
+Q_\epsilon(\vx_i, \vu_i)$.
+
+\begin{definition}[Graph Abstraction]
+    The quantization function $Q_\epsilon$ induces a DAG on the discrete
+    abstraction given by a graph $G(V, E)$, where each vertex
+    corresponds to a cell $V_i = C$, and an edge exists between two
+    cells $(C, C') \in E_i$ iff there exist state-input pairs
+    $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
+    \simulate(\vx, \vu )$.
+\end{definition}
+
+
+Given a numerical simulator $\simulate$ and an initial abstraction
+defined by a quantization function $\quant_\epsilon$ and a time step
+$\Delta$, we pick samples and simulate them to explore the abstraction
+on the fly to obtain a graph $G$, which has a finite number of
+abstract states $C$ (or cells) and edges $(C,C')$ iff $C
+\areach{\Delta} C'$.
+
+
+% \begin{definition}[Abstract State Graph]. Let ∆ > 0 be a fixed time
+%     step. The abstract state graph H(∆) for time step ∆ is defined by
+%     the set of vertices C, and edges (Ci, Cj ) whenever Ci ∆ Cj . Let
+%     C0 denote the collection of initial cells in C, i.e., cells Ci
+%     such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
+%     cells, or cells Cj such that there is a state xj ∈ Cj that reaches
+%     an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
+% H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
+
+
+
+\subsection{Enriched Abstraction}
 
 \input{figs/segtraj_rel_enriched.tex}
 
 Recall that each edge $(C,C')$ of the graph $G$ denotes an observed
-trajectory segment between the respective cells. The graph abstraction
+trajectory between the respective cells. The graph abstraction
 $G$ only states that there exists a state $\x \in C$ from which the
 system can evolve to a future state $\x' \in C'$. To increase the
 precision we iteratively refined the abstraction by state
@@ -67,10 +82,10 @@ interval error. Such a model can either be approximated using learning
 methods or computed as a sound (over) approximation using reachability
 set computation methods. Because we assume black box semantics, we
 only present the former. Using regression analysis on the $start$ and
-$end$ states of the witnessed trajectory segments between two cells,
+$end$ states of the witnessed trajectory between two cells,
 we compute an approximate discrete map along with an error estimate.
 Moreover, using the simulation function $\simulate$, additional
-trajectory segments (or data) can be generated if required. The data
+trajectories (or data) can be generated if required. The data
 can be separated into a training set and testing set to compute the
 map and the error respectively.  The latter case can be explored if
 the symbolic dynamics of the system are known. A tool like
@@ -86,3 +101,9 @@ given safety property, and even other temporal properties.  We now
 discuss the background required to present our ideas.
 
 
+
+Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
+we use the generated trajectories to learn quantitative models
+describing the local behavior of the system. These models are defined
+by a set of relations $R \subseteq \HybridStates \times \HybridStates$
+for each edge of the reachability graph.
