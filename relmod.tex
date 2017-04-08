@@ -403,22 +403,32 @@ is at least as precise as the corresponding $0$-relational model.
 \vspace*{-.3cm}
 \end{figure}
 
+% Finally, we generalize the relational models to $k$-relational PWA
+% models. A $k$-relational model is constructed by using $k$ length
+% \textit{connected} segmented trajectories. A segmented trajectory $\SegTraj$ is
+% \textit{connected} iff its cost $\cost(\SegTraj) = 0$.
+
 Finally, we generalize the relational models to $k$-relational PWA
 models. A $k$-relational model is constructed by using $k$ length
-\textit{connected} segmented trajectories. A segmented trajectory $\SegTraj$ is
-\textit{connected} iff its cost $\cost(\SegTraj) = 0$.
+trajectories which have their end points in the same cells.
 
-Two $\SegTraj:\tupleof{\pi_{t_1}, \ldots, \pi_{t_k}}$ and
-$\SegTraj':\tupleof{\pi'_{t_1}, \ldots, \pi'_{t_k}}$ are
-\textit{similar} if their trajectory segments have the same sequence
-of cell traversals $\tupleof{C_1, C_2, \ldots, C_k}$, \ie
-\begin{align*}
-    \forall i\in\setof{1 \ldots k}.
-    & start(\pi_{t_i}) \in C_i          
-    \land start(\pi'_{t_i}) \in C_i \land  \\
-    & end(\pi_{t_i}) \in C_{i+1}  
-    \land end(\pi'_{t_i}) \in C_{i+1}
-\end{align*}
+\[
+    \ds = \setof{(\vx,\vx') | \vx \in C \land \vx' \in C' \land \vx''
+    \in C'' \land \ldots \land \vx^k \in C }.
+\]
+
+
+% Two $\SegTraj:\tupleof{\pi_{t_1}, \ldots, \pi_{t_k}}$ and
+% $\SegTraj':\tupleof{\pi'_{t_1}, \ldots, \pi'_{t_k}}$ are
+% \textit{similar} if their trajectory segments have the same sequence
+% of cell traversals $\tupleof{C_1, C_2, \ldots, C_k}$, \ie
+% \begin{align*}
+%     \forall i\in\setof{1 \ldots k}.
+%     & start(\pi_{t_i}) \in C_i          
+%     \land start(\pi'_{t_i}) \in C_i \land  \\
+%     & end(\pi_{t_i}) \in C_{i+1}  
+%     \land end(\pi'_{t_i}) \in C_{i+1}
+% \end{align*}
 
 For every cell $C$ in the reachability graph, we construct a data set
 $\ds$ by collecting $\pi_{t_i}$, such that they are the first segment of $k$
