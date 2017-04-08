@@ -1,14 +1,18 @@
-\subsection{PWA Relational Abstraction}
 
-Given an abstraction, we can define its enrichment
+A discrete abstraction over a continuous space uses relations to
+describe the behavior of the system over time. Such relations abstract
+the underlying relation between concrete states, and concrete paths
+can no longer be constructed directly. Instead, search procedueres
+like Counter-Example Guided Refinement must be used to find concrete
+paths. In general, search techniques are exponential with respect to
+computational resources and memory. As an alternative, we introduce
+data driven `enrichment' of abstractions to approximate the concrete
+relations underlying the abstract relations. Informally, we use linear
+regression to compute affine maps associated with the relations
+between two abstract states. We then show how associating the computed
+maps with the relations transforms a discrete abstraction into a PWA
+transitions system.
 
-We now briefly overview the approach, which consists of three
-steps
-
-Discover the abstraction 
-enriches the abstraction
-formulates a BMC query
-concretizes
 
 abstraction defined by a quantization function $\quant_\epsilon$
 time step $\Delta$
@@ -31,21 +35,39 @@ for each edge of the reachability graph.
 
 
 \subsection{Graph Abstraction}
-DEFINITION 3.4 (ABSTRACT STATE GRAPH). Let ∆ > 0 be
-a fixed time step. The abstract state graph H(∆) for time step ∆
-is defined by the set of vertices C, and edges (Ci, Cj ) whenever
-Ci
-∆ Cj . Let C0 denote the collection of initial cells in C, i.e., cells
-Ci such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
-cells, or cells Cj such that there is a state xj ∈ Cj that reaches
-an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
-H(∆) is given by D
-C,
-∆ , C0, Cu
-E
-.
+The abstraction of the hybrid dynamical system is defined by
+paritioning the combiend state-input space $\HybridStates \times
+\Inputs$ into hyper-rectangles or cells $C_i \in \C$. The cells are
+pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
+their union $\bigcup_{C_i\in\C}C_i$ is the state-input
+space $\HybridStates \times \Inputs$. This discrete abstraction over
+the continuous space is implicit and defined using a quantization
+function $Q_d$ parameterized by the precision $d$.
+This further
+defines an equivalence relations such that
+\[
+    (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; Q()
+\]
 
-\subsection{Enriched Graph Abstraction}
+$(\vx_i, \vu_i) \in C_i \; \text{iff} \; \C_i = Q(\vx_i, \vu_i)$
+
+\begin{definition}[] Let C be a d-quantized tiling. The d-quantized
+    tiling-based plant abstraction (denoted Pd) is given by a graph
+    (V, E), where V = C, and the set of edges E is defined such that
+    (Cj, Ck) ∈ E iff: there is a state-input pair (x, u) ∈ Cj and a
+state-input pair (x 0 , u) ∈ Ck such that x 0 = SIM(x, u, τ ).
+\end{definition}
+
+\begin{definition}[Abstract State Graph]. Let ∆ > 0 be a fixed time
+    step. The abstract state graph H(∆) for time step ∆ is defined by
+    the set of vertices C, and edges (Ci, Cj ) whenever Ci ∆ Cj . Let
+    C0 denote the collection of initial cells in C, i.e., cells Ci
+    such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
+    cells, or cells Cj such that there is a state xj ∈ Cj that reaches
+    an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
+H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
+
+\subsection{Enriched Abstraction}
 
 \input{figs/segtraj_rel_enriched.tex}
 
