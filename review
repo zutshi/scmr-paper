@@ -1,0 +1,529 @@
+--
+============================================================================
+EMSOFT 2017 Reviews for Submission #159
+============================================================================
+
+Title: Piece-Wise Relational Models for Falsifying Safety Properties of Hybrid Systems
+
+Authors: Aditya Zutshi, Sergio Mover, Sriram Sankaranarayanan and Jyotirmoy Deshmukh
+============================================================================
+                            REVIEWER #1
+============================================================================
+
+
+---------------------------------------------------------------------------
+Reviewer's Scores
+---------------------------------------------------------------------------
+
+               Relevance to EMSOFT (1-4): 3
+          Presentation/Readability (1-4): 2
+                       Originality (1-4): 4
+               Technical Soundness (1-4): 2
+Account of prior work and references (1-3): 2
+
+
+---------------------------------------------------------------------------
+Comments
+---------------------------------------------------------------------------
+
+This paper is about checking safety properties on continuous models of an
+embedded controller's environment. The continuous model is provided as a
+black-box function capable of simulating Δ seconds from a given state with
+constant input values. From what I can understand: (i) the state-space of
+the system is explored by running multiple simulations; (ii) the resulting
+states are clustered based on a quantization function; (iii) an affine
+relation (the convex hull) is calculated to characterize each cluster; (iv)
+linear regression analysis is used to characterize the transitions between
+clusters as affine relations, (iv) A finer abstraction is produced by
+distinguish trajectories that initially pass through the same (k - 1)
+clusters but then end up in different clusters, and (v) safety properties of
+the resulting discrete "relational" abstraction are analyzed using SMT-based
+bounded model checking. The work does not aim at soundness or completeness,
+but rather to find problems in real embedded systems. The technique is a
+variation of one proposed at EMSOFT in 2014 ([28]). It is demonstrated on
+the academic examples from [28] with mixed results.
+
+I am not an expert in this area, but it seems to me that this paper presents
+some novel and interesting ideas. I found, however, that after a great
+introduction, the presentation becomes quite frustrating. There are a
+succession of different formalisms and notations, which often lack precision
+and explanations, and the links between them are not clearly described (I
+had to battle to write the above summary and I am not certain that it is
+correct). And, even after a careful reading of the text, I am still unsure
+about one or two fundamental details:
+
+1. The title states that the paper addresses "hybrid systems" and the system
+   model includes discrete states, but thereafter the paper only treats
+   continuous systems. Apparently this is reasonable because of an
+   assumption that the model is a "switched-mode dynamical system".
+
+   It would be nice to define exactly what you mean by "switched-mode
+   dynamical system". Does it mean that only the controller model makes
+   discrete transitions and that the environment is a continuous model with
+   no discrete events or discontinuities?
+
+   I imagine that the idea is to combine the generated discrete abstraction
+   with a discrete controller model to verify both together. It would be
+   good to state this clearly and to treat the resulting issues throughout
+   the paper. I note that the experimental results do not treat this issue.
+   Otherwise, why not change the title and focus the text on what you
+   actually did?
+
+   (Similar remarks hold at a smaller scale. The discussion often describes
+    what "can be" done, e.g., in sections 3.2 and 4.1. I would rather read
+    about what "has been" done and what the result was!)
+
+2. Why do you need a bounded model checker to check safety invariants when
+   you already enumerate and characterize the reachable states? That is, why
+   not just test the invariant on the convex hulls as they are generated?
+
+   My guess is that you later want to restrict the state-space by composing
+   your abstraction with a controller model. Is that right? This probably
+   seems obvious to you, but please put yourself in the place of someone who
+   is new to the work and not an expert in the domain! In any case, this
+   idea is not clearly stated, not addressed by the text, and not considered
+   in the experimental evaluation.
+
+   Is this why the PWA transition system characterizes states by a valuation
+   function v and not simply as tuples? If yes, how will this work? I do not
+   understand why you have a valuation function when the system only has one
+   variable (x).
+
+### Other comments and suggestions
+
+* The paper puts a certain emphasis on "learning" a model. Would it not be
+  more accurate to talk about "approximating" or "abstracting"?
+
+* It would be great to include an "overview figure" that lists all of the
+  different formalisms and explains how they fit together. The enumeration
+  in section 5 is very helpful, but it introduces even more notation and
+  does not completely describe how all of the other graphs and transition
+  systems are related.
+
+#### INTRODUCTION
+
+* "Automatic approaches for testing the safety and performance of such
+closed-loop systems is challenging," ->
+  "Developing automatic approaches for testing the safety and performance of
+such closed-loop systems is challenging," ?
+
+* "Related approaches using bisimulation relations [20, 25, 27] have
+interesting parallels with the work presented here.": What does this sentence
+mean exactly?
+
+#### LEARNING PWA RELATIONAL MODELS
+
+* "The system statespace (denoted X) is a subset of Q × R^n"
+-> "The system statespace, denoted X, is a subset of Q × R^n"
+
+* "An input to S is assumed to be a time-bounded signal, i.e., a function
+  from [0,T] to U, with T as the time horizon, and U ⊆ R^k.": Why not just
+  use functions from [0,T] to R^k? What do you gain by introduction U (it is
+  not exploited in the rest of the paper)?
+
+* "we view S as effectively black-box"
+-> "we view S as a black-box"
+
+* "equipped with a forward simulation map, in a simulation time-step"
+-> "equipped with a forward simulation map, which in a simulation time-step"
+
+* "allows computing the unique reachable state x ∈ X"
+-> "allows computing the unique reachable state x' ∈ X" (?)
+
+* "the forward simulation map SIMS^S_Δ : X × U × R^+ ↦ X": why R^+?
+
+* Why is Δ sometimes subscripted with t? Do you use a constant step-size or
+  not? The text could be clearer.
+
+* "Also, to ease the presentation, we conflate the inputs with the state and
+  denote them by x.": This sentence could be clearer. I think you mean to
+  say that you consider that the input values are included in the continuous
+  state x. That said, you keep using u at the start of section 2.1.
+
+* "several “proximal” tuples": "proximate"?
+
+* "In statistics, linear regression is the problem of finding"
+-> "Linear regression is the problem of finding"
+
+* "For rest of the section, we elide" -> "For the rest of the paper, we
+  elide" ?
+
+* "The equation 2 now becomes"
+-> "Equation 2 now becomes"
+
+* "In this fashion, we can we can use OLS to approximate its trajectories of
+  system S at fixed time step"
+-> "In this fashion, we can use OLS to approximate the trajectories of
+system S at a fixed time step"
+
+* The definition of a "PWA transition system" is not a numbered definition
+  (while the definition of a PWA relation model is). The "move function"
+  seems to define the semantics of the transition systems. This could be
+  more clear. You use G here for a set of conjunctions of affine predicates,
+  and later it is used for graphs.
+
+* "and use the name a variable as a"
+-> "and use the name of the variable as a"
+
+* "We how we can use the formal machinery of a PWA transition"?
+
+* "S defined by a simulator SIMS∆~\footnote{...}."
+-> "S defined by a simulator SIMS∆.\footnote{...}"
+
+* Definition 2.2 is not precise enough. Why not systematically state the
+  values of L, x, T, G, U, l_0, Θ? This would aid the poor reader by
+  specifying the initial state and the set of locations. What is the set of
+  locations?
+
+* "the the valuation function for variable x"
+-> "the valuation function for variable x"
+
+* "A PWA model will be usually non-deterministic,"
+-> "A PWA model will usually be non-deterministic,"
+
+* "Abusing the notation,"
+-> "Abusing notation,"
+
+* "a single step in ρ by x' = ρ(x)": this abuse of notation is regrettable.
+  It would be clearer and more precise, I believe, to avoid it.
+
+* "iff for every state x ∈ X^n": Why "^n"?
+
+* "In what follows, we use the terms PWA relational model and PWA
+   transition system interchangeably to mean PWA relational model.": Please
+   choose one term and use it consistently.
+
+* "As all the guards and transitions are affine, a bounded reachability
+  query is equivalent to checking all combinations of discrete locations,
+  where each combination can be summarized as a linear program.": I did not
+  understand what you are trying to say here.
+
+* "Temporal properties of pwa transitions systems"
+  -> "Temporal properties of PWA transitions systems" (and elsewhere).
+
+#### CONNECTION WITH GRAPH-BASED ABSTRACTION
+
+* I found the transition from the previous section very abrupt and it was
+  unclear where all this was going.
+
+* "As an alternative, we introduce data driven ‘enrichment’ of abstractions
+  to approximate the concrete relations underlying the abstract relations.
+  Informally, we use linear regression to compute affine maps associated
+  with the relations between two abstract states.": I would say that the
+  first statement is informal and the second is formal. I prefer the second
+  as it says precisely what you do. "data driven enrichment of abstractions"
+  is a great sounding phrase, but I think it is essentially empty.
+
+* "The abstraction of the hybrid dynamical system is a a partitioning"
+-> "The abstraction of a hybrid dynamical system is a partitioning"
+
+* "This further defines an equivalence relations"
+-> "This further defines an equivalence relation"
+
+* "We call it a time parameterized PWA relational abstraction": Is there
+  a real need to introduce more terminology? This name is never used again.
+
+RELATIONAL MODELING EXTENSIONS
+
+* "such a relation can be rarely represented"
+-> "such a relation can rarely be represented"
+
+* "Using a tool like FLOW*": missing citation or URL.
+
+* "we rely on statistical methods like simple linear": which other
+  statistical methods did you actually use?
+
+* "with the below relation"
+-> "with the following relation"
+
+* "C ~ C' ⟺  ∃x ∈ C. ∃x' ∈ C'. x' ∈ Ax + b ± δ": Why do you start
+using "±
+  δ"? Figure 1, Definition 2.2, and §2.1 just use "+ δ".
+
+* Figure 2 is unnecessary. It does not really show anything.
+
+* "Form a state x ∈ C,"
+-> "From a state x ∈ C,"
+
+* "be taken as long as x' ∈ C’ is satisfied."
+-> "be taken as long as x' ∈ C' is satisfied."
+
+* "split them in to multiple sets"
+-> "split them into multiple sets"
+
+* "PWA transition system which only defines the evolution of states x,"
+-> "PWA transition system that only defines the evolution of states x,"
+
+* "trajectory segments form a cell C."
+-> "trajectory segments from a cell C."
+
+* "D = {(x, x')|x ∈ C}": Do you not need an extra clause to relate x and x'
+  to the model transitions?
+
+* "Figure 5: The data gets split into two sets"
+-> "Figure 5: The data is split into two sets"
+
+#### AN EXAMPLE: VAN DER POL OSCILLATOR
+
+* "The corresponding reachability graph is H(∆ = 0.1).": more notation and
+  without a precise definition!
+
+* "which if exists, can indicate the existence of a"
+-> "which if it exists, may indicate the existence of a"
+
+* "numerical simulation function SIM ∆~\footnote{...}."
+-> "numerical simulation function SIM ∆.\footnote{...}"
+
+#### EXPERIMENTAL RESULTS
+
+* "Its different parts comprised of the"
+-> "Its different parts comprise the"
+
+* "Finally, the The bounded model checking"
+-> "Finally, the bounded model checking"
+
+* "due to the differences in which they operate"
+-> "due to the differences in how they operate"
+
+* "requires a finer abstraction to begin with in order to minimize the"
+-> "modeling errors. On the other hand, a coarser abstraction as the"
+
+* Is table 1 really useful? How is it to be interpreted? What information is
+  being conveyed?
+
+* "As apparent form the results,"
+-> "As apparent from the results,"
+
+* "but coarse enough to be manageable by the current bmc"
+-> "but coarse enough to be manageable by current BMC"
+
+* "during the k-relational modeling process till"
+-> "during the k-relational modeling process until"
+
+* "Similarly, small time length trajectory"
+-> "Similarly, small time-length trajectory"
+
+#### REFERENCES
+
+* [6] "Ph.D. Dissertation. Ph. D. thesis," -> "Ph. D. thesis,"
+
+* [22] "(????)": ????
+
+============================================================================
+                            REVIEWER #2
+============================================================================
+
+
+---------------------------------------------------------------------------
+Reviewer's Scores
+---------------------------------------------------------------------------
+
+               Relevance to EMSOFT (1-4): 4
+          Presentation/Readability (1-4): 3
+                       Originality (1-4): 4
+               Technical Soundness (1-4): 3
+Account of prior work and references (1-3): 2
+
+
+---------------------------------------------------------------------------
+Comments
+---------------------------------------------------------------------------
+
+This submission presents a model based methodology to find falsifications in
+black box dynamical systems. After describing approaches based on data driven
+modeling, arguing the pros and cons, the authors put forward a framework that
+combines ideas from abstraction based search and relational abstractions and
+defines the k-relational modeling to compute PWA relational abstractions. To
+estimate the local dynamics of the trajectory segments and compute relational
+models, which were then interpreted as infinite state discrete transition
+system, the proposed framework utilizes simple regression for an
+over-determined case. These infinite state discrete transition system
+constructions were model checked for safety violations using an off-the-shelf
+bounded model checkers and a naive linear programming based specialized model
+checker for comparison. The framework was implemented as a tool chain, namely
+the PWA-Rel and its performance was demonstrated on a few benchmarks.
+
+The paper is well organized and written and should be accepted. I list next a
+few issues that could improve the readability and the overall manuscript:
+- The submission is missing an abstract.
+-  The following sentence “For this step, we need to have models that can be
+digested by existing symbolic tools, which is harder to do with some of the
+aforementioned heavier data-driven modeling methods” requires a more in-depth
+discussion. Please enrich the discussion especially because the paper starts on
+such a negative tone without providing concrete examples. While I do not
+disagree with the authors I feel that things could be made clearer with a few
+explanatory sentences.
+- In section 2.1. the authors state that when N>n “a single affine function
+cannot be found”. Should the problem be stated in finding the best choice of
+a and b or should the problem considering determining the optimal number of
+piece wise affine approximations? Can the magnitude N-n give a hint of what is
+a good number of PWA / affine approximations? I feel that this could lead to a
+nice results which the authors can easily cast in optimization (2).
+- In section 4.1 the authors state that “in the presence of complex
+non-linear behavior, using a single affine map can lead to poor
+approximation”. In this context and in relation with recent effort in CPS on
+modeling complex dynamics (see “Constructing compact causal mathematical
+models for complex dynamics” ICCPS2017) can the authors comment or speculate
+on how the complexity of the dynamics might influence the required number of
+affine maps? How does the non-smoothness and non-differentiability influence
+the computation of R(C,C’)? Is there any relationship between the number of
+nondifferentiable points and the number of required affine maps? It will also
+be enrich the discussion of data-driven modeling techniques with recent efforts
+in modeling non-smooth complex dynamics with fractal properties and hint
+towards potential extensions.
+- Another critical parameter in the framework seems to be the time steps Delta
+used in section 4. Can the authors perform a sensitivity analysis to gauge its
+impact on overall quality of the results?
+- Since the main goal of this technique is to find violations of safety
+properties in the embedded control system, it would prove useful for the reader
+if the authors could comment which of the evaluations are considering this
+specific goal. Again, this is not a criticism, but I feel that the
+investigation in section 6 could be described in a few more sentences to
+connect with embedded control.
+- Lastly, the paper has a few misspellings and grammar issues. I summarize some
+I found: “apparent form the results…”, “We how we can use”,
+“Finally, the The bounded…”
+
+============================================================================
+                            REVIEWER #3
+============================================================================
+
+
+---------------------------------------------------------------------------
+Reviewer's Scores
+---------------------------------------------------------------------------
+
+               Relevance to EMSOFT (1-4): 3
+          Presentation/Readability (1-4): 3
+                       Originality (1-4): 2
+               Technical Soundness (1-4): 3
+Account of prior work and references (1-3): 2
+
+
+---------------------------------------------------------------------------
+Comments
+---------------------------------------------------------------------------
+
+The paper presents a method for falsifying safety properties of hybrid systems.
+The method first constructs a relational abstraction of the system (which is
+considered as a black box) from a set of simulation traces. The relations in
+the abstraction are affine with uncertainty. The approach is quite interesting,
+however the examples used for demonstration are unfortunately not black boxes,
+although these examples are treated as black boxes, since it would be of great
+interest to show its usefulness for complex models for which traditional
+verification tools cannot be applied. A comparison with S3CAM is interesting,
+but is less informative than a comparison with simulation-based validation
+tools.
+I also recommend using relations more complex than affine, such as polynomial,
+for which Z3 can be used (nonlinear relations may reduce the number of
+hyper-rectangles).
+
+The method is of heuristic nature and thus convincing experimental results
+would be needed. The paper compares with previous work (S3CAM) using a similar
+approach. This approach has been tested on more real-life examples from
+automative control. I am wondering why there are no comparisons on these
+examples.
+
+============================================================================
+                            REVIEWER #4
+============================================================================
+
+
+---------------------------------------------------------------------------
+Reviewer's Scores
+---------------------------------------------------------------------------
+
+               Relevance to EMSOFT (1-4): 3
+          Presentation/Readability (1-4): 2
+                       Originality (1-4): 3
+               Technical Soundness (1-4): 2
+Account of prior work and references (1-3): 2
+
+
+---------------------------------------------------------------------------
+Comments
+---------------------------------------------------------------------------
+
+The paper presents a model-based methodology to do falsification for hybrid
+systems. The technique combines the abstraction based search and relation
+abstraction concept to learn a PWA abstract model from the simulations of a
+system. The transitions between states of the abstract model characterized by
+the affine relations between source and target states. A model checking
+technique is then applied to find a counter-example for the abstract model.
+This counter-example will be used to guide the search for a counter-example of
+the original system. Experimental results of several academic benchmarks are
+reported that show the capability of proposed technique in finding false
+behavior.
+
+It's clear to the reviewer that the authors may require more time to complete
+the paper (e.g., the abstract is missing in the paper. The paper's organization
+also needs to be improved. It's not clear for the reviewer to see the
+high-level concept and contributions of the paper from the beginning.
+
+Although the author claims that the proposed technique can effectively find a
+counter-example for a black-box model, however, the experiment result does not
+reflect that statement. Most of the benchmarks are nonlinear continuous systems
+that are not black-box. I strongly suggest the author evaluate the proposed
+approach on some black-box systems such as industrial Simulink models.
+
+Also, using linear regression to infer affine dynamics and discrete structures
+of the abstractions of hybrid systems has been applied in the past. Please
+check out the related work on mining hybrid automata from input/output traces
+
+Medhat, Ramy, et al. "A framework for mining hybrid automata from input/output
+traces." Embedded Software (EMSOFT), 2015 International Conference on. IEEE,
+2015.
+
+Using OLS does not always result in finding the best fit. For example, if some
+data points are excessively small or large compared to the rest of data, they
+will have disproportionately large effects on the resulting constant. In this
+case, using other techniques like ridge regression or lasso regression may
+yield a better result.
+
+As the approach is neither sound nor complete and the application perspective
+for falsifying black-box system is not adequately demonstrated, it's hard to
+assert that the contributions of the proposed approach are novel.
+
+The paper contains some minor typos such as:
+
+Page 2, OLS paragraph: the best choice for a and b, consistency of
+capitalization
+
+Page 3, definition 2.2, second bullet: the the valuation function -> delete
+one the
+
+Page 3, section 2.2: pwa -> PWA
+Page 4, section 3.1, at the first line: a a partitioning of -> delete one
+a
+Page 7, section 6.1, at the first line: the The bounded model checking ->
+delete The
+Page 8, section 6.2: bmc -> BMC
+
+============================================================================
+                            REVIEWER #5
+============================================================================
+
+
+---------------------------------------------------------------------------
+Reviewer's Scores
+---------------------------------------------------------------------------
+
+               Relevance to EMSOFT (1-4): 3
+          Presentation/Readability (1-4): 3
+                       Originality (1-4): 3
+               Technical Soundness (1-4): 3
+Account of prior work and references (1-3): 3
+
+
+---------------------------------------------------------------------------
+Comments
+---------------------------------------------------------------------------
+
+This is sophisticated stuff that, sadly, went over my head. Your motivation is
+good and overall, this seems reasonable, but I couldn't easily wrap my head
+around the sorts of system for which this technique would work. I suggest
+leading with the Van Der Pol oscillator to help ignorant readers such as myself
+get a handle on what it is you're actually able to do, then launch into the
+formalism. As it stands, I think you need to be fairly expert in hybrid
+dynamical systems to even begin to grasp what's going on here.
+
