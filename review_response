@@ -17,10 +17,20 @@ R1: Like the idea but the presentation and results need improvement
 - Clarify the clustering done.
 
 
-R2: Seems the most positive
+R2: Seems the most positive, but focuses on PWA identification.
 
+- Clarify the purpose of the approach is to use sub-optimal
+  identification techniques but still provide a `reasonable' and
+  scalable falsification technique.
 
+R3: Poor benchmarks: use automative control examples, try
+polynomial kernels (with Z3), compare with simulation based
+falsification (S-Taliro?).
 
+- Try polynomial kernels on a benchmark?
+- Clarify S3CAM was already compared with S-Taliro>
+
+R4:
 
 --
 ============================================================================
@@ -445,12 +455,14 @@ nice results which the authors can easily cast in optimization (2).
    framed as a multiobjective optimization problem, where a small
    number of clusters and an accurate affine map is desired. This is a
    hard problem for arbitrary non-linear systems~\cite{[TODO]}.
-   Hence, in the paper, we try to present a scalable falsification approach
+   Hence, in this paper, we presented a scalable falsification approach
    with a sub-optimal PWA identification approach.
+
    [TODO: OLS is not the main focus of the paper. We should state that
    and mention that any method for learning affine functions can be
    used.]
    ============
+
 - In section 4.1 the authors state that “in the presence of complex
 non-linear behavior, using a single affine map can lead to poor
 approximation”. In this context and in relation with recent effort in CPS on
@@ -463,15 +475,29 @@ nondifferentiable points and the number of required affine maps? It will also
 be enrich the discussion of data-driven modeling techniques with recent efforts
 in modeling non-smooth complex dynamics with fractal properties and hint
 towards potential extensions.
+
+
+   ============
+   [TODO: ...]
+   ============
+
 - Another critical parameter in the framework seems to be the time steps Delta
 used in section 4. Can the authors perform a sensitivity analysis to gauge its
 impact on overall quality of the results?
+
+   ============
+   [TODO: ...]
+   ============
+
 - Since the main goal of this technique is to find violations of safety
 properties in the embedded control system, it would prove useful for the reader
 if the authors could comment which of the evaluations are considering this
 specific goal. Again, this is not a criticism, but I feel that the
 investigation in section 6 could be described in a few more sentences to
 connect with embedded control.
+   ============
+   [TODO: ...]
+   ============
 - Lastly, the paper has a few misspellings and grammar issues. I summarize some
 I found: “apparent form the results…”, “We how we can use”,
 “Finally, the The bounded…”
