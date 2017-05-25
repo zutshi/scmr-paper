@@ -13,7 +13,7 @@ R1: Like the idea but the presentation and results need improvement
 
 - Clarify that the plant is inherently a hybrid dynamical system
   and in the future (or if time permits) a controller can be added and
-  analyzed together as a infitnite state transition system.
+  analyzed together as a infinite state transition system.
 - Clarify the clustering done.
 
 
@@ -23,14 +23,28 @@ R2: Seems the most positive, but focuses on PWA identification.
   identification techniques but still provide a `reasonable' and
   scalable falsification technique.
 
-R3: Poor benchmarks: use automative control examples, try
+R3: Poor benchmarks: use automotive control examples, try
 polynomial kernels (with Z3), compare with simulation based
 falsification (S-Taliro?).
 
 - Try polynomial kernels on a benchmark?
 - Clarify S3CAM was already compared with S-Taliro>
 
-R4:
+R4: Probably the most negative review.
+Sloppy presentation; high level concepts are not well presented
+and contributions are not clear. Benchmarks are too simple. Why OLS?
+Contributions are not significant/novel.
+
+- Spell out the contributions clearly.
+- Use Simulink models.
+- Cite papers which learn hybrid automata from i/o traces, and clarify
+  the difference.
+  \cite{medhat2015framework} and many others
+- Clarify that OLS is just one choice out of many.
+
+R5: Probably a borderline.
+
+- Add a motivation section showcasing the contributions.
 
 --
 ============================================================================
@@ -601,6 +615,11 @@ yield a better result.
 As the approach is neither sound nor complete and the application perspective
 for falsifying black-box system is not adequately demonstrated, it's hard to
 assert that the contributions of the proposed approach are novel.
+
+   ============
+   [TODO: ...]
+   ============
+
 
 The paper contains some minor typos such as:
 
