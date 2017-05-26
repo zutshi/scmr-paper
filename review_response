@@ -1,13 +1,27 @@
-Summary of the reviews and plan of action:
+Plan of action:
 ---------------------------------------------
-- Improve presentation
-- Fix notations
-- Add benchmarks: hybrid with multiple modes
+- Modify ordering of sections: Abstraction -> PWA enrichment
+- Simplify notations
+- Fold multiple PWA relational/transitions system into one and use the
+  transitions system as a semantic interpretation for model checking.
+  Can be eliminated if automatons/kripke structures are used instead.
 - Fix the `convex-hull' in the definition 2.2 PWA Relational Model.
   Showcase clustering using a benchmark. Add it to future work
   and cite Nimit's  paper. Or, retract it entirely?
+- Clearly state that the approach is not a generic data-drive system
+  identification technique, but focused on the falsification aspect.
+  We only model selective state-space regions: abstract violations.
+- De-emphasize OLS (and the process and the cost functions used for
+  modeling). Add that the idea hinges on selectively identifying the
+  state-space for modeling and not how the models might be created.
+  Emphasize again that the requirement is only on the linearity of
+  the individual models and hence, OLS is one way. Trade-off between
+  efficiency and complexity can be achieved by selecting the `right'
+  modeling template.
+- Add benchmarks: hybrid with multiple modes.
 
-
+Summary of the reviews
+---------------------------------------------
 
 R1: Like the idea but the presentation and results need improvement
 
@@ -28,7 +42,7 @@ polynomial kernels (with Z3), compare with simulation based
 falsification (S-Taliro?).
 
 - Try polynomial kernels on a benchmark?
-- Clarify S3CAM was already compared with S-Taliro>
+- Clarify S3CAM was already compared with S-Taliro.
 
 R4: Probably the most negative review.
 Sloppy presentation; high level concepts are not well presented
