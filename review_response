@@ -1,5 +1,11 @@
 Plan of action:
 ---------------------------------------------
+
+- What is the paper saying/should be saying?
+- Simplify notations....pwa relational and k-relational
+
+
+
 - Modify ordering of sections: Abstraction -> PWA enrichment
 - Simplify notations
 - Fold multiple PWA relational/transitions system into one and use the

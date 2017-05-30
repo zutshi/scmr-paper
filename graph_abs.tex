@@ -1,3 +1,72 @@
+In this section, we present the model of the hybrid dynamical system
+under test, and the background for PWA relational abstractions.
+
+
+\mypara{System under test ($\System$)}
+
+We assume that $\System$ is a hybrid dynamical system with exogenous
+inputs modeling an embedded control system. The system state-space
+(denoted $\HybridStates$) is a subset of $\Modes \times \Reals^n$,
+where $\Modes$ is a finite set of discrete modes, and $\Reals^n$
+represents the continuous-valued state-space. For ease of exposition,
+we assume that the hybrid system is effectively a switched-mode
+dynamical system, \ie, the mode of the system is completely determined
+by its state.  An input to $\System$ is assumed to be a time-bounded
+{\em signal}, \ie, a function from $[0,T]$ to $\Inputs$, with $T$ as
+the time horizon, and $\Inputs \subseteq \Reals^k$.  In this paper, we
+view $\System$ as effectively black-box equipped with a forward
+simulation map, in a simulation time-step of $\Delta_t$ from time $t$,
+allows computing the unique reachable state $\vx \in \HybridStates$
+given state-input pair $(\vx,\vu)$.
+
+% time and input parameterized reachability relation $\reach{t,
+% \vu}_\System \subseteq \HybridStates \times \HybridStates$ as follows:
+% $\simulate^{\System}:
+% (\vx, \vu, t) \mapsto \vx$, where $\vx \in \HybridStates$, $\vu \in
+% \Inputs$ and $t \in [0,T]$.
+
+
+% Given the hybrid state space $\vx\in\HybridStates$ and input space $u
+% \in\Inputs$ and time step $t$, it computes the unique successor state
+% $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
+
+
+\begin{definition}[System Evolution]
+    The behavior of system $\System$ at time $t$ is described as an
+    evolution in the hybrid state-space $\HybridStates$ under the
+    effect of the input $\vu \in \Inputs$ at time $t$. The forward
+    simulation map $\simulate^\System : \HybridStates \times \Inputs
+    \times \Reals^+ \mapsto \HybridStates$, maps a state $\x$ at time
+    $t$ to a new state $\x'$ at time $t+\Delta_t$, under a constant
+    input $\vu$.  Finally, we define the time and input parameterized
+    reachability relation $\reach{t,u} \subseteq \HybridStates \times
+    \HybridStates$ such that $(\vx,\vx') \in \reach{t,u}$ iff
+    $\vx'=\simulate^{\System}(\vx,u,t)$.
+\end{definition}
+
+\mypara{System Assumptions:} We require that $\System$ can always be
+simulated forward in time with deterministic results. This in turn
+requires existence and uniqueness of trajectories over a finite time
+horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
+the vector field in each underlying hybrid mode, ruling away issues
+such as finite escape times~\cite{Meiss/2007/Differential}, and having
+well-defined semantics for simulations at switching boundaries. While
+these assumptions hold for the dynamical system examples which we
+consider in this paper, such assumptions can be restrictive for
+general control system models. When analyzing a system that does not
+obey theoretical conditions that allow deterministic simulation, we
+assume that the underlying tool used for numerical approximations of
+system behaviors uses deterministic simulation semantics.  Finally, we
+assume full observability of the system state, validate our results
+only against the $\simulate$ function (as the analytic closed-form
+representation of the system dynamics is assumed to be unavailable).
+From here on, we drop the subscript $\System$ whenever it is clear
+from the context. Also, to ease the presentation, we conflate the
+inputs with the state and denote them by $\vx$.
+
+% Abstractions for black box systems
+% graph based
+% enrichment procedure
 
 A discrete abstraction over a continuous space uses relations to
 describe the behavior of the system over time. Such relations abstract
@@ -129,3 +198,5 @@ infinite state discrete transition system, and we can use
 off-the-shelf bounded model checkers to find concrete violations of a
 given safety property, and even other temporal properties.
 
+\todo{Add figure? graph-abs -enrich-> pwa-transition-system -bmc->
+concrete-CEX}
