@@ -123,15 +123,20 @@ transition system.
 %     \simulate(\vx, \vu )$.
 % \end{definition}
 
-The abstraction of the hybrid dynamical system is a a
-partitioning of the hybrid state space $\HybridStates$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
-pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
-their union $\bigcup_{C_i\in\Cells}C_i$ is the state space $\HybridStates$. The partitions over
-the continuous state space are implicitly defined using a quantization
-function $Q_\epsilon$ parameterized by the precision $\epsilon$.
-This further defines an equivalence relations such that $(\vx_i)
-\equiv (\vx_j) \;\text{iff}\; Q_\epsilon(\vx_i) = Q_\epsilon(\vx_j)$.
-In other words, $(\vx_i) \in C_i \; \text{iff} \; C_i = Q_\epsilon(\vx_i)$.
+The abstraction of the hybrid dynamical system is a a partitioning of
+the hybrid state space $\HybridStates$ into hyper-rectangles or cells
+$C_i \in \Cells$. The cells are pairwise disjoint $C_i \cap C_j \neq
+\emptyset$ iff $i \neq j$ and their union $\bigcup_{C_i\in\Cells}C_i$
+is the state space $\HybridStates$. The partitions over the continuous
+state space are implicitly defined using a quantization function
+$Q_\epsilon$ parameterized by the precision $\epsilon$.  This further
+defines an equivalence relations such that $(\vx_i) \equiv (\vx_j)
+\;\text{iff}\; Q_\epsilon(\vx_i) = Q_\epsilon(\vx_j)$.  In other
+words, $(\vx_i) \in C_i \; \text{iff} \; C_i = Q_\epsilon(\vx_i)$. The
+abstraction can be interpreted as a graph and explored using fixed
+time $(\Delta\in\Reals^+)$ relations obtained using
+$\simulate(\vx)$~\footnote{$\simulate(\vx)$ is a fixed
+parameterization of $\mathsc{sim}(\vx,\Delta)$}.
 
 \begin{definition}[Graph Abstraction]
     The quantization function $Q_\epsilon$ induces a directed acyclic
@@ -223,7 +228,7 @@ given safety property, and even other temporal properties.
     \node (GR) at (0,0) {$G^R$};
     \node (CEX) at (4,0) {$CEx$};
 
-    \node (enrich) [block] at (-2, 0) {\scriptsize Enrich using \\ \scriptsize affine maps};
+    \node (enrich) [block] at (-2, 0) {\scriptsize Enrich using \\ \scriptsize affine  maps};
     \node (BMC) [block] at (2, 0) {\scriptsize Find CEx \\ \scriptsize using BMC};
 
     %\node[align=center] at (0, 0) {\scriptsize Enrich using \\ \scriptsize Regression \\ \scriptsize(OLS)};
