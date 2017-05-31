@@ -2,7 +2,7 @@ In this section, we present the model of the hybrid dynamical system
 under test, and the background for PWA relational abstractions.
 
 
-\mypara{System under test ($\System$)}
+\subsection{System under test ($\System$)}
 
 We assume that $\System$ is a hybrid dynamical system with exogenous
 inputs modeling an embedded control system. The system state-space
@@ -198,5 +198,32 @@ infinite state discrete transition system, and we can use
 off-the-shelf bounded model checkers to find concrete violations of a
 given safety property, and even other temporal properties.
 
-\todo{Add figure? graph-abs -enrich-> pwa-transition-system -bmc->
-concrete-CEX}
+\begin{figure}[!htbp]
+\begin{center}
+\tikzstyle{line} = [thick]
+\tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
+\tikzstyle{block} = [rectangle, minimum width=0.5cm, minimum height=1.0cm, text centered, draw=black, align=center]%, fill=blue!25]
+\begin{tikzpicture}[scale=1.0, on grid, auto]
+
+    \node (G) at (-4,0) {$G$};
+    \node (GR) at (0,0) {$G^R$};
+    \node (CEX) at (4,0) {$CEx$};
+
+    \node (enrich) [block] at (-2, 0) {\scriptsize Enrich using \\ \scriptsize affine maps};
+    \node (BMC) [block] at (2, 0) {\scriptsize Find CEx \\ \scriptsize using BMC};
+
+    %\node[align=center] at (0, 0) {\scriptsize Enrich using \\ \scriptsize Regression \\ \scriptsize(OLS)};
+
+    %\draw [line] (-2.0,-0.5) rectangle (-1.0,0.5);
+    \draw[arw] (G.east) -- (enrich.west);
+    \draw[arw] (enrich.east) -- (GR.west);
+    \draw[arw] (GR.east) -- (BMC.west);
+    \draw[arw] (BMC.east) -- (CEX.west);
+
+\end{tikzpicture}
+\end{center}
+\vspace*{-.3cm}
+\caption{Finding counter-examples (CEx) in a graph abstraction using PWA models.}
+\label{fig:overview}
+\vspace*{-.3cm}
+\end{figure}

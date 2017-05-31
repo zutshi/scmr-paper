@@ -92,41 +92,43 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 graph $G^R$. The affine maps $f$ for the transition relations are show
 in \tabref{vdp-pwa}.}{vdp-graph}
 
-\begin{table}[h]
-\centering
-\caption{PWA model computed using OLS. The affine model for each edge $(C,C')$ in the graph \figref{vdp-graph} is given by $x'\in Ax + b + \delta$, where $\delta$ is a vector of intervals.}
-\label{tab:vdp-pwa}
-\begin{tabular}{@{}ccccc@{}}
-\toprule
-$C$ & $C'$ & $A$ & $b$ & $\delta$\\
-\midrule
-(0, -1)   & (0, -1)   & $\begin{bmatrix}0.99& 0.12 \\-0.12&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-(0, -1)   & (0, -2)   & $\begin{bmatrix}0.99& 0.12 \\-0.10&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-\midrule
-(0, -2)   & (0, -2)   & $\begin{bmatrix}0.99& 0.12 \\-0.09&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-(0, -2)   & (0, -4)   & $\begin{bmatrix}0.99& 0.12 \\-0.07&1.62\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-\midrule
-(0, -9)   & (-1, -15) & $\begin{bmatrix}0.99& 0.12 \\-0.09&1.61\end{bmatrix}$&$\begin{bmatrix}0\\-0.04\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
-\midrule
-(-1, -15) & (-3, -24) & $\begin{bmatrix}0.95& 0.12 \\-1.29&1.47\end{bmatrix}$&$\begin{bmatrix}-0.01\\-0.41\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
-\midrule
-(-3, -24) & (-4, -29) & $\begin{bmatrix}1.11&-0.17 \\-1.71&0.66\end{bmatrix}$&$\begin{bmatrix}-1.07\\-3.31\end{bmatrix}$&$\begin{bmatrix}[-0.04, 0.04]\\ [-0.07, 0.09]\end{bmatrix}$\\
-\midrule
-(-4, -29) & (-4, -29) & $\begin{bmatrix}0.99& 0.01 \\-0.41&1.02\end{bmatrix}$&$\begin{bmatrix}0\\-0.28\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-\midrule
-(-1, -10) & (-2, -16) & $\begin{bmatrix}0.97& 0.12 \\-0.71&1.56\end{bmatrix}$&$\begin{bmatrix}0\\-0.11\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
-(-1, -10) & (-2, -15) & $\begin{bmatrix}0.97& 0.12 \\-0.70&1.58\end{bmatrix}$&$\begin{bmatrix}0\\-0.08\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
-\midrule
-(-2, -16) & (-3, -23) & $\begin{bmatrix}0.92& 0.12 \\-1.84&1.39\end{bmatrix}$&$\begin{bmatrix}-0.02\\-0.73\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-\midrule
-(-3, -23) & (-5, -29) & $\begin{bmatrix}3.14&-0.81 \\-0.96&0.23\end{bmatrix}$&$\begin{bmatrix}-3.13\\-4.99\end{bmatrix}$&$\begin{bmatrix}[-0.04, 0.03]\\ [-0.03, 0.04]\end{bmatrix}$\\
-\midrule
-(-2, -15) & (-3, -22) & $\begin{bmatrix}0.93& 0.12 \\-1.75&1.40\end{bmatrix}$&$\begin{bmatrix}-0.02\\-0.68\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
-\midrule
-(-3, -22) & (-5, -29) & $\begin{bmatrix}3.08&-0.72 \\-1.69&0.40\end{bmatrix}$&$\begin{bmatrix}-2.77\\-4.57\end{bmatrix}$&$\begin{bmatrix}[-0.02, 0.02]\\ [-0.01, 0.02]\end{bmatrix}$\\
-\bottomrule
-\end{tabular}
-\end{table}
+% Does table add anything to the discussion?
+%
+% \begin{table}[h]
+% \centering
+% \caption{PWA model computed using OLS. The affine model for each edge $(C,C')$ in the graph \figref{vdp-graph} is given by $x'\in Ax + b + \delta$, where $\delta$ is a vector of intervals.}
+% \label{tab:vdp-pwa}
+% \begin{tabular}{@{}ccccc@{}}
+% \toprule
+% $C$ & $C'$ & $A$ & $b$ & $\delta$\\
+% \midrule
+% (0, -1)   & (0, -1)   & $\begin{bmatrix}0.99& 0.12 \\-0.12&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% (0, -1)   & (0, -2)   & $\begin{bmatrix}0.99& 0.12 \\-0.10&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% \midrule
+% (0, -2)   & (0, -2)   & $\begin{bmatrix}0.99& 0.12 \\-0.09&1.63\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% (0, -2)   & (0, -4)   & $\begin{bmatrix}0.99& 0.12 \\-0.07&1.62\end{bmatrix}$&$\begin{bmatrix}0\\0\end{bmatrix}  $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% \midrule
+% (0, -9)   & (-1, -15) & $\begin{bmatrix}0.99& 0.12 \\-0.09&1.61\end{bmatrix}$&$\begin{bmatrix}0\\-0.04\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+% \midrule
+% (-1, -15) & (-3, -24) & $\begin{bmatrix}0.95& 0.12 \\-1.29&1.47\end{bmatrix}$&$\begin{bmatrix}-0.01\\-0.41\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+% \midrule
+% (-3, -24) & (-4, -29) & $\begin{bmatrix}1.11&-0.17 \\-1.71&0.66\end{bmatrix}$&$\begin{bmatrix}-1.07\\-3.31\end{bmatrix}$&$\begin{bmatrix}[-0.04, 0.04]\\ [-0.07, 0.09]\end{bmatrix}$\\
+% \midrule
+% (-4, -29) & (-4, -29) & $\begin{bmatrix}0.99& 0.01 \\-0.41&1.02\end{bmatrix}$&$\begin{bmatrix}0\\-0.28\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% \midrule
+% (-1, -10) & (-2, -16) & $\begin{bmatrix}0.97& 0.12 \\-0.71&1.56\end{bmatrix}$&$\begin{bmatrix}0\\-0.11\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+% (-1, -10) & (-2, -15) & $\begin{bmatrix}0.97& 0.12 \\-0.70&1.58\end{bmatrix}$&$\begin{bmatrix}0\\-0.08\end{bmatrix} $&$\begin{bmatrix}[0, 0]\\ [0, 0.01]\end{bmatrix}$\\
+% \midrule
+% (-2, -16) & (-3, -23) & $\begin{bmatrix}0.92& 0.12 \\-1.84&1.39\end{bmatrix}$&$\begin{bmatrix}-0.02\\-0.73\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% \midrule
+% (-3, -23) & (-5, -29) & $\begin{bmatrix}3.14&-0.81 \\-0.96&0.23\end{bmatrix}$&$\begin{bmatrix}-3.13\\-4.99\end{bmatrix}$&$\begin{bmatrix}[-0.04, 0.03]\\ [-0.03, 0.04]\end{bmatrix}$\\
+% \midrule
+% (-2, -15) & (-3, -22) & $\begin{bmatrix}0.93& 0.12 \\-1.75&1.40\end{bmatrix}$&$\begin{bmatrix}-0.02\\-0.68\end{bmatrix}$&$\begin{bmatrix}[0, 0]\\ [0, 0]\end{bmatrix}$\\
+% \midrule
+% (-3, -22) & (-5, -29) & $\begin{bmatrix}3.08&-0.72 \\-1.69&0.40\end{bmatrix}$&$\begin{bmatrix}-2.77\\-4.57\end{bmatrix}$&$\begin{bmatrix}[-0.02, 0.02]\\ [-0.01, 0.02]\end{bmatrix}$\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
 
 
 
