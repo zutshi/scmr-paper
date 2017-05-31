@@ -35,13 +35,15 @@ given state-input pair $(\vx,\vu)$.
     The behavior of system $\System$ at time $t$ is described as an
     evolution in the hybrid state-space $\HybridStates$ under the
     effect of the input $\vu \in \Inputs$ at time $t$. The forward
-    simulation map $\simulate^\System : \HybridStates \times \Inputs
-    \times \Reals^+ \mapsto \HybridStates$, maps a state $\x$ at time
-    $t$ to a new state $\x'$ at time $t+\Delta_t$, under a constant
+    simulation map $\mathsc{sim}^\System : \HybridStates \times \Inputs
+    \times \Reals^+ \mapsto \HybridStates$, maps a state $\x\in\HybridStates$ at time
+    $t$ to a new state $\x'\in\HybridStates$ at time $t+\Delta\in\Reals^+$, under a constant
     input $\vu$.  Finally, we define the time and input parameterized
     reachability relation $\reach{t,u} \subseteq \HybridStates \times
-    \HybridStates$ such that $(\vx,\vx') \in \reach{t,u}$ iff
-    $\vx'=\simulate^{\System}(\vx,u,t)$.
+    \HybridStates$ such that
+    \begin{equation}
+        (\vx,\vx') \in \reach{t,u} \;\text{iff}\; \vx'=\mathsc{sim}^{\System}(\vx,u,t).
+    \end{equation}
 \end{definition}
 
 \mypara{System Assumptions:} We require that $\System$ can always be
@@ -58,31 +60,43 @@ obey theoretical conditions that allow deterministic simulation, we
 assume that the underlying tool used for numerical approximations of
 system behaviors uses deterministic simulation semantics.  Finally, we
 assume full observability of the system state, validate our results
-only against the $\simulate$ function (as the analytic closed-form
+only against the $\mathsc{sim}^\System$ function (as the analytic closed-form
 representation of the system dynamics is assumed to be unavailable).
 From here on, we drop the subscript $\System$ whenever it is clear
 from the context. Also, to ease the presentation, we conflate the
 inputs with the state and denote them by $\vx$.
 
-% Abstractions for black box systems
-% graph based
-% enrichment procedure
+\subsection{Graph Abstraction}
 
-A discrete abstraction over a continuous space uses relations to
-describe the behavior of the system over time. Such relations abstract
-the underlying relation between concrete states, and concrete paths
-can no longer be constructed directly. Instead, search procedures
-like Counter-Example Guided Refinement must be used to find concrete
-paths. In general, such search techniques are exponential with respect to
+We base our methodology on the implicit discrete abstraction for
+black-box dynamical systems~\cite{zutshi2014multiple}. The authors
+showed how this abstraction is a graph abstraction, and reduced the
+search for abstract violations to finding paths in a graph.
+
+% Such an abstraction is defined by partitioning the
+% state-space of the system using a grid, and hence each abstract state
+% is a hyper-rectangle. The relations between abstract states are
+% obtained by suitably lifting $(\vx,\vx') \in\reach{t,u}$. Considering
+% the abstract states as vertices of a graph and the relations as edges
+% between nodes, the problem of finding an abstract counter-example
+% (CEx) can be cast as finding a path in the graph. Such an abstraction
+% can be explored on-the-fly by enumerating the abstract relations
+% between a pair of states.
+
+\mypara{A discrete abstraction} over a continuous space uses relations
+to describe the behavior of the system over time. Such relations
+abstract the underlying relation between concrete states, and concrete
+paths can no longer be constructed directly. Instead, search
+procedures like Counter-Example Guided Refinement (CEGAR) must be used
+to find concrete paths. In general, such search techniques are based
+on refinement of the state-space and exponential with respect to
 computational resources and memory. As an alternative, we introduce
 data driven `enrichment' of abstractions to approximate the concrete
-relations underlying the abstract relations. Informally, we use linear
-regression to compute affine maps associated with the relations
+relations underlying the abstract relations.  Specifically, we use
+linear regression to compute affine maps associated with the relations
 between two abstract states. We then show how associating the computed
 maps with the relations transforms a discrete abstraction into a PWA
 transition system.
-
-\subsection{Graph Abstraction}
 
 % The abstraction of the hybrid dynamical system is a a
 % partitioning of the combined state-input space $\HybridStates \times
