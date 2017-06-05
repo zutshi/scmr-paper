@@ -2,22 +2,59 @@ In this section, we present the model of the hybrid dynamical system
 under test, and the background for PWA relational abstractions.
 
 
-\subsection{System under test ($\System$)}
+\subsection{System-under-test ($\System$)}
 
-We assume that $\System$ is a hybrid dynamical system with exogenous
-inputs modeling an embedded control system. The system state-space
-(denoted $\HybridStates$) is a subset of $\Modes \times \Reals^n$,
-where $\Modes$ is a finite set of discrete modes, and $\Reals^n$
-represents the continuous-valued state-space. For ease of exposition,
-we assume that the hybrid system is effectively a switched-mode
-dynamical system, \ie, the mode of the system is completely determined
-by its state.  An input to $\System$ is assumed to be a time-bounded
-{\em signal}, \ie, a function from $[0,T]$ to $\Inputs$, with $T$ as
-the time horizon, and $\Inputs \subseteq \Reals^k$.  In this paper, we
-view $\System$ as effectively black-box equipped with a forward
-simulation map, in a simulation time-step of $\Delta_t$ from time $t$,
-allows computing the unique reachable state $\vx \in \HybridStates$
-given state-input pair $(\vx,\vu)$.
+We assume that the system-under-test is a hybrid dynamical system, \ie, a
+system which has discrete modes and a continuous state-space, and which
+evolvution is either (1) continuous in time according to the dynamics
+associated with its current discrete mode (typically described using
+differential equations over its continuous state), or (2) through
+discrete jumps that possibly change the discrete mode of the system and
+possibly reset its continuous state to some value.  However, we assume
+that the system is {\em effectively black-box}. This means that we do not
+assume any knowledge of the symbolic dynamical equations describing the
+system behavior. We do assume some knowledge of the system: an {\em
+interface} view, in which we are allowed to stimulate the system with
+inputs and observe its outputs. 
+
+We formally define a system-under-test $\System$ as a tuple $(\Modes,
+\ContStates, \initmode, \initstate, \Delta, \Inputs, \Outputs)$.  Here,
+system state-space (denoted $\HybridStates$) is a subset of $\Modes \times
+\ContStates$, where $\Modes$ is a finite set of discrete modes, and
+$\ContStates$ is a compact subset of $\Reals^n$ representing the set of
+continuous states.  We assume that the system is {\em initialized} to an
+initial mode $\initmode$ and an initial state $\initstate$ at time $t=0$.
+We assume that the system has $m$ exogenuous inputs which take values from
+the set $\Inputs$ which is a compact subset of $\Reals^m$. We assume that
+the system has $\ell \le n$ outputs, where $\Outputs \subseteq
+\HybridStates$. In this paper, we assume that the entire system state is
+observable.  In other words, $\Outputs = \HybridStates$. 
+
+Finally, we restrict our attention to switched-mode systems, \ie, those in
+which there is a partition imposed on $\ContStates$, and there is a
+bijective map between each element $\ContStates_i$ in the partition and
+each mode in $\Modes$.
+
+The operational semantics of $\System$ is defined in terms of a
+forward-simulation map $\simmap_\Delta$, which is a function that maps a
+time $t$, the current state of the system, and an input value in $\Inputs$
+to the state of the system at time $t+\Delta$.
+
+
+
+
+% We assume that $\System$ is a hybrid dynamical system with exogenous
+% inputs modeling an embedded control system. 
+% 
+% we assume that the hybrid system is effectively a switched-mode
+% dynamical system, \ie, the mode of the system is completely determined
+% by its state.  An input to $\System$ is assumed to be a time-bounded
+% {\em signal}, \ie, a function from $[0,T]$ to $\Inputs$, with $T$ as
+% the time horizon, and $\Inputs \subseteq \Reals^k$.  In this paper, we
+% view $\System$ as effectively black-box equipped with a forward
+% simulation map, in a simulation time-step of $\Delta_t$ from time $t$,
+% allows computing the unique reachable state $\vx \in \HybridStates$
+% given state-input pair $(\vx,\vu)$.
 
 % time and input parameterized reachability relation $\reach{t,
 % \vu}_\System \subseteq \HybridStates \times \HybridStates$ as follows:
