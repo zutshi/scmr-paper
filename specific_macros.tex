@@ -36,19 +36,25 @@
 
 \newcommand{\System}{\ensuremath{S}}
 \newcommand{\Inputs}{\ensuremath{\mathcal{U}}}
+\newcommand{\inputsignal}{\mathbf{u}}
 \newcommand{\Flow}{\ensuremath{\mathcal{F}}}
-\newcommand{\Modes}{\ensuremath{\mathcal{Q}}}
+\newcommand{\Modes}{\ensuremath{\mathcal{M}}}
 \newcommand{\ContStates}{\ensuremath{X}}
+\newcommand{\UnsafeStates}{\ensuremath{U}}
+\newcommand{\InitStates}{\ensuremath{X}_\init}
+\newcommand{\InitModes}{\ensuremath{M}_\init}
 \newcommand{\Inv}{\ensuremath{\mathcal{I}}}
 %\newcommand{\Transitions}{\ensuremath{\Delta}}
 \newcommand{\Transitions}{\scr{T}}
 \newcommand{\HybridStates}{\ensuremath{\mathcal{X}}}
 \newcommand{\HybridStateSet}{\ensuremath{X}}
+\newcommand{\discreteMode}{q}
+\newcommand{\contState}{x}
 \newcommand{\ResetMap}{\mathcal{R}}
 \newcommand{\Guards}{\mathcal{G}}
 \newcommand{\Init}{\mathcal{X}_{0}}
 \newcommand{\Err}{\ContStates_{f}}
-\newcommand{\initmode}{q_{0}}
+\newcommand{\initmode}{q_\init}
 \newcommand{\cInit}{\ensuremath{X}_0}
 \newcommand{\Unsafe}{\mathcal{X}_f}
 %\newcommand{\reachSet}[2]{R^{#1}_{\HA}({#2})}
@@ -209,6 +215,8 @@
 \newcommand \uset[2]{\underset{#1}{\underbrace{#2}}}
 \newcommand \ith[2]{ {#1}^{(#2)}}
 \newcommand \Cells {\ensuremath \mathcal{C}}
+\newcommand \CellEdges {\ensuremath \mathcal{E}}
+\newcommand \CellLabelingFunction{\ensuremath \mathcal{L}}
 \newcommand \complex {\ensuremath \mathcal{C}}
 \newcommand \grb {Gr\"obner\xspace}
 \newcommand \hi[1]{}
@@ -279,6 +287,7 @@
 
 
 \newcommand\init{\mathsf{init}}
+\newcommand\unsafe{\mathsf{unsafe}}
 
 \newcommand\ol[1]{\overline{#1}}
 % \newcommand\state[1]{\vec{{\texttt{#1}}}}
@@ -371,8 +380,8 @@
 \newcommand\kpi{\kappa^{p_i}}
 
 
-\renewcommand{\Si}{S_i}
-% \newcommand\Si{S_i}
+% \renewcommand{\Si}{S_i}
+\newcommand\Si{S_i}
 \newcommand\Sii{S_{i+1}}
 \newcommand\Ui{U_i}
 \newcommand\Uii{U_{i+1}}
@@ -395,7 +404,7 @@
 \newcommand{\cstates}{\scr{X}}
 \newcommand{\csys}{S}
 \newcommand{\cell}{C}
-\newcommand{\quant}{Q}
+% \newcommand{\quant}{Q}
 %\newcommand\quant{\mathsc{Quant}}
 
 \newcommand\fmincon{\texttt{fmincon}\xspace}
@@ -412,3 +421,7 @@
 \newcommand{\simmap}{\mathsc{sim}}
 % \newcommand{\initmode}{q_0}
 \newcommand{\initstate}{x_0}
+
+\newcommand{\quant}{h}
+
+\newcommand{\TSAbstraction}[2]{\mathcal{T}^{#1}(#2)}
