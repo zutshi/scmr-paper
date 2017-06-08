@@ -55,14 +55,15 @@ input value in $\Inputs$ to the state of the system at time
 $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
 \times \Inputs \times \Reals^{\ge 0}$ to $\ContStates$. 
 
-Let $\inputsignal$ = $(t_0, u_0)$, $\ldots$, $(t_N,u_N)$ be a
-timed-sequence of inputs, where $t_0 = 0$, and for all $i > 0$, $t_i -
-t_{i-1} = \Delta$, and $u_i \in \Inputs$.  We can extend the forward
-simulation map to a sequence of states to describe the application of
-an input signal to excite the system as follows:
-$\simmap_\Delta(\initstate, \mathbf{u} = \contState_N$, if for all $i  \in
-[0,N-1]$, $\simmap_\Delta(\contState_i, u_i,t_i) = \contState_{i+1}$.
-
+% Let $\inputsignal$ = $(t_0, u_0)$, $\ldots$, $(t_N,u_N)$ be a
+% timed-sequence of inputs, where $t_0 = 0$, and for all $i > 0$, $t_i -
+% t_{i-1} = \Delta$, and $u_i \in \Inputs$.  We can extend the forward
+% simulation map to a sequence of states to describe the application of
+% an input signal to excite the system as follows:
+% $\simmap_\Delta(\initstate, \mathbf{u}) = \contState_N$, if for all $i
+% \in [0,N-1]$, $\simmap_\Delta(\contState_i, u_i,t_i) =
+% \contState_{i+1}$.
+% 
 % An alternative view of the forward simulation-map is as a
 % parameterized reachability relation $\reach_\Delta{t,u} \subseteq
 % \ContStates \times \ContStates$ defined as below:
@@ -132,76 +133,138 @@ $\simmap_\Delta(\initstate, \mathbf{u} = \contState_N$, if for all $i  \in
 % 
 \subsection{$\epsilon$-precision Transition System Abstraction}
 
-We observe that the parameterized reachability relation described in
-the previous section induces an existential discrete abstraction of
-the system similar to the one considered in \cite{zutshi2014multiple}.
-We briefly review this discrete abstraction and show how falsification
-of systems reduces to a path-search in the resulting transition
-system. We make the observation that this discrete abstraction is
-actually a Kripke structure, \ie, a transition system defined as the
-tuple $(\Cells, \CellEdges, \CellLabelingFunction)$, where $\Cells$ is
-a finite set of cells, $\CellEdges \subseteq \Cells \times \Cells$ is
-an unlabeled transition relation, and $\CellLabelingFunction$ is a
-function that assigns one or more labels to the cells from a finite
-set of labels.
+We now show how we can abstract a hybrid dynamical system $\System$
+which has trajectories in dense-time by a discrete transition system.
+A discrete transition system $\mathcal{T}$ can be defined as the tuple
+$(\Cells, \CellEdges, \Cells_\init, \CellLabelingFunction)$, where
+$\Cells$ is a finite set of cells, $\CellEdges \subseteq \Cells \times
+\Cells$ is an unlabeled transition relation, and
+$\CellLabelingFunction$ is a function that assigns one or more labels
+to the cells from a finite set $L$ of labels. The operational
+semantics of the transition system are as follows: the system starts
+in some cell in $\Cells_\init$. At each step, if the transition system
+is in cell $C$, it transitions to cell $C'$ if $(C,C') \in
+\CellEdges$. A finite-time trace property $\varphi$ of the system is
+some subset of the free monoid $(2^L)^*$. We say that $\mathcal{T}
+\not\models \varphi$ if there exists some trace of $\mathcal{T}$ such
+that the sequence of labels in that trace does not belong to
+$\varphi$.
 
-In what follows, we review an $\epsilon$-precision transition system
-abstraction of a system $\System$ (denoted as
-$\TSAbstraction{\epsilon}{\System}$) as follows. We define a
-quantization function $\quant_\epsilon$ that maps a state $\contState$ in
-$\ContStates$ to $10^{-\epsilon}*\lfloor \contState*10^\epsilon \rfloor$.
+We now give an example of a specific kind of transition system
+abstraction that we can build given $\System$ and the simulation map
+$\simmap_\Delta$.  We call the transition system an
+$\epsilon$-precision transition system and denote it by
+$\TSAbstraction{\epsilon}{\System}$.  Let $\epsilon  = 10^{-k}$, for
+some positive integer $k$.  We define a quantization function
+$\quant_\epsilon$ that maps a state $\contState$ in $\ContStates$ to
+$10^{-k}*\lfloor \contState*10^k \rfloor$. This transformation
+essentially truncates the decimal representation of the numeric value
+of the state $\state$ to at most $k$ digits after the decimal point.
 This function induces an equivalence relation $\contState_i
 \equiv_\epsilon \contState_j$ iff $\quant_\epsilon(\contState_i) =
-\quant_\epsilon(\contState_j)$. Now consider the quotient structure
-$\ContStates/\equiv_\epsilon$. We treat each equivalence class in the
-quotient structure as a cell. We discover the transitions in the
-abstraction using simulations. Given a numerical simulator for the
-model with a forward simulation map $\simmap_\Delta$, we add an edge
-from cell $C$ to cell $C'$ iff:
-\begin{itemize}
-\item
-$\simmap_\Delta(\contState, u, t)$ = $\contState'$, 
-\item
+\quant_\epsilon(\contState_j)$.
+
+Using the equivalence relation $\equiv_\epsilon$, we can now define
+the tuple $(\Cells, \CellEdges, \CellLabelingFunction)$ for
+$\TSAbstraction{\epsilon}{\System}$ by considering the quotient
+structure $\ContStates/\equiv_\epsilon$.  Essentially, each
+equivalence class in the quotient structure is a cell in $\Cells$.
+For cells $C$ and $C'$ in $\TSAbstraction{\epsilon}{\System}$, the
+edge $(C,C')$ can be an element of $\CellEdges$ iff:
+$\simmap_\Delta(\contState, u, t)$ = $\contState'$,
 $\quant_\epsilon(\contState)$ = $C$, and,
-\item
 $\quant_\epsilon(\contState') = C'$.
-\end{itemize}
 
-While our framework is general enough to reason about arbitrary
-temporal logic properties of trajectories, we restrict our attention
-to safety properties, where we assume that there is a specified set of
-states $\UnsafeStates \subseteq \ContStates$ that are unsafe.  Thus,
-our label set has only two elements:
+We assume that there is a specified set of states $\UnsafeStates
+\subseteq \ContStates$ that are unsafe\footnote{Our framework is
+general enough to reason about richer class of correctness properties
+for trajectories such as bounded-time LTL properties. In this case, we
+assume the LTL property is defined over Boolean-valued predicates over
+$\ContStates$. The labeling function $\CellLabelingFunction$ would
+then label cells with the predicates that evaluate to $\mathit{true}$
+for some state in the cell.}, and thus restrict our attention to
+simple safety properties. Thus, our label set has only two elements:
 $\setof{\init,\unsafe}$. We then define $\CellLabelingFunction$ as
-follows: 
-\begin{equation*}
-\CellLabelingFunction(C) = \left\{
-\begin{array}{l@{\hspace{1em}}l}
-\init   & \exists \contState \in \InitStates\text{ s.t.  }\quant_\epsilon(\contState) = C  \\
-\unsafe & \exists \contState \in \UnsafeStates\text{ s.t.  }\quant_\epsilon(\contState) = C  \\
-\{\}    & \text{otherwise.}    
-\end{array}\right.
-\end{equation*}
+$\CellLabelingFunction(C) = \init$ if $C$ contains some initial state,
+$\CellLabelingFunction(C) = \unsafe$ if $C$ contains some unsafe
+state, and empty otherwise.
 
+In what follows, we review the procedure
+$\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
+from \cite{zutshi2014multiple} that, given the $\System$, the forward
+simulation map $\simmap_\Delta$, and a precision $\epsilon$ creates an
+$\epsilon$-precision transition system abstraction of $\System$.  The
+essence of the procedure is a breadth-first exploration of
+$\ContStates$ to build $\TSAbstraction{\epsilon}{\System}$ =
+$(\Cells,\CellEdges,\CellLabelingFunction)$. It consists of the
+following steps:
+\begin{enumerate}
+\item
+Add a set of random samples from the initial set of states to a queue
+(\ie some states $\contState$ at time $0$).
+\item
+Pop the head of the queue (say state $\contState$ at time $t$), identify
+the corresponding cell by applying $\quant_\epsilon$, and add it to
+$\Cells$. 
+\item
+Obtain $\contState' = \simmap_\Delta(\contState, t, u)$. Obtain a a
+fixed number of states in the neighborhood of $\contState'$, and add
+$\contState'$ and these states (all time $t+\Delta$) to the queue. 
+\item
+Add an edge between the cells corresponding to $\contState$ and 
+$\contState'$.
+\item
+Go to step 2 till either the queue is empty or a fixed number of cells
+or edges is added to $\TSAbstraction{\epsilon}{\System}$.
+\end{enumerate}
 
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
 We remark that our abstraction is {\em neither an overapproximation
 nor an underapproximation} of the continuous-time continuous-space
-reachability relation between states. The purpose of this abstraction
-is to discover falsifying trajectories; thus, this technique explores
-the abstraction to get abstract falsifying trajectories starting at an
-initial abstract state that lead to error, and to confirm that such an
-abstract trajectory is not spurious, it performs a concretization step
-by performing an actual simulation of the system. If the abstract
-counterexample trajectories are found to be spurious, then
+reachability relation between states. The purpose of the
+$\epsilon$-precision transition system is to discover falsifying
+trajectories. This can be accomplished by
+Algorithm~\ref{algo:s3camBMC} that uses CounterExample-Guided
+Abstraction and Refinement (CEGAR).
+
+Here, we construct $\TSAbstraction{\epsilon}{\System}$
+(Line~\ref{algoline:construct}), we check if there is a path in
+$\TSAbstraction{\epsilon}{\System}$ that leads to a cell labeled
+unsafe. This can be done by a bounded model checking procedure
+(Line~\ref{algoline:bmc}) that explores at most $\ell$ transitions of
+$\TSAbstraction{\epsilon}{\System}$ (\ie, traces that are at most
+$\ell\Delta$ seconds in length). The model checker may return a set of
+counterexample trajectories $\Pi$. If this set is empty
+(Line~\ref{algoline:nocex}), then either the exploration performed by
+$\mathsf{ScatterAndSimulate}$ is not enough or the system could be
+safe. In the former case, the user can increase the scope of
+exploration for $\mathsf{ScatterAndSimulate}$.  The next step is to
+check if the abstract trajectories are spurious, by performing a
+concretization step by performing an actual simulation of the system
+(Line~\ref{algoline:checkspurious}). If all abstract counterexample
+trajectories are found to be spurious, then
 $\TSAbstraction{\epsilon}{\System}$ can be refined, basically by
-increasing $\epsilon$. We summarize this procedure in
-Algorithm~\ref{algo:cegar}.
+increasing $\epsilon$.
+\begin{algorithm}[t] 
+\DontPrintSemicolon
+\caption{CEGAR for $\TSAbstraction{\epsilon}{\System}$\label{algo:s3camBMC}}
+\KwIn{$\System$, $\simmap_\Delta$, $\epsilon_0$ , Smallest Precision $\epsilonmin$} 
+$\epsilon \assign \epsilon_0$ \;
+\While{$\epsilon \ge \epsilonmin$}{
+    $\TSAbstraction{\epsilon}{\System}$ $\assign$ 
+    $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
+    \nllabel{algoline:construct} \;
+    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\TSAbstraction{\epsilon}{\System}$) 
+    \nllabel{algoline:bmc} \;
+    \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} } 
+    \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION \nllabel{algoline:checkspurious} }
+    $\epsilon$ $\assign$ $\frac{\epsilon}{10}$ \nllabel{algoline:refine} \;
+}
+\end{algorithm}
 
-
-The biggest drawback of Algorithm~\ref{algo:cegar} is that with
+The biggest drawback of Algorithm~\ref{algo:s3camBMC} is that with
 increasing $\epsilon$, the size of $\Cells$ in
 $\TSAbstraction{\epsilon}{\System}$ increases exponentially.  Thus,
 every subsequent run of the falsification algorithm is slower. In the
@@ -209,9 +272,6 @@ next section, we propose an alternative abstraction that enriches the
 basic abstraction proposed here by adding labels to the transitions.
 We can then perform refinement by enriching the transition relation,
 rather than increasing $\epsilon$.
-
-
-
 
 % The abstraction of the hybrid dynamical system is a partitioning of
 % the hybrid state space $\HybridStates$ into hyper-rectangles or cells
