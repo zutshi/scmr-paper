@@ -1,3 +1,5 @@
+# Aditya: 4,5, 6, 7, 8, 15,16, 18, 19
+
 Sec3.1.
 1. Should define system as a tuple 
   (DiscModes, ContStates, Inputs, Outputs)
