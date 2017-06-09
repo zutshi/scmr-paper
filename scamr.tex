@@ -1,23 +1,65 @@
-\subsection{PWA Transition System}
+In this section, we describe a {\em relational modeling} approach to
+abstract a system. The technique described in this section can be
+viewed as an enrichment of the procedure to construct an
+$\epsilon$-precision transition system from the previous section.  The
+central idea of this paper is that a discrete abstraction based on a
+transition system can be augmented with additional information which
+can greatly improve the accuracy of the abstraction. The refined
+discrete abstraction takes the form of a $\epsilon$-precision {\em
+relational} transition system $\RTSAbstraction{\epsilon}{\System}$.
 
-We define a PWA transition system $A$ as a tuple
-$\tupleof{\pLocs,\vx,\scrT, G, U, \pLocI,\Theta}$, where:
-\begin{itemize}[noitemsep, leftmargin= 1.5 em]
+\subsection{$\epsilon$-precision Relational Transition System}
+
+An $\epsilon$-precision Relational Transition System is a labeled
+transition system described by the tuple: 
+$(\Cells,\vx,\CellEdges,\InitCells,\CellLabelingFunction,
+\EdgeLabelingFunction,\exprs{\vx})$, where:
+
+\begin{itemize}
 \item
-$\pLocs$ is a set of locations,
+$\Cells$ is a set of cells,
 \item
-$\vx$ is a variable that takes values in $\reals^m$,
+$\vx$ is a variable that takes values in $\ContStates$, 
 \item
-$\scrT$ is a finite subset of $\pLocs \times G \times U \times G \times \pLocs$, 
 \item
-$G$ is a set of conjunctions of affine predicates, 
+$\CellEdges$ is a finite subset of $\Cells \times \Cells$, 
 \item
-$U$ is a set of affine relations,
+$\InitCells$ is a set of intial cells, 
 \item
-$\pLocI$ is an initial location, and,
+$\exprs{\vx}$ is a set of arbitrary computable expressions over the
+variable $\vx$,
 \item
-$\Theta$ is an initial affine predicate.
+$\CellLabelingFunction$ is a function mapping a cell $C$ to a
+predicate of the form $e(\vx) > \mathbf{0}$, where $e(\vx)$ is some
+expression in $\exprs{\vx}$,
+\item
+$\EdgeLabelingFunction$ maps an edge $(C,C')$ to a pair
+$(g(\vx)>\mathbf{0}, r(\vx))$, where the {\em guard} $g(\vx)$ and the
+{\em update} $r(\vx)$ are expressions in $\exprs{\vx}$.
 \end{itemize}
+
+
+
+
+
+% We define a PWA transition system $A$ as a tuple
+% $\tupleof{\pLocs,\vx,\scrT, G, U, \pLocI,\Theta}$, where:
+% \begin{itemize}[noitemsep, leftmargin= 1.5 em]
+% \item
+% $\pLocs$ is a set of locations,
+% \item
+% $\vx$ is a variable that takes values in $\reals^m$,
+% \item
+% $\scrT$ is a finite subset of $\pLocs \times G \times U \times G \times \pLocs$, 
+% \item
+% $G$ is a set of conjunctions of affine predicates, 
+% \item
+% $U$ is a set of affine relations,
+% \item
+% $\pLocI$ is an initial location, and,
+% \item
+% $\Theta$ is an initial affine predicate.
+% \end{itemize}
 
 The operation of $A$ is described in terms of its configuration and
 its moves. A configuration of $A$ is a pair $(\ell, \nu)$, where $\ell

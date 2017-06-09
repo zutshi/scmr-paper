@@ -215,8 +215,11 @@
 \newcommand \uset[2]{\underset{#1}{\underbrace{#2}}}
 \newcommand \ith[2]{ {#1}^{(#2)}}
 \newcommand \Cells {\ensuremath \mathcal{C}}
+\newcommand \InitCells {\ensuremath \mathcal{C}_\init}
 \newcommand \CellEdges {\ensuremath \mathcal{E}}
-\newcommand \CellLabelingFunction{\ensuremath \mathcal{L}}
+\newcommand \CellLabelingFunction{\ensuremath \mathcal{L}_\Cells}
+\newcommand \EdgeLabelingFunction{\ensuremath \mathcal{L}_\CellEdges}
+\newcommand \exprs[1] {\mathcal{G}(#1)}
 \newcommand \complex {\ensuremath \mathcal{C}}
 \newcommand \grb {Gr\"obner\xspace}
 \newcommand \hi[1]{}
@@ -425,5 +428,6 @@
 \newcommand{\quant}{h}
 
 \newcommand{\TSAbstraction}[2]{\mathcal{T}^{#1}(#2)}
+\newcommand{\RTSAbstraction}[2]{\mathcal{R}^{#1}(#2)}
 
 \newcommand{\epsilonmin}{\epsilon_\mathrm{min}}
