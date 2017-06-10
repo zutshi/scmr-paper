@@ -1,0 +1,21 @@
+The PWA transition system is a finite location, infinite state
+transition system. As all the guards and transitions are affine, a
+bounded reachability query is equivalent to checking all
+combinations of discrete locations, where each combination can be
+summarized as a linear program. As the time is bounded, the number of
+combinations are finite, but, exponential in number.
+
+It should be noted that an explicit execution of the transition system
+represents a directed acyclic graph, with each location being a node,
+and a directed edge from each node to all nodes reachable in forward
+time. A path on this graph is then a linear program, with each
+branching node corresponding to a logical disjunction.
+
+Temporal properties of PWA transitions systems can be checked using
+off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason
+over infinite state transitions systems using SMT solvers.
+Furthermore, lazy SMT solvers can be employed for this specific
+problem instance to achieve better efficiency~\cite{shoukry2017smc}.
+We now show how relational PWA abstractions can be viewed as PWA
+transition systems, and how the problem of falsification can
+be answered by a BMC query.
