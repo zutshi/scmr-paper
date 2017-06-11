@@ -1,0 +1,183 @@
+%% BMC macro
+\newcommand{\unsafebmc}{\ensuremath{{\psi}_{\UnsafeStates}}}
+\newcommand{\bvars}[1]{\ensuremath{{\vec{B}}^{#1}}}
+\newcommand{\rvars}[1]{\ensuremath{{\vx}^{#1}}}
+\newcommand{\vars}[1]{\ensuremath{{\vec{V}}^{#1}}}
+\newcommand{\cellvar}[1]{\ensuremath{{cell}^{#1}}}
+\newcommand{\initbmc}{\ensuremath{INIT}}
+\newcommand{\encbmc}{\ensuremath{BMC}}
+\newcommand{\transbmc}{\ensuremath{TRANS}}
+\newcommand{\edgebmc}{\ensuremath{EDGE}}
+\newcommand{\subs}[3]{\ensuremath{{#1}[{#2}/{#3}]}}
+
+\newcommand{\abspathbmc}[0]{\ensuremath{\Pi_{abs}}}
+\newcommand{\concbmc}[1]{\ensuremath{CONC_{{#1}}}}
+%
+We describe the implementation of the procedure
+$\mathsf{BoundedModelCheck}$ used at Line~\ref{algoline:bmc} in
+Algorithm~\ref{algo:s3camBMC},
+that checks if the $\epsilon$-precision Relational Transition System
+$\RTSAbstraction{\epsilon}{\System}$ reaches an error condition
+$\UnsafeStates$ in at most $k$ steps returning, in that case, a path
+$\Pi$. In the following we assume that the set of unsafe states
+$\UnsafeStates$ can be represented with a Boolean formula
+$\unsafebmc(\vx)$.
+
+We describe two implementations:
+(1) a symbolic Bounded Model Checking~\cite{Biere+Others/99/Symbolic}
+(BMC) algorithm and (2) an algorithm (similarly
+to e.g.~\cite{DBLP:conf/fmcad/BuLWL08}) that explicitly enumerates the
+abstract paths formed by cells $\Cells$ and edges $\CellEdges$,
+checking for their feasibility in $\RTSAbstraction{\epsilon}{\System}$.
+
+
+\paragraph{Symbolic path exploration.}
+%
+%
+Given a set of variables $X$, we denote with $X^i=\{x^i | x \in X\}$
+the copy of the variables $X$ renamed with the ``$^i$'' superscript.
+Given a Boolean formula $\exprs{\vars{}}$,
+%% $\subs{\exprs{V}}{z}{x}$ is the formula $\exprs{V}$ where all the
+%% occurrences of the variable $x$ are replaced with $z$.
+$\subs{\exprs{\vars{}}}{\vars{i}}{\vars{}}$ is the formula $\exprs{\vars{}}$
+where every variable $v \in \vars{}$ is substituted with $v^+ \in \vars{+}$.
+
+We encode the finite set of cells $\Cells$ with a set of Boolean
+variables $\bvars{}$. For clarity, given the cell $C \in \Cells$ we
+write $\cellvar{} = C$, instead of showing its encoding with $\bvars{}$.
+%
+In the following, we interpret each variable $x \in \vx$ as a Real
+valued variable and we refer to all the Boolean and Real variables
+with the set $\vars{} = \rvars{} \vee \bvars{}$
+%
+We encode the set of paths of length $k$ of
+$\RTSAbstraction{\epsilon}{\System}$ that reaches $\unsafebmc$
+as the quantifier-free first-order logic formula:
+\begin{eqnarray*}
+\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, k) & := &
+\initbmc(\vars{0}) \wedge
+\bigwedge_{i=1}^{k}{\transbmc(\vars{i-1}, \vars{i})} \wedge
+\subs{\unsafebmc}{\rvars{k}}{\rvars{}}\\
+% init
+\initbmc(\vars{i}) & := &
+\bigwedge_{C \in \InitCells}{(\cellvar{i} = C) \wedge
+\subs{\CellLabelingFunction(C)}{\rvars{i}}{\rvars{}}
+}
+\\
+% trans
+\transbmc(\vars{i}, \vars{i+1}) & := &
+  \bigvee_{(C,C^+) \in \CellLabelingFunction}{
+    \edgebmc_{(C,C^+)}(\vars{i}, \vars{i+1})
+  } \\
+\edgebmc_{(C,C^+)}(\vars{i}, \vars{i+1}) & := &
+(\cellvar{i} = C) \wedge (\cellvar{i+1} = C^+) \wedge  \\
+&& \subs{\CellLabelingFunction(C)}{\rvars{i}}{\rvars{}} \wedge
+   \subs{\CellLabelingFunction(C^+)}{\rvars{i+1}}{\rvars{}} \wedge \\
+&& \subs{\subs{\EdgeLabelingFunction((C,C^+))}{\rvars{i}}{\rvars{}}}{\rvars{i+1}}{{\rvars{+}}}
+\end{eqnarray*}
+
+The formula
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, k)$ is satisfiable
+if and only if there exists a path of length $k$ in 
+$\RTSAbstraction{\epsilon}{\System}$ that reaches a state in $\unsafebmc$.
+
+The procedure
+$\mathsf{BoundedModelCheck}(\RTSAbstraction{\epsilon}{\System})$
+checks the satisfiability of the sequence of formulas 
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, 0)$, 
+$\ldots$,
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, k)$
+with an SMT solver, returning a path $\Pi$ of
+$\RTSAbstraction{\epsilon}{\System}$ as soon as one of the formula is
+satisfiable, or no paths otherwise.
+
+\paragraph{Explicit path exploration.}
+The second algorithm explicitly enumerates
+the (abstract) paths in the graph that has $\Cells$
+as nodes, and $\CellEdges$ as edges, and may end in an unsafe state
+$\UnsafeStates$.
+%
+Such paths may not be real paths of
+$\RTSAbstraction{\epsilon}{\System}$, since they may not satisfy the
+conditions imposed by the labeling function $\CellLabelingFunction$
+and the relation $\EdgeLabelingFunction$, and hence the algorithm must
+further check, for each abstract path $\abspathbmc$, if there exists a 
+concrete path $\Pi$ of
+$\RTSAbstraction{\epsilon}{\System}$.
+
+$\abspathbmc := C_0, \ldots, C_l$ is an abstract path of
+ $\RTSAbstraction{\epsilon}{\System}$ where:
+\begin{itemize}[label=--,leftmargin=1em,labelsep=*]
+\item for $i \in [0,l]$, $C_i \in \Cells$,
+\item $C_0 \in \InitCells$,
+\item for $i \in [0,l-1]$, $(C_i, C_{i+1}) \in \EdgeLabelingFunction$,
+\item $C_l$ is such that
+$\CellLabelingFunction(C_l) \land \unsafebmc(\vx)$ is satisfiable
+(i.e. the cell $C_l$ contains an unsafe state).
+\end{itemize}
+%
+There exists a concrete path $\Pi$ of
+$\RTSAbstraction{\epsilon}{\System}$ that traverses the sequences of
+cells of an abstract path $\abspathbmc$ if and only if the formula
+\begin{eqnarray}
+\label{eq:simulateabs}
+\concbmc{\abspathbmc} & := &
+\bigg( \bigwedge_{i=0}^{l}{
+  \subs{\CellLabelingFunction(C_i)}{\rvars{i}}{\rvars{}}
+} \bigg)
+\wedge
+\subs{\unsafebmc}{\rvars{l}}{\rvars{}} \wedge \\
+&&
+\bigwedge_{i=1}^{l}{
+  \subs{
+  \subs{\CellEdges((C_i,C_{i+1}))}{\rvars{i}}{\rvars{}}
+  }{\rvars{i+1}}{\rvars{+}}
+}
+\end{eqnarray}
+is satisfiable\footnote{Formula~\ref{eq:simulateabs} is a conjunction
+of linear predicates and hence its satisfiability can be casted as the
+feasibility of a linear program.}.
+%
+This can be proved by showing that each model of the formula
+$\concbmc{\abspathbmc}$  ``corresponds'' to a path of
+$\RTSAbstraction{\epsilon}{\System}$, and each path of
+$\RTSAbstraction{\epsilon}{\System}$ that traverses the sequence of
+cells of $\abspathbmc$ ``corresponds'' to a model of 
+$\concbmc{\abspathbmc}$.
+
+The explicit path exploration enumerates all the abstract
+paths $\abspathbmc$ of length at most $k$. The enumeration can either
+be a depth-first search (DFS) or a breadth-first search (BFS). As soon
+as a $\abspathbmc$ is found, the algorithm checks the satisfiability
+of $\concbmc{\abspathbmc}$. If  $\concbmc{\abspathbmc}$ is
+satisfiable, the algorithm returns a concrete path $\Pi$, otherwise
+the search continues trying to enumerate another abstract path. 
+The search is guaranteed to terminate, since the length of the
+abstract paths is at most $k$.
+
+On the one hand, a possible advantage of the explicit enumeration (2)
+over the symbolic BMC (1) is that it can explore the paths of
+$\RTSAbstraction{\epsilon}{\System}$ using different heuristics
+(e.g. a DFS instead of a BFS), and  
+that each concretization check is ``simpler'' than a single symbolic
+BMC query.
+%
+On the other hand, the symbolic BMC implicitly exploits SMT solvers,
+that automatically prune the search space (and intuitively, also the number 
+of abstract paths that must be visited) by learning conflict clauses.
+
+\todo{Tell that we use a DFS in the implementation section}
+
+
+%% Temporal properties of PWA transitions systems can be checked using
+%% off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason
+%% over infinite state transitions systems using SMT solvers.
+%% Furthermore, lazy SMT solvers can be employed for this specific
+%% problem instance to achieve better efficiency~\cite{shoukry2017smc}.
+%% We now show how relational PWA abstractions can be viewed as PWA
+%% transition systems, and how the problem of falsification can
+%% be answered by a BMC query.
+
+% To clarify:
+%  - is there a maximum k that we look at? Where do we guarnatee that?
+%    
