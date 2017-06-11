@@ -1,0 +1,467 @@
+In this section, we present the model of the hybrid dynamical system
+under test, and the background for PWA relational abstractions.
+
+\mypara{System under test ($\System$)}
+
+We assume that $\System$ is a hybrid dynamical system with exogenous
+inputs modeling an embedded control system. The system state-space
+(denoted $\HybridStates$) is a subset of $\Modes \times \Reals^n$,
+where $\Modes$ is a finite set of discrete modes, and $\Reals^n$
+represents the continuous-valued state-space. For ease of exposition,
+we assume that the hybrid system is effectively a switched-mode
+dynamical system, \ie, the mode of the system is completely determined
+by its state.  An input to $\System$ is assumed to be a time-bounded
+{\em signal}, \ie, a function from $[0,T]$ to $\Inputs$, with $T$ as
+the time horizon, and $\Inputs \subseteq \Reals^k$.  In this paper, we
+view $\System$ as effectively black-box equipped with a forward
+simulation map, in a simulation time-step of $\Delta_t$ from time $t$,
+allows computing the unique reachable state $\vx \in \HybridStates$
+given state-input pair $(\vx,\vu)$.
+
+% time and input parameterized reachability relation $\reach{t,
+% \vu}_\System \subseteq \HybridStates \times \HybridStates$ as follows:
+% $\simulate^{\System}:
+% (\vx, \vu, t) \mapsto \vx$, where $\vx \in \HybridStates$, $\vu \in
+% \Inputs$ and $t \in [0,T]$.
+
+
+% Given the hybrid state space $\vx\in\HybridStates$ and input space $u
+% \in\Inputs$ and time step $t$, it computes the unique successor state
+% $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
+
+
+\begin{definition}[System Evolution]
+    The behavior of system $\System$ at time $t$ is described as an
+    evolution in the hybrid state-space $\HybridStates$ under the
+    effect of the input $\vu \in \Inputs$ at time $t$. The forward
+    simulation map $\simulate^\System : \HybridStates \times \Inputs
+    \times \Reals^+ \mapsto \HybridStates$, maps a state $\x$ at time
+    $t$ to a new state $\x'$ at time $t+\Delta_t$, under a constant
+    input $\vu$.  Finally, we define the time and input parameterized
+    reachability relation $\reach{t,u} \subseteq \HybridStates \times
+    \HybridStates$ such that $(\vx,\vx') \in \reach{t,u}$ iff
+    $\vx'=\simulate^{\System}(\vx,u,t)$.
+\end{definition}
+
+\mypara{System Assumptions:} We require that $\System$ can always be
+simulated forward in time with deterministic results. This in turn
+requires existence and uniqueness of trajectories over a finite time
+horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
+the vector field in each underlying hybrid mode, ruling away issues
+such as finite escape times~\cite{Meiss/2007/Differential}, and having
+well-defined semantics for simulations at switching boundaries. While
+these assumptions hold for the dynamical system examples which we
+consider in this paper, such assumptions can be restrictive for
+general control system models. When analyzing a system that does not
+obey theoretical conditions that allow deterministic simulation, we
+assume that the underlying tool used for numerical approximations of
+system behaviors uses deterministic simulation semantics.  Finally, we
+assume full observability of the system state, validate our results
+only against the $\simulate$ function (as the analytic closed-form
+representation of the system dynamics is assumed to be unavailable).
+From here on, we drop the subscript $\System$ whenever it is clear
+from the context. Also, to ease the presentation, we conflate the
+inputs with the state and denote them by $\vx$.
+
+\subsection{Learning Dynamics using Linear Regression}
+
+The approach in \cite{zutshi2014multiple} uses the forward simulation
+map to explore a fixed number of tuples in the reachability relation
+$\reach{t,\vu}$ specified by a user-provided budget.  In general, the
+budget required to adequately explore the transition space requires
+exploring an exponential (in the dimension of $\HybridStates$) number
+of such tuples. This can cause undue burden in terms of computation
+time as well as storage.  The central idea in this paper is to {\em
+summarize} several tuples as a single affine map obtained using linear
+regression.  In other words, we can replace several ``proximal''
+tuples $(\vx,\vx')$ in $\reach{t,u}$ by an affine map of the form
+$\vx' = A\vx + B\vu + \delta$, where $A$ and $B$ are matrices and
+$\delta$ is a worst-case error estimate.
+
+In statistics, linear regression is the problem of finding an affine
+function or \textit{predictor}, which can `best' summarize the
+relationship between the given set of observed input $\x$ and output
+$\x'$ vectors. The notion of `best' is formally captured using a loss
+function (which can be non-linear), resulting in different kinds of
+regression analysis including ridge, lasso, huber, generelized and
+many other regressions. For simplicity, we present the commonly used
+loss function \textit{ordinary least squares} (OLS) in the next
+section.
+~\footnote{The choice of regression analysis should ideally be based on the
+quality of data. As we assume the data (from the simulator) to be
+noise free, the affecte on result of the falsification search is
+minimal.
+Though it is important,  not central to the
+discussion as long as the learnt models  can be used to learn different
+models}.
+
+\mypara{Ordinary Least Squares (OLS)}
+For rest of the section, we elide the discrete mode from the hybrid
+state of the system, and only focus on the continuous state. Note that
+we can do this because of our assumption that the system is a
+switched-mode dynamical system.  Suppose we have $N$ tuples of the
+form $(\x,\x')$ in the reachability relation that we have explored,
+where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn an
+affine function described as
+\begin{equation}
+\label{eq:affinemap}
+\x' = A\x + B
+\end{equation}
+Here, $A$ is a $n\times n$ matrix, and $B$ is a $n\times 1$ matrix.
+
+
+If $N>n$, which is the case in the current context of \textit{finding
+the best fit}, the problem is over-determined: there are more
+equations than unknowns. Hence, a single affine function cannot be
+found which satisfies the equation \eqref{eq:affinemap}. Instead, we
+need to find the `best' choice for $\vec{a}$ and $b$. This choice is
+formally defined using a loss function. For the case of OLS, the loss
+function is the sum of squares of the errors in prediction.  The task
+is then to determine $A$ and $B$, such that the least square error of
+the affine predictor is minimized for the given data set.
+
+\begin{equation}
+    \operatornamewithlimits{argmin}_{A,B}\displaystyle\sum_{i=1}^{N}{\left(\x' - (A\x + B)\right)^2}
+\label{reg}
+\end{equation}
+
+To ease the presentation, we can rewrite the above as a homogeneous
+expression by using $\hat{\x} = [\x^T\ 1]^T$ and replacing $A$ and $B$ by the vector
+$\vec{A} = [A\ B]$. The equation~\ref{reg} now becomes
+\[
+\operatornamewithlimits{argmin}_{\vec{A}}\displaystyle\sum_{i=1}^{N}{(\x' - \vec{A}^T \hat{\x})^2}
+\]
+
+The solution of OLS can be analytically computed as the Moore-Penrose
+pseudo-inverse: $\vec{A} = (X^TX)^{-1}X^T X'$, where $X$ is the matrix
+representing the horizontal stacking of all $\hat{\x}$ and $X'$
+represents the stacking of all $\x'$ values.  The details can be found
+in standard texts on learning and statistics
+\cite{friedman2001elements}. Alternative methods based on gradient
+descent can also be used to find a suitable $A$ matrix.
+
+In this fashion, we can we can use OLS to approximate its trajectories
+of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
+= \vec{A}\hat{\x}$.
+
+% where
+% $A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T
+% \end{bmatrix}$ and $\vb = \begin{bmatrix}b_1 \\ \vdots \\ b_n
+% \end{bmatrix}$.
+
+We note that linear regression tools are often able to provide an
+$n\times 1$ vector $\vec{\delta}$ of error intervals, where the
+$i^{th}$ entry of the form $[{\delta_i}_{\min},{\delta_i}_{\max}]$
+indicates the best and worst possible error in computation of the
+$i^{th}$ state in $\x'$.
+
+
+Affine maps are poor approximations for arbitrary non-linear
+functions. Hence, we use a collection of affine maps to approximate
+the local behaviors (in state-space) of the system $\System$. This
+results in a piece wise approximation, as described in the next
+section.
+
+
+% \mypara{Regression Analysis}
+
+% In statistics, regression is the problem of finding a
+% \textit{predictor}, which can suitably predict the relationship
+% between the given set of observed input $\x$ and output $\y$ vectors.
+% In other words, assuming that $\y$ depends on $\x$, regression
+% strategies find either a parameterized or a non-parameterized
+% prediction function to explain the dependence. We now discuss simple
+% linear regression, which is parametric in nature and searches for an
+% affine predictor. It is also called \textit{ordinary least squares}.
+
+% \mypara{Ordinary Least Squares (OLS)}
+
+% Let the data set be comprised of $N$ input and output pairs $(\x,
+% y)$, where $\x\in\reals^n$ and $y\in\reals$. If $N>n$, which is
+% the case in the current context of \textit{finding the best fit}, the
+% problem is over-determined; there are more equations than
+% unknowns. Hence, a single affine function cannot be found which
+% satisfies the equation $\forall i\in\{1\ldots N\}. y_i = \vec{a}^T\x_i + b$. Instead, we
+% need to find the `best' choice for $\vec{a}$ and $b$. This is formally
+% defined using a loss function. For the case of simple linear
+% regression or OLS, the loss function is the sum of squares of the
+% errors in prediction.  The task is then to determine the vector of
+% coefficients $\vec{a}$ and an offset constant $b$, such that the least
+% square error of the affine predictor is minimized for the given data
+% set.
+% \begin{equation}
+%     \operatornamewithlimits{argmin}_{\vec{a}, b}\displaystyle\sum_{i=1}^{N}{\left(\y_i - (\vec{a}^T\x_i + b)\right)^2}
+% \label{reg}
+% \end{equation}
+% To ease the presentation, we can rewrite the above as a homogeneous
+% expression by augmenting $\x$ by $\hat{\x} = \begin{bmatrix}\x \\ 1\end{bmatrix}$ and replacing $\vec{a}$ and $b$ by the vector
+% $\vec{ab} = \begin{bmatrix}\vec{a} \\ b \end{bmatrix}$. The equation~\ref{reg} now becomes
+% \[
+%     \operatornamewithlimits{argmin}_{\vec{ab}}\displaystyle\sum_{i=1}^{N}{(\y_i - \vec{ab}^T \hat{\x}_i)^2}
+% \]
+% The solution of OLS can be analytically computed as
+% \[ Ab = (X^TX)^{-1}X^T\y\]
+% where $X$ is the matrix representing the horizontal stacking of all
+% $\hat{\x}$.
+% The details can be found in several texts on learning and statistics
+% \cite{friedman2001elements}.
+
+% Given a time invariant dynamical system $\x' = \simulate(\x, \Delta)$,
+% where $\x\in\reals^n$ we can use OLS to approximate its trajectories
+% at fixed time step $\Delta$ by a discrete map $\x' = A\x + \vb$, where
+% $A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T \end{bmatrix}$ and $\vb =
+% \begin{bmatrix}b_1 \\ \vdots \\ b_n \end{bmatrix}$. This map is a
+%     global relational model for the system. The data set for the
+%     regression is a set of pairs $\setof{(\x,\x') | \x' =
+%     \simulate(\x, \Delta)}$ and can be generated on demand. Another
+%     set can be generated to compute the error $\delta$ as an interval
+%     of vectors, where each element is an interval $\delta_i \in
+%     [\delta_{min}, \delta_{max}]$.
+%
+%     Affine maps are poor
+%     approximations for arbitrary non-linear functions. Hence, we use a
+%     collection of affine maps to approximate the local behaviors (in
+%     state-space) of the system $\simulate$. This results in a piece
+%     wise approximation, as described in the next section.
+
+
+
+% \subsection{Relational Abstractions}
+% For a hybrid automaton model, they can summarize the continuous
+% dynamics of each mode using a binary relation over continuous states.
+% The resulting relations are timeless (independent) and hence valid for
+% all time as long as the mode invariant is satisfied. The relations
+% take the general form of $R(\x,\x') \bowtie 0$, where $\bowtie$
+% represents one of the relational operators $=, \ge, \le, <, >$. For
+% example, an abstraction that captures the monotonicity with respect to
+% time for the differential equation $\dot{x} = 2$ is $x' > x$. The
+% abstraction capturing the relation between the set of ODEs: $\dot{x} =
+% 2$, $\dot{y} = 5$, is $5(x' - x) = 2(y' - y)$.
+
+%%  Similar to timeless relational abstractions, time-aware relational
+%%  abstractions \cite{mover2013time} construct binary relations between
+%%  the current state $\x$ of the system and any future reachable state
+%%  $\x'$. The difference lies with the latter also constructing relations
+%%  between the current time $t$ and any future time $t'$. This is
+%%  achieved by a case by case analysis of the eigen structure of the
+%%  matrix $A$ (of an affine ODE). Separate abstractions are used for the
+%%  case of linear systems with constant rate, real eigen values and
+%%  complex eigenvalues.
+
+
+\subsection{PWA Transition System}
+
+We define a PWA transition system $A$ as a tuple
+$\tupleof{\pLocs,\vx,\scrT, G, U, \pLocI,\Theta}$, where:
+\begin{itemize}[noitemsep, leftmargin= 1.5 em]
+\item
+$\pLocs$ is a set of locations,
+\item
+$\vx$ is a variable that takes values in $\reals^m$,
+\item
+$\scrT$ is a finite subset of $\pLocs \times G \times U \times G \times \pLocs$,
+\item
+$G$ is a set of conjunctions of affine predicates,
+\item
+$U$ is a set of affine relations,
+\item
+$\pLocI$ is an initial location, and,
+\item
+$\Theta$ is an initial affine predicate.
+\end{itemize}
+
+The operation of $A$ is described in terms of its configuration and
+its moves. A configuration of $A$ is a pair $(\ell, \nu)$, where $\ell
+\in \pLocs$, and $\nu$ is a valuation function assigning values in
+$\reals^m$ to the variable $\vx$.  The move function $\mu$ maps a
+configuration $(\ell,\nu)$ to the next configuration $(\ell',\nu')$,
+iff there is a transition $\tau$ of the form $(\ell,g,f,g',\ell')$,
+and $\nu(\vx)$ satisfies predicate $g$, $\nu'(\vx)$ satisfies
+predicate $g'$ and $\nu'(\vx) \in f(\nu(\vx))$.
+
+For a given $\tau$, we call the affine relation $f_\tau$ its update
+relation, and the predicates $g_\tau$ and $g'_\tau$ as pre- and
+post-conditions on the transition. The machine starts its operation in
+location $\pLocI$ with an initial valuation $\nu_0$ to the variable
+$\vx$ such that $\nu_0(\vx)$ satisfies $\Theta$. For convenience, we
+abuse notation, and use the name a variable as a proxy for a certain
+valuation, and use the primed version of the variable as a proxy for
+its valuation after a transition, \ie, $\vx$ is used instead of
+$\nu(\vx)$ and $\vx'$ is used instead of $\nu'(\vx)$.
+
+% We define the PWA transition system as a discrete transition system
+% $\rho:\tupleof{\pLocs,\vx,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
+% a nonempty set of locations, $\vx$ is a set of variables, $\scrT$
+% is a finite set of transitions of the form $\tupleof{l, \tau,
+% l'}$, where $l\in\pLocs$ is the pre-location, $l'\in\pLocs$ the
+% post-location and $\tau \in \scrT$ is the transition. $\tau$
+% is labeled by the transition relation $\rho_{\tau}$
+% over the current states and the next states. The transition relation
+% is defined in terms of affine predicates on the current and next
+% states and an affine update between them.
+% \[
+%     \rho_{\tau}(\vx,\vx') \subseteq \setof{(\vx,\vx')) \;|\;
+%     g_\tau(\vx) \land g'_\tau(\vx') \land f_{\tau}(\vx, \vx')}
+% \]
+% where $f_{\tau}$ is an affine relation on the pre and post states
+% $\vx,\vx'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
+% post conditions) on the states. Finally, $\pLocI$ is an initial
+% location $\Theta$ is an affine assertion characterizing the initial
+% states included in $\pLocI$.
+
+
+% A configuration of the PWATS is
+% a pair (l,\nu(v)), where \nu is a valuation function assigning values to
+% variables.
+
+% A run of the PWA TS is as follows: the PWA TS starts in the initial
+% location from a valuation \nu(v) \in theta.
+
+% A move of the PWA TS is described by the function mu: from (L,R^n) to
+% (L,R^n), and mu follows the rules that
+% mu(l,\nu(v)) = (l',\nu'(v)), iff (l,g,g',f,l') in T, and
+% \nu(v) satisfies g, \nu(v') satisfies g', and \nu(v') = f(\nu(v)).
+
+We how we can use the formal machinery of a PWA transition system $A$
+to approximate the behavior of a hybrid dynamical system $\System$
+defined by a simulator $\simulate^{\System}$~\footnote{Due to $f_\tau$
+being restricted to an affine form, we can only approximate general
+hybrid systems.}.
+
+
+%defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
+%\in f_\tau(\x)}$.
+
+
+% Given a state vector $\x\in\reals^n$, a guarded affine map
+% $\gm:(\guard, \amap)$ defines the discretized consecution rule as a
+% pair of an affine guard predicate $\guard:C\x - \vd \le 0$ and an affine map
+% $\amap:A\x+\vb$, where $A \in \reals^{n \times n}$, $C \in
+% \reals^{m \times n}$ are matrices and $\vb \in \reals^n$, $\vd
+% \in \reals^m$ are vectors. A guarded affine map is satisfied if its
+% guard is satisfied.
+
+We now formalize the PWA relational model for a dynamical system.
+\begin{definition}[PWA Relational Model]
+
+A PWA relational model $A(\System)$ of a hybrid dynamical system
+$\System$ is simply a PWA transition system, where:
+
+\begin{itemize}[noitemsep, leftmargin= 1.5 em]
+\item
+each transition of $A$ represents a discrete time step $\Delta$ of the
+system $\System$,
+\item
+if the state-space of $\System$ is $\reals^n$, the the valuation
+function for variable $\x$ in $A$ assigns $\x$ some value in
+$\reals^n$,
+\item
+for the $N$ tuples $(v,v')$ discovered by simulation, if $v' = Av
++ B + \vec{\delta}$ represents the affine relation discovered using
+linear regression, and if $h$ is the convex hull of all the $v$
+states across all tuples and $h'$ is the convex hull of all the $v'$
+states across all tuples, then $f_\tau \subseteq
+\setof{(\x,\x') \mid \x' \in A\x + B + \vec{\delta}}$,
+and $g$ states that $\x$ is in $h$, and $g'$ states that
+$\x' \in h'$.
+\end{itemize}
+
+Note that the guard predicates $g_\tau$ represent a conjunction of $m$
+affine inequalities, then we can represent $g_\tau$ as follows:
+\[
+g_\tau  \equiv C\x - \vd \le 0
+\]
+where $C$ is an $m \times n$ matrix and $\vd$ is $m \times 1$ matrix.
+
+
+% Given a hybrid dynamical system over a state-space $\reals^n$, a PWA
+% relational model $\rho$ is given by the tuple
+% $\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in \scrT$ is a
+% collection of affine transitions  and $\Theta$ is an affine predicate
+% over $\x\in\real^n$. The transition relation is then defined by
+% $\scrT$ with $n$ transition relations as follows
+%
+% \begin{equation}
+%     \scrT = \left\{
+%         \begin{array}{ll}
+%             g_1(\x) \land g'_1(\x') \implies f_1(\x,\x') \\
+%             \ldots\\
+%             g_n(\x) \land g'_n(\x') \implies f_n(\x,\x') \\
+%         \end{array}
+%     \right.
+% \end{equation}
+\end{definition}
+
+% where $g_i$ and $g'_i$ are affine predicates and $f_i$ are affine
+% relations and $\x'$ denotes the next state of the system.
+
+A PWA relational model is \textit{deterministic}, iff for every state
+$\x\in\reals^n$, a unique guarded affine map is satisfied and if all
+entries in the error interval vector $\vec{\delta}$ are singletons.
+However, in practice such a case rarely exists. A PWA model will be
+usually non-deterministic, both due to multiple choices of transitions
+from any location and the reachable states at the $k^{th}$ time step
+(or after $k\Delta$ units of time) being a set.  Abusing the notation,
+we denote the set of states reachable in a single step in $\rho$ by
+$\x' = \rho(\x)$.
+
+A PWA relational model system is \textit{complete}, iff for every
+state $\x\in\HybridStates^n$, there exists at least one satisfied
+transition relation $\scrT$. If this is not the case, the system can
+deadlock, with no further executions. This usually results from
+modeling errors, and from here on, we do not consider such cases.
+
+In what follows, we use the terms PWA relational model and PWA
+transition system interchangeably to mean PWA relational model.
+
+\subsection{Bounded Model Checking (BMC)}
+The PWA transition system is a finite location, infinite state
+transition system. As all the guards and transitions are affine, a
+bounded reachability query is equivalent to checking all
+combinations of discrete locations, where each combination can be
+summarized as a linear program. As the time is bounded, the number of
+combinations are finite, but, exponential in number.
+
+It should be noted that an explicit execution of the transition system
+represents a directed acyclic graph, with each location being a node,
+and a directed edge from each node to all nodes reachable in forward
+time. A path on this graph is then a linear program, with each
+branching node corresponding to a logical disjunction.
+
+Temporal properties of pwa transitions systems can be checked using
+off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason
+over infinite state transitions systems using SMT solvers.
+Furthermore, lazy SMT solvers can be employed for this specific
+problem instance to achieve better efficiency~\cite{shoukry2017smc}.
+We now show how relational pwa abstractions can be viewed as pwa
+transition systems, and how the problem of falsification can
+be answered by a BMC query.
+
+% Given a dynamical system over a continuous state-space
+% $\ContStates\in\reals^n$, a PWA model is a map $\ContStates \mapsto
+% \setof{\gm_1, \gm_2, \ldots, \gm_n}$ from the state-space of the
+% dynamical system to a finite set of guarded affine maps
+% $\setof{\gm_1, \gm_2, \ldots, \gm_n}$. It defines the consecution
+% rule by the affine map of the satisfied $\gm$.
+
+% \begin{equation}
+%     \pwa = \left\{
+%         \begin{array}{ll}
+%             \gm_1: \amap_1(\x) &\text{if}\; \guard_1(\x) \\
+%             \gm_2: \amap_2(\x) &\text{if}\; \guard_2(\x) \\
+%             \ldots & \ldots\\
+%             \gm_n: \amap_n(\x) &\text{if}\; \guard_n(\x) \\
+%         \end{array}
+%     \right.
+% \end{equation}
+
+% \end{definition}
+
+% where $\amap_i = A_i\x + \vb_i$, and $\guard_i(\x) \equiv C_i\x-\vd_i\le0$.
+% Abusing the notation, we denote the next state computed by the PWA
+% model as $\x' = \pwa(\x)$. A PWA model is \textit{deterministic}, iff
+% for every state $\x\in\ContStates$, a unique guarded affine map is
+% satisfied. A PWA model is \textit{complete}, iff for every state
+% $\x\in\ContStates$, there exists at least one satisfied guarded affine
+% map $\gm$.
+
