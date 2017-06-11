@@ -6,16 +6,17 @@ central idea of this paper is that a discrete abstraction based on a
 transition system can be augmented with additional information which
 can greatly improve the accuracy of the abstraction. The refined
 discrete abstraction takes the form of a $\epsilon$-precision {\em
-relational} transition system $\RTSAbstraction{\epsilon}{\System}$.
+relational} transition system $\RTSAbstraction{\epsilon}{\System}$. We
+use the abbreviation $\epsilon$-RTS for $\epsilon$-precision
+relational transition system.
 
-\subsection{$\epsilon$-precision Relational Transition System}
-
+\subsection{$\epsilon$-RTS}
 Let $\exprs{\vx}$ denote a set of Boolean-valued expressions over the
 variable $\vx$ and their Boolean combinations.  For example, if $\vx =
 \setof{x_1,x_2}$, then $\exprs{\vx}$ could be $\setof{ x_1 > 0, x^2_1
-+ x_2 > 0, x_2 < 1 \wedge x_1 + x_2 > -1}$.  An $\epsilon$-precision
-Relational Transition System $\RTSAbstraction{\epsilon}{\System}$ is a
-labeled transition system described by the tuple:
++ x_2 > 0, x_2 < 1 \wedge x_1 + x_2 > -1}$.  An $\epsilon$-RTS
+$\RTSAbstraction{\epsilon}{\System}$ is a labeled transition system
+described by the tuple:
 $(\Cells,\vx,\CellEdges,\InitCells,\CellLabelingFunction,
 \EdgeLabelingFunction,\UnsafeStates)$, where:
 
@@ -93,127 +94,6 @@ $\CellEdges = \setof{(C_1,C_1), (C_1, C_2)}$, and,
 \end{array}
 \]
 
-Observe that the $\epsilon$-precision relation transition system is a
-valid abstraction of the given trajectory fragments in
-Eq.~\ref{eq:transitions}.
+Observe that the $\epsilon$-RTS is a valid abstraction of the given
+trajectory fragments in Eq.~\ref{eq:transitions}.
 \end{example}
-
-
-
-
-% We define the PWA transition system as a discrete transition system
-% $\rho:\tupleof{\pLocs,\vx,\scrT, \pLocI,\Theta}$, where $\pLocs$ is
-% a nonempty set of locations, $\vx$ is a set of variables, $\scrT$
-% is a finite set of transitions of the form $\tupleof{l, \tau,
-% l'}$, where $l\in\pLocs$ is the pre-location, $l'\in\pLocs$ the
-% post-location and $\tau \in \scrT$ is the transition. $\tau$
-% is labeled by the transition relation $\rho_{\tau}$
-% over the current states and the next states. The transition relation
-% is defined in terms of affine predicates on the current and next
-% states and an affine update between them.
-% \[
-%     \rho_{\tau}(\vx,\vx') \subseteq \setof{(\vx,\vx')) \;|\;
-%     g_\tau(\vx) \land g'_\tau(\vx') \land f_{\tau}(\vx, \vx')}
-% \]
-% where $f_{\tau}$ is an affine relation on the pre and post states
-% $\vx,\vx'$, $g_{\tau}$ and $g'_{\tau}$ are affine guards (pre and
-% post conditions) on the states. Finally, $\pLocI$ is an initial
-% location $\Theta$ is an affine assertion characterizing the initial
-% states included in $\pLocI$.
-
-
-% A configuration of the PWATS is
-% a pair (l,\nu(v)), where \nu is a valuation function assigning values to
-% variables.
-
-% A run of the PWA TS is as follows: the PWA TS starts in the initial
-% location from a valuation \nu(v) \in theta.
-
-% A move of the PWA TS is described by the function mu: from (L,R^n) to
-% (L,R^n), and mu follows the rules that
-% mu(l,\nu(v)) = (l',\nu'(v)), iff (l,g,g',f,l') in T, and
-% \nu(v) satisfies g, \nu(v') satisfies g', and \nu(v') = f(\nu(v)).
-
-% We how we can use the formal machinery of a PWA transition system $A$
-% to approximate the behavior of a hybrid dynamical system $\System$
-% defined by a simulator $\simulate^{\System}$~\footnote{Due to $f_\tau$
-% being restricted to an affine form, we can only approximate general
-% hybrid systems.}. 
-
-
-%defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
-%\in f_\tau(\x)}$.
-
-
-% Given a state vector $\x\in\reals^n$, a guarded affine map
-% $\gm:(\guard, \amap)$ defines the discretized consecution rule as a
-% pair of an affine guard predicate $\guard:C\x - \vd \le 0$ and an affine map
-% $\amap:A\x+\vb$, where $A \in \reals^{n \times n}$, $C \in
-% \reals^{m \times n}$ are matrices and $\vb \in \reals^n$, $\vd
-% \in \reals^m$ are vectors. A guarded affine map is satisfied if its
-% guard is satisfied.
-
-% We now formalize the PWA relational model for a dynamical system.
-% \begin{definition}[PWA Relational Model]
-% 
-% A PWA relational model $A(\System)$ of a hybrid dynamical system
-% $\System$ is simply a PWA transition system, where:
-% 
-% \begin{itemize}[noitemsep, leftmargin= 1.5 em]
-% \item
-% each transition of $A$ represents a discrete time step $\Delta$ of the
-% system $\System$,
-% \item
-% if the state-space of $\System$ is $\reals^n$, the the valuation
-% function for variable $\x$ in $A$ assigns $\x$ some value in
-% $\reals^n$,
-% \item
-% for the $N$ tuples $(v,v')$ discovered by simulation, if $v' = Av
-% + B + \vec{\delta}$ represents the affine relation discovered using
-% linear regression, and if $h$ is the convex hull of all the $v$
-% states across all tuples and $h'$ is the convex hull of all the $v'$
-% states across all tuples, then $f_\tau \subseteq
-% \setof{(\x,\x') \mid \x' \in A\x + B + \vec{\delta}}$,
-% and $g$ states that $\x$ is in $h$, and $g'$ states that
-% $\x' \in h'$.
-% \end{itemize}
-% 
-% Note that the guard predicates $g_\tau$ represent a conjunction of $m$
-% affine inequalities, then we can represent $g_\tau$ as follows:
-% \[
-% g_\tau  \equiv C\x - \vd \le 0
-% \]
-% where $C$ is an $m \times n$ matrix and $\vd$ is $m \times 1$ matrix.
-
-
-% Given a hybrid dynamical system over a state-space $\reals^n$, a PWA
-% relational model $\rho$ is given by the tuple
-% $\tupleof{\pLocs,\x,\scrT,\pLocI,\Theta}$, where $\tau \in \scrT$ is a
-% collection of affine transitions  and $\Theta$ is an affine predicate
-% over $\x\in\real^n$. The transition relation is then defined by
-% $\scrT$ with $n$ transition relations as follows
-% 
-% \begin{equation}
-%     \scrT = \left\{
-%         \begin{array}{ll}
-%             g_1(\x) \land g'_1(\x') \implies f_1(\x,\x') \\
-%             \ldots\\
-%             g_n(\x) \land g'_n(\x') \implies f_n(\x,\x') \\
-%         \end{array}
-%     \right.
-% \end{equation}
-% \end{definition}
-
-% where $g_i$ and $g'_i$ are affine predicates and $f_i$ are affine
-% relations and $\x'$ denotes the next state of the system.
-
-% A PWA relational model is \textit{deterministic}, iff for every state
-% $\x\in\reals^n$, a unique guarded affine map is satisfied and if all
-% entries in the error interval vector $\vec{\delta}$ are singletons.
-% However, in practice such a case rarely exists. A PWA model will be
-% usually non-deterministic, both due to multiple choices of transitions
-% from any location and the reachable states at the $k^{th}$ time step
-% (or after $k\Delta$ units of time) being a set.  Abusing the notation,
-% we denote the set of states reachable in a single step in $\rho$ by
-% $\x' = \rho(\x)$.
-
