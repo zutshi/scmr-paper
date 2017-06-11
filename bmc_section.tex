@@ -1,3 +1,94 @@
+We describe the the procedure $\mathsf{BoundedModelCheck}$ used at
+Line~\ref{algoline:bmc} in Algorithm~\ref{algo:s3camBMC}
+that checks if the $\epsilon$-precision Relational Transition System
+$\RTSAbstraction{\epsilon}{\System}$ violates the safety property
+$\psi(\vx)$ in at most $k$ steps.
+
+We describe two possible implementations:
+(1) a symbolic Bounded Model Checking~\cite{Biere+Others/99/Symbolic} encoding of
+the paths of $\RTSAbstraction{\epsilon}{\System}$ of length $k$ that 
+violates $\psi$, and (2) an algorithm that explicitly enumerates the
+``discrete'' paths formed cells $\Cells$ and the transition
+$\CellEdges$, and then checks if the relations of the variables $\vx$
+on the visited edges hold for for each path (this is in similar in
+spirit to~\cite{DBLP:conf/fmcad/BuLWL08}).
+
+
+%% BMC macro
+\newcommand{\bvars}[1]{\ensuremath{{B}^{#1}}}
+\newcommand{\rvars}[1]{\ensuremath{{\vx}^{#1}}}
+\newcommand{\vars}[1]{\ensuremath{{V}^{#1}}}
+\newcommand{\cellvar}[1]{\ensuremath{{cell}^{#1}}}
+\newcommand{\initbmc}{\ensuremath{INIT}}
+\newcommand{\encbmc}{\ensuremath{BMC}}
+\newcommand{\errorbmc}{\ensuremath{ERROR}}
+\newcommand{\transbmc}{\ensuremath{TRANS}}
+\newcommand{\edgebmc}{\ensuremath{EDGE}}
+\newcommand{\subs}[3]{\ensuremath{{#1}[{#2}/{#3}]}}
+
+Given a set of variables $X$, we denote with $X^i=\{x^i | x \in X\}$
+the copy of the variables $X$ renamed with the $^i$ superscript.
+Given a Boolean formula $\exprs{V}$
+%% $\subs{\exprs{V}}{z}{x}$ is the formula $\exprs{V}$ where all the
+%% occurrences of the variable $x$ are replaced with $z$.
+We use the shorthand $\subs{\exprs{V}}{X^i}{X}$ to denote the formula
+where every variable $x$ is substituted to $x^+$
+
+We encode the finite set of cells $\Cells$ with a set of Boolean
+variables $\bvars{}$. For clarity, given the cell $C \in \Cells$ we
+write $\cellvar{} = C$, instead of showing its encoding with $\bvars{}$.
+%
+In the following, we interpret each variable $x \in \vx$ as a Real
+valued variable and we refer to all the Boolean and Real variables
+with the set $\vars{} = \rvars{} \vee \bvars{}$
+%
+We encode the set of paths of length $k$ of
+$\RTSAbstraction{\epsilon}{\System}$ that violates the property $\psi$
+as the quantifier first-order logic formula:
+\begin{eqnarray*}
+\encbmc(\RTSAbstraction{\epsilon}{\System}, \psi, k) & := &
+\initbmc(\vars{0}) \wedge
+\bigwedge_{i=1}^{k}{\transbmc(\vars{i-1}, \vars{i})} \wedge
+\neg \subs{\psi}{\rvars{i}}{\rvars{}}\\
+% init
+\initbmc(\vars{i}) & := &
+\bigwedge_{C \in \InitCells}{(\cellvar{i} = C) \wedge
+\subs{\CellLabelingFunction(C)}{\rvars{i}}{\rvars{}}
+}
+\\
+% trans
+\transbmc(\vars{i}, \vars{i+1}) & := &
+  \bigvee_{(C,C^+) \in \CellLabelingFunction}{
+    \edgebmc_{(C,C^+)}(\vars{i}, \vars{i+1})
+  } \\
+\edgebmc_{(C,C^+)}(\vars{i}, \vars{i+1}) & := &
+(\cellvar{i} = C) \wedge (\cellvar{i+1} = C^+) \wedge  \\
+&& \subs{\CellLabelingFunction(C)}{\rvars{i}}{\rvars{}} \wedge
+   \subs{\CellLabelingFunction(C^+)}{\rvars{i+1}}{\rvars{}} \wedge \\
+&& \subs{\subs{\EdgeLabelingFunction((C,C^+))}{\rvars{i}}{\rvars{}}}{\rvars{i+1}}{{\rvars{+}}} \\
+\end{eqnarray*}
+
+The formula
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \psi, k)$ is satisfiable
+if and only if there exists a path of length $k$.
+The procedure
+$\mathsf{BoundedModelCheck}(\RTSAbstraction{\epsilon}{\System}, \psi, k)$
+checks the satisfiability of the sequence of formulas 
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \psi, 0)$, 
+$\ldots$,
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \psi, k)$
+with a SMT solver, returning as soon as one of the formula is
+satisfiable (i.e. as soon as it found a path in
+$\RTSAbstraction{\epsilon}{\System}$).
+
+
+
+
+
+
+
+
+
 The PWA transition system is a finite location, infinite state
 transition system. As all the guards and transitions are affine, a
 bounded reachability query is equivalent to checking all
@@ -19,3 +110,8 @@ problem instance to achieve better efficiency~\cite{shoukry2017smc}.
 We now show how relational PWA abstractions can be viewed as PWA
 transition systems, and how the problem of falsification can
 be answered by a BMC query.
+
+
+% To clarify:
+%  - is there a maximum k that we look at? Where do we guarnatee that?
+%    
