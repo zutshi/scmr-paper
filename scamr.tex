@@ -42,6 +42,63 @@ $\UnsafeStates \subset \ContStates$ is a set of unsafe states.
 \end{itemize}
 
 
+The operation of $\RTSAbstraction{\epsilon}{\System}$ is described in
+terms of its configuration and its moves. A configuration is a pair
+$(C, \nu)$, where $C \in \Cells$, and $\nu$ is a valuation function
+assigning values in $\ContStates$ to the variable $\vx$.  The
+transition system starts in some cell $C \in \InitCells$.  The move
+function $\mu$ maps a configuration $(C,\nu)$ to the next
+configuration $(C',\nu')$, iff there is a transition $(C,C') \in
+\CellEdges$ such that:
+\begin{enumerate}
+\item
+There exists $\contState \in \ContStates$ such that
+$\quant_\epsilon(\contState) = C$ and exists $\contState' \in
+\ContStates$ such that $\quant_\epsilon(\contState') = C'$,
+and $\contState' = \simmap_\Delta(\contState, t, u)$,
+\item
+If $\CellLabelingFunction(C) =  e(\vx)$, and if
+$\CellLabelingFunction(C') = e'(\vx)$, then for $\nu(\vx) =
+\contState$ and $\nu(\vx') = \contState'$, the expressions
+$e(\nu(\vx))$ and $e'(\nu'(\vx))$ evaluate to true,
+\item
+If $\EdgeLabelingFunction((C,C'))$ = $(g(\vx), r(\vx,\vxp))$,
+for $\nu(\vx) = \contState$ and $\nu'(\vxp) = \contState'$,
+$g(\nu(\vx))$ and $r(\nu(\vx), \nu'(\vx))$ evaluate to true.
+\end{enumerate}
+
+\begin{example}
+Consider a system with the following two reachability relations
+discovered using simulations. The values of the inputs are irrelevant
+to this example, so we just assume it is some fixed constant $u$.
+Also, let $\Delta = 0.1$.
+\begin{eqnarray}
+\label{eq:transitions}
+(0.05, 0.1) & = & \simmap_\Delta((0.1, 0.1), 0, u), \\
+(1.35,1.15) & = & \simmap_\Delta((0.9, 0.8), 0.1, u).
+\end{eqnarray}
+
+Consider the following $\RTSAbstraction{\epsilon}{\System}$ where,
+$\Cells = \setof{C_1,C_2}$, $\vx = (x_1,x_2)$, $\InitCells = \setof{C_1}$,
+$\CellEdges = \setof{(C_1,C_1), (C_1, C_2)}$, and,
+\[
+\begin{array}{l}
+\CellLabelingFunction(C_1) = (0 \le x_1 < 1) \wedge (0 \le x_2 < 1), \\
+\CellLabelingFunction(C_2) = (1 \le x_1 < 2) \wedge (1 \le x_2 < 2), \\
+\EdgeLabelingFunction((C_1,C_1)) = (g_1,r_1), \text{ where, } \\
+\qquad g_1 = (0 \le x_1 < 0.5) \wedge (0 \le x_2 < 1), \\
+\qquad r_1 = (0 < x^+_1 - 0.5x_1 < 0.1) \wedge (0 < x^+_2 - x_2 < 0.001), \\
+\EdgeLabelingFunction((C_1,C_2)) = (g_2,r_2), \text{ where, } \\
+\qquad g_2 = (0.5 \le x_1 < 1) \wedge (0 \le x_2 < 1), \\
+\qquad r_2 = (0.4 < x^+_1 - x_1 < 0.5) \wedge (0.3 < x^+_2 - x_2 < 0.4). \\
+\end{array}
+\]
+
+Observe that the $\epsilon$-RTS is a valid abstraction of the given
+trajectory fragments in Eq.~\ref{eq:transitions}.
+\end{example}
+
+
 % % We define a PWA transition system $A$ as a tuple
 % % $\tupleof{\pLocs,\vx,\scrT, G, U, \pLocI,\Theta}$, where:
 % % \begin{itemize}[noitemsep, leftmargin= 1.5 em]
@@ -140,28 +197,7 @@ $\UnsafeStates \subset \ContStates$ is a set of unsafe states.
 
 % \begin{itemize}[noitemsep, leftmargin= 1.5 em]
 % =======
-The operation of $\RTSAbstraction{\epsilon}{\System}$ is described in
-terms of its configuration and its moves. A configuration is a pair
-$(C, \nu)$, where $C \in \Cells$, and $\nu$ is a valuation function
-assigning values in $\ContStates$ to the variable $\vx$.  The
-transition system starts in some cell $C \in \InitCells$.  The move
-function $\mu$ maps a configuration $(C,\nu)$ to the next
-configuration $(C',\nu')$, iff there is a transition $(C,C') \in
-\CellEdges$ such that:
-\begin{enumerate}
-\item
-There exists $\contState \in \ContStates$ such that
-$\quant_\epsilon(\contState) = C$ and exists $\contState' \in
-\ContStates$ such that $\quant_\epsilon(\contState') = C'$,
-and $\contState' = \simmap_\Delta(\contState, t, u)$,
-\item
-If $\CellLabelingFunction(C) =  e(\vx)$, and if
-$\CellLabelingFunction(C') = e'(\vx)$, then for $\nu(\vx) =
-\contState$ and $\nu(\vx') = \contState'$, the expressions
-$e(\nu(\vx))$ and $e'(\nu'(\vx))$ evaluate to true,
-\item
-If $\EdgeLabelingFunction((C,C'))$ = $(g(\vx), r(\vx,\vxp))$, 
-for $\nu(\vx) = \contState$ and $\nu'(\vxp) = \contState'$, 
+
 % for the $N$ tuples $(v,v')$ discovered by simulation, if $v' = Av
 % + B + \vec{\delta}$ represents the affine relation discovered using
 % linear regression, and if $h$ is the convex hull of all the $v$
@@ -456,40 +492,3 @@ for $\nu(\vx) = \contState$ and $\nu'(\vxp) = \contState'$,
 % %%  matrix $A$ (of an affine ODE). Separate abstractions are used for the
 % %%  case of linear systems with constant rate, real eigen values and
 % %%  complex eigenvalues.
-
-=======
-% If $\EdgeLabelingFunction((C,C'))$ = $(g(\vx), r(\vx,\vxp))$,
-% for $\nu(\vx) = \contState$ and $\nu'(\vxp) = \contState'$,
-$g(\nu(\vx))$ and $r(\nu(\vx), \nu'(\vx))$ evaluate to true.
-\end{enumerate}
-
-\begin{example}
-Consider a system with the following two reachability relations
-discovered using simulations. The values of the inputs are irrelevant
-to this example, so we just assume it is some fixed constant $u$.
-Also, let $\Delta = 0.1$.
-\begin{eqnarray}
-\label{eq:transitions}
-(0.05, 0.1) & = & \simmap_\Delta((0.1, 0.1), 0, u), \\
-(1.35,1.15) & = & \simmap_\Delta((0.9, 0.8), 0.1, u).
-\end{eqnarray}
-
-Consider the following $\RTSAbstraction{\epsilon}{\System}$ where,
-$\Cells = \setof{C_1,C_2}$, $\vx = (x_1,x_2)$, $\InitCells = \setof{C_1}$,
-$\CellEdges = \setof{(C_1,C_1), (C_1, C_2)}$, and,
-\[
-\begin{array}{l}
-\CellLabelingFunction(C_1) = (0 \le x_1 < 1) \wedge (0 \le x_2 < 1), \\
-\CellLabelingFunction(C_2) = (1 \le x_1 < 2) \wedge (1 \le x_2 < 2), \\
-\EdgeLabelingFunction((C_1,C_1)) = (g_1,r_1), \text{ where, } \\
-\qquad g_1 = (0 \le x_1 < 0.5) \wedge (0 \le x_2 < 1), \\
-\qquad r_1 = (0 < x^+_1 - 0.5x_1 < 0.1) \wedge (0 < x^+_2 - x_2 < 0.001), \\
-\EdgeLabelingFunction((C_1,C_2)) = (g_2,r_2), \text{ where, } \\
-\qquad g_2 = (0.5 \le x_1 < 1) \wedge (0 \le x_2 < 1), \\
-\qquad r_2 = (0.4 < x^+_1 - x_1 < 0.5) \wedge (0.3 < x^+_2 - x_2 < 0.4). \\
-\end{array}
-\]
-
-Observe that the $\epsilon$-RTS is a valid abstraction of the given
-trajectory fragments in Eq.~\ref{eq:transitions}.
-\end{example}
