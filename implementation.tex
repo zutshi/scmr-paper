@@ -71,6 +71,29 @@ model checker by requesting distinct counter-examples.
 % different discrete sequences or discrete trace sequences from the
 % model checker.
 
+\mypara{The search parameters} for PWA-Rel include the parameters of
+S3CAM: $N$, $\epsilon$ and $\Delta$. Additionally, they also include
+the maximum error budget $\delta_{max}$ for OLS and the maximum length
+of segmented trajectory for building $k$-relational models.  The
+effects of $N$, $\epsilon$ and $\Delta$ on S3CAM's performance were
+detailed in~\cite{zutshi2014multiple}. However, they also have an
+effect on relational modeling. A finer grid with small cells produces
+more accurate models than a coarser grid with large cells. Similarly,
+small time length trajectory segments result in more accurate
+modeling.
+
+%An increase in the number of samples can increases the
+%accuracy of regression.
+
+% \paragraph{Maximum Model Error ($\boldsymbol{\delta}_{\bold{max}}$) .}
+% Given a $\delta_{max}$, we keep increasing $k$ during the
+% $k$-relational modeling process till $\delta_i \le \delta_{max}$ is
+% satisfied. A $k_{max}$ is introduced to bound the longest
+% segmented trajectory which can be considered.
+
+% \paragraph{Bounded k relations ($\boldsymbol{k}_{\bold{max}}$.) }
+
+
 \subsection{Evaluation}
 
 We benchmarked our implementation and compared it with S3CAM.  The
@@ -156,52 +179,17 @@ system, which the current state of the art bounded model checkers
 (which use generic SMT solvers) can not handle under reasonable
 resources.
 
-% more scalable 
-\subsection{Search Parameters}
-
-The search parameters for PWA-Rel include the parameters of S3CAM:
-$N$, $\epsilon$ and $\Delta$. Additionally, they also include the
-maximum error budget $\delta_{max}$ for OLS and the maximum length of
-segmented trajectory for building $k$-relational models.
-
-The effects of $N$, $\epsilon$ and $\Delta$
-on S3CAM's performance were detailed in~\cite{zutshi2014multiple}. However, they also have an effect on
-relational modeling. A finer grid with small cells produces more
-accurate models than a coarser grid with large cells. Similarly,
-small time length trajectory segments result in more accurate
-modeling.
-%An increase in the number of samples can increases the
-%accuracy of regression.
-
-\paragraph{Maximum Model Error ($\boldsymbol{\delta}_{\bold{max}}$) .}
-Given a $\delta_{max}$, we keep increasing $k$ during the
-$k$-relational modeling process till $\delta_i \le \delta_{max}$ is
-satisfied. A $k_{max}$ is introduced to bound the longest
-segmented trajectory which can be considered.
-
-% \paragraph{Bounded k relations ($\boldsymbol{k}_{\bold{max}}$.) }
-
 \subsection{Reasons for Failure}
-The approach can fail to find a counter-example, even when it exists, in
-one of three ways.
 
-\begin{itemize}
-
-    \item \emph{S3CAM Fails}: No abstract counter-example is found by
-        S3CAM. We can remedy it by increasing search budgets and/or
-        restarting.
-
-    \item \emph{BMC Fails}: An abstract counter-example is found, but
-        the BMC fails to find a concrete counter-example in the PWA
-        relational model. The failure can be attributed to either (a)
-        a spurious abstract counter-examples or (b) a poorly estimated
-        model. The former can be addressed by restarting but the
-        latter requires that the maximum model error $\delta_{max}$ be
-        decreased.
-
-    \item \emph{Inaccurate PWA Modeling}: An abstract counter-example
-        is found, and it is successfully concretized in the PWA
-        relational model by the BMC. However, it is not reproducible
-        in the black box system. This happens when the PWA relational
-        model is not precise enough.
-\end{itemize}
+The approach can fail to find a counter-example, even when it exists,
+in one of three ways. As it is dependant on S3CAM to find abstract
+paths, it can fail when (a) S3CAM fails to find abstract
+counter-examples. We can remedy it by increasing search budgets and/or
+restarting. Even when abstract counter-examples are found, they may
+not be \emph{concretizable}. In such a case, the (b) BMC search fails.
+The failure can be attributed to either spurious abstract
+counter-examples or a poorly estimated model. The former can be
+addressed by restarting but the latter requires that the maximum model
+error $\delta_{max}$ be decreased. Finally, the (c) counter-example
+from the BMC might not be reproducible in the black box system. This
+happens if the relational model is not precise enough.
