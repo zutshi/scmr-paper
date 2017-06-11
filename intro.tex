@@ -1,49 +1,36 @@
-
-% Testing of hybrid systems is a complex task, due to the interaction
-% between discrete and continuous dynamics. Industrially developed
-% hybrid systems, with embedded software interacting with physical
-% components, are typically safety-critical. Thus, it is important to
-% guarantee that the systems adhere to functional and safety
-% specifications. Since the reachability problem for hybrid systems is
-% known to in general be undecidable, exhaustive exploration of the
-% state-space is intractable, and thus testing is an approach to attempt
-% to achieve system correctness. However, to guarantee safety and other
-% requirements, the testing procedures need to rely on a rigorous
-% theoretical foundation. In this special session aims to collect and
-% connect researchers, within academia as well as industry, working on
-% model-based testing of hybrid systems. The session calls for papers
-% proposing new theoretical research directions in the field, as well as
-% papers describing practical applications of model-based testing of
-% hybrid systems.
-
-
-Model-based development is rapidly becoming the preferred paradigm for
-developing embedded control software in an industrial context.  Tools
-like \SIMULINK are often used to create models of closed-loop
-dynamical systems, \ie, a plant model of the physical systems that we
-wish to control, and a model for the embedded controllers.  Automatic
-approaches for testing the safety and performance of such closed-loop
-systems is challenging, and current approaches focus mostly on guided
+Simulation-driven model-based development is rapidly becoming the
+preferred paradigm for developing embedded control software in an
+industrial context.  Tools like \SIMULINK are often used to create
+models of closed-loop dynamical systems, \ie, a plant model of the
+physical systems that we wish to control, and a model for the embedded
+controllers.  Automatic approaches for testing the safety and
+performance of such closed-loop systems largely focus on guided
 testing using numerical simulations
 \cite{annpureddy2011s,donze2010breach,deshmukh2015stochastic,dreossi2015efficient,akazaki}.
-On the other hand, theoretical research on hybrid and timed systems
-focusses on formal guarantees for restricted classes of dynamical
-systems such as hybrid automata where the system state evolves
-according to a vector field that is either constant, affine
-\cite{frehse2011spaceex}, or polynomial \cite{chen2015reachability}.
-In this paper, we propose an approach that leverages useful features
-from both kinds of techniques.
+On the other hand, a common approach taken in formal verification
+approaches for hybrid and timed systems is to model such closed-loop
+systems as restricted classes of dynamical systems such as those with
+constant, affine \cite{frehse2011spaceex}, or polynomial
+\cite{chen2015reachability} dynamics. Constructing such conservative
+abstractions of real-world closed-loop systems involves a difficult
+tradeoff between keeping the computed abstraction small in size but
+high in fidelity.
 
-We propose a two step process for finding violations of safety
-properties. In the first step, we learn a piece-wise affine (PWA) {\em
-relational} model from simulations of the dynamical system. In the
-second step, we leverage symbolic techniques to exhaustively analyze
-the model learned in the first phase. We remark that the approach we
-propose is neither sound nor complete: a violation found by our
-technique may not exist in the original system, and our technique may
-miss violations that exist in the original system. A fair question is:
-why is such a technique useful? There are two perspectives from which
-we can answer this question.
+In this paper, we wish to find inputs to the system and system initial
+conditions that falsify safety properties of effectively black-box
+systems, \ie, systems where the dynamics are highly complex, or not
+expressed in a closed-form. We thus investigate a falsification
+approach that operates on an on-the-fly abstraction of the system
+constructed by assuming that the system dynamics have a certain form.
+Our approach has two main steps: In the first step, we learn a
+piece-wise {\em relational model} from simulations of the given
+dynamical system. In the second step, we leverage symbolic techniques
+to exhaustively analyze the model learned in the first phase. We
+remark that the approach we propose is neither sound nor complete: a
+violation found by our technique may not exist in the original system,
+and our technique may miss violations that exist in the original
+system. A fair question is: why is such a technique useful? There are
+two perspectives from which we can answer this question.
 
 In many settings, we may not have a physics-based model derived from
 first principles, but may just have time-series data of the system
@@ -67,88 +54,68 @@ some of the aforementioned heavier data-driven modeling methods.
 Hence, we use a lighter flavor of data-driven modeling such as the one
 proposed for learning relational models from data
 \cite{zutshi2012timed,sankaranarayanan2011relational}. By learning a
-{\em PWA relational model}, \ie, essentially a PWA discrete-time
-dynamical system, we can use software analysis approaches such as
-bounded model checking assisted by SMT solvers and linear programming
-solvers.
+{\em kernelized relational model}, \ie, essentially a discrete-time
+dynamical system with a chosen form for the dynamics, we can use
+software analysis approaches such as bounded model checking assisted
+by SMT solvers and linear programming solvers.
 
-The other perspective for our technique is the context when we have an
-effectively black-box model, \ie, a model that has features such as
-nonlinearities, delays or look-up tables that make symbolic analysis
-rather challenging.  We note that the ultimate goal for our technique
-is to find violations of safety properties in the {\em actual embedded
-control system}, and not, per se, in the model. The aphorism
-attributed to mathematician George E.P. Box is quite apt for our
-context, and bears worth repeating,  ``all models are wrong, some
-models are useful.'' We can sidestep analyzing a highly complex model
-by approximating its behavior with a simpler relational model, which
-in turn can give us promising tests to run on the actual system. This
-gives our technique intrinsic value as a debugging tool.
-
-% In our previous work~\cite{zutshi2014multiple}, we analyzed systems by
-% restricting ourselves to their black box semantics. This enabled us to
-% reason about the state-space reachability of the system without a
-% direct analysis of its structure. Using a coarse abstraction which we
-% searched on-the-fly, we could observe the local dynamics as required.
-% This gave us an efficient procedure to find abstract counter-examples.
-% However, to concretized the counter-examples, a `closer look' or
-% refinement of the abstraction is required. The grid based state-space
-% abstraction was refined by splitting the relevant cells (abstract
-% states) into smaller ones. As noted previously, due to the curse of
-% dimensionality, such a uniform splitting is an expensive operation,
-% and can not scale to higher dimensions.
+The other perspective for our technique is that we are often faced
+with black-box models, where symbolic analysis is rather challenging.
+We note that the ultimate goal is to find violations of safety
+properties in the {\em actual embedded control system}, and not, per
+se, in the model. The aphorism attributed to mathematician George E.P.
+Box is quite apt for our context, and bears worth repeating,  ``all
+models are wrong, some models are useful.'' We can sidestep analyzing
+a highly complex model by approximating its behavior with a simpler
+relational model, which in turn can give us promising tests to run on
+the actual system. This gives our technique intrinsic value as a
+debugging tool.
 
 In \cite{zutshi2014multiple}, the authors investigate an on-the-fly
-abstraction technique that is close to the approach we propose.  Both
-approaches use an existential abstraction of the state-space of the
-hybrid dynamical system. The abstract model learned is a directed
-acyclic graph, where nodes represent regions of the state-space, and
-an edge between two regions indicates a transition between states in
-the regions.  A key difference in this work is that the model being
-learned in addition to being an existential graph-based abstraction is
-also a {\em relational} abstraction.  In other words, the approach
-presented here improves the existential abstraction by annotating the
-edges in the graph-based abstraction with affine relations between the
-source and destination states.  More specifically, we use linear
-regression to quantitatively estimate the discovered edges in the
-graph-based abstraction of the state-space. These linear maps
-approximate locally observed behaviors, and the resulting graph or the
-Piece-Wise Affine (PWA) relational model can be interpreted as an
-infinite state discrete transition system and model checked for time
-bounded safety properties. A counter-example if found, can indicate
-the presence of a violation in the system.  We then use this
-counter-example to guide the search towards a counter-example in the
-original system. 
+abstraction technique that is close to the approach we propose.  This
+approach use an existential abstraction of the state-space of a given
+hybrid dynamical system. The abstract model learned can be viewed as a
+discrete-time transition system, where states of the transition system
+are cells in a tiling-based abstraction, and an edge between two cells
+indicates a concrete transition between the states of the actual
+system contained in the cell.  A key difference in this paper is that
+the model being learned in addition to being such a transition system
+is that it is now enriched with labels on the states and transitions.
+These labels capture {\em relations} between source and destination
+states. Thus an edge between two cells can now represent the {\em
+guard} region within the cell where the source states lie, and the
+(symbolic) {\em update} relation between the destination and the
+source states.  The relations that we learn depend on user-specified
+{\em kernels}, \ie, if the user specifies that the relations should be
+linear, we can use techniques such as linear regression or convex hull
+computation to obtain the update and guard relations respectively.
+Other kernels such as polynomials can also be included.  The relations
+discovered approximate locally observed behaviors, and the resulting
+kernelized transition system can be interpreted as a symbolic,
+discrete labeled transition system. We can apply time-bounded model
+checking to find counterexamples to bounded safety properties on such
+a system. A counterexample if found, can indicate the presence of a
+violation in the system.  We can then use this counterexample to guide
+the search towards a violation in the original system. 
 
-We remark that our work focusses on building discrete PWA models, and
-is unrelated to work on analyzing dynamical systems that have PWA
-vector fields. Techniques to analyze PWA dynamical systems using
-bisimulation relations translate the system into a non-deterministic
-infinite state transition system, and use model checking approaches to
-verify them \cite{asarin2000approximate}. Related approaches using
-bisimulation relations \cite{pappas2003bisimilar,tabuada2006linear,
-yordanov2007model} have interesting parallels with the work presented
-here.
+We remark that our work focusses on building piecewise relational
+models, and is unrelated to work on analyzing dynamical systems that
+have piecewise-affine (PWA) vector fields. Techniques to analyze PWA
+dynamical systems using bisimulation relations translate the system
+into a non-deterministic infinite state transition system that is
+required to be an overapproximation of the original system and use
+model checking approaches to verify them \cite{asarin2000approximate}.
 
-%Furthermore, using linear programming, we can over-approximate the
-%neighbhourhood of the counter-example in the model.
+% Related approaches using bisimulation relations
+%\cite{pappas2003bisimilar,tabuada2006linear, yordanov2007model} have
+% interesting parallels with the work presented here.
 
-% In the conclusion, we discuss extensions to data driven
-% approaches (instead of simulator driven), where instead of a
-% simulator, a fixed set of data is provided as the behavioral
-% description of the system. Using a combination of relational modeling,
-% and program analysis we outline the future work for falsifying
-% properties of SDCS.
-% Bounded time behaviors are modeled
-% only one violation is being searched for
-% mention explicitly the relation between older cegar work
-
-The layout of the paper is as follows: In Section~\ref{sec:prelims},
-we introduce the basic steps to obtain a PWA relational model. In
-Section~\ref{sec:pwa-rel}, we explore the connection between the PWA
-relational model and previous graph-based abstraction techniques such
-as those in \cite{zutshi2014multiple}. We present extensions of
-relational modeling in Section~\ref{sec:rel-mod}, and present
-experimental validation of our technique on a few textbook examples of
-dynamical systems with hybrid and polynomial dynamics in
-Section~\ref{sec:res}.
+The layout of the paper is as follows: In Section~\ref{sec:scam}, we
+review the discrete-time on-the-fly transition system abstraction
+introduced by \cite{zutshi2014multiple}.  We show how to enrich this
+abstraction to kernelized transition systems in
+Section~\ref{sec:scamr}.  We show how such systems can be analyzed
+using symbolic bounded model checking in Sec.~\ref{sec:bmc}.  We
+present an approach to refine the relational transition systems in
+Sec.~\ref{sec:rel-mod}, and present experimental validation of our
+technique on a few examples systems in Section~\ref{sec:res}.
