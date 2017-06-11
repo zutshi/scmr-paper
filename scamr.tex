@@ -11,7 +11,7 @@ relational} transition system $\RTSAbstraction{\epsilon}{\System}$.
 \subsection{$\epsilon$-precision Relational Transition System}
 
 An $\epsilon$-precision Relational Transition System is a labeled
-transition system described by the tuple: 
+transition system described by the tuple:
 $(\Cells,\vx,\CellEdges,\InitCells,\CellLabelingFunction,
 \EdgeLabelingFunction,\exprs{\vx})$, where:
 
@@ -19,12 +19,12 @@ $(\Cells,\vx,\CellEdges,\InitCells,\CellLabelingFunction,
 \item
 $\Cells$ is a set of cells,
 \item
-$\vx$ is a variable that takes values in $\ContStates$, 
+$\vx$ is a variable that takes values in $\ContStates$,
 \item
 \item
-$\CellEdges$ is a finite subset of $\Cells \times \Cells$, 
+$\CellEdges$ is a finite subset of $\Cells \times \Cells$,
 \item
-$\InitCells$ is a set of intial cells, 
+$\InitCells$ is a set of intial cells,
 \item
 $\exprs{\vx}$ is a set of arbitrary computable expressions over the
 variable $\vx$,
@@ -50,9 +50,9 @@ $(g(\vx)>\mathbf{0}, r(\vx))$, where the {\em guard} $g(\vx)$ and the
 % \item
 % $\vx$ is a variable that takes values in $\reals^m$,
 % \item
-% $\scrT$ is a finite subset of $\pLocs \times G \times U \times G \times \pLocs$, 
+% $\scrT$ is a finite subset of $\pLocs \times G \times U \times G \times \pLocs$,
 % \item
-% $G$ is a set of conjunctions of affine predicates, 
+% $G$ is a set of conjunctions of affine predicates,
 % \item
 % $U$ is a set of affine relations,
 % \item
@@ -117,7 +117,7 @@ We how we can use the formal machinery of a PWA transition system $A$
 to approximate the behavior of a hybrid dynamical system $\System$
 defined by a simulator $\simulate^{\System}$~\footnote{Due to $f_\tau$
 being restricted to an affine form, we can only approximate general
-hybrid systems.}. 
+hybrid systems.}.
 
 
 %defines a set valued relation of the form $R:\setof{(\x,\x') \;|\; \x'
@@ -171,7 +171,7 @@ where $C$ is an $m \times n$ matrix and $\vd$ is $m \times 1$ matrix.
 % collection of affine transitions  and $\Theta$ is an affine predicate
 % over $\x\in\real^n$. The transition relation is then defined by
 % $\scrT$ with $n$ transition relations as follows
-% 
+%
 % \begin{equation}
 %     \scrT = \left\{
 %         \begin{array}{ll}
@@ -276,8 +276,18 @@ In statistics, linear regression is the problem of finding an affine
 function or \textit{predictor}, which can `best' summarize the
 relationship between the given set of observed input $\x$ and output
 $\x'$ vectors. The notion of `best' is formally captured using a loss
-function which can be non-linear. We use the commonly used loss
-function \textit{ordinary least squares} (OLS) for this presentation.
+function (which can be non-linear), resulting in different kinds of
+regression analysis including ridge, lasso, huber, generelized and
+many other regressions. For simplicity, we present the commonly used
+loss function \textit{ordinary least squares} (OLS) in the next
+section.
+~\footnote{The choice of regression analysis should ideally be based on the
+quality of data. As we assume the data (from the simulator) to be
+noise free, the affecte on result of the falsification search is
+minimal.
+Though it is important,  not central to the
+discussion as long as the learnt models  can be used to learn different
+models}.
 
 \mypara{Ordinary Least Squares (OLS)}
 For rest of the section, we elide the discrete mode from the hybrid
@@ -286,7 +296,7 @@ we can do this because of our assumption that the system is a
 switched-mode dynamical system.  Suppose we have $N$ tuples of the
 form $(\x,\x')$ in the reachability relation that we have explored,
 where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn an
-affine function described as 
+affine function described as
 \begin{equation}
 \label{eq:affinemap}
 \x' = A\x + B
@@ -299,11 +309,10 @@ the best fit}, the problem is over-determined: there are more
 equations than unknowns. Hence, a single affine function cannot be
 found which satisfies the equation \eqref{eq:affinemap}. Instead, we
 need to find the `best' choice for $\vec{a}$ and $b$. This choice is
-formally defined using a loss function. For the case of simple linear
-regression or OLS, the loss function is the sum of squares of the
-errors in prediction.  The task is then to determine $A$ and $B$, such
-that the least square error of the affine predictor is minimized for
-the given data set.
+formally defined using a loss function. For the case of OLS, the loss
+function is the sum of squares of the errors in prediction.  The task
+is then to determine $A$ and $B$, such that the least square error of
+the affine predictor is minimized for the given data set.
 
 \begin{equation}
     \operatornamewithlimits{argmin}_{A,B}\displaystyle\sum_{i=1}^{N}{\left(\x' - (A\x + B)\right)^2}
@@ -332,7 +341,7 @@ of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
 % where
 % $A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T
 % \end{bmatrix}$ and $\vb = \begin{bmatrix}b_1 \\ \vdots \\ b_n
-% \end{bmatrix}$. 
+% \end{bmatrix}$.
 
 We note that linear regression tools are often able to provide an
 $n\times 1$ vector $\vec{\delta}$ of error intervals, where the

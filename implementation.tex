@@ -1,30 +1,62 @@
 The presented technique was prototyped as a tool: PWA-Rel.  We
 compared it against S3CAM~\cite{zutshi2014multiple} on several
-academic benchmarks. Below, we present the details of the
-implementation and the benchmarks used.
+benchmarks. Below, we present the details of the implementation and
+the benchmarks used.
 
 \subsection{Implementation}
-PWA-Rel was implemented in Python. Its different parts comprised of
-the (a) abstraction graph generation, (b) regression analysis and (c)
-BMC. S3CAM was used to compute (a). To compute (b), OLS regression
-routines were used from Scikit-learn~\cite{pedregosa2011scikit}, a
-Python module for machine learning. Finally, the The bounded model
-checking (c) was done using the SAL model checker~\cite{SAL-SRI},
-which used Yices2~\cite{dutertre2014yices} as the SMT solver. A naive
-alternative linear programming (LP) based model checker, specific to
-the PWA relational abstractions was implemented utilizing PyGLPK.
-Specifically, each path of the graph $G^R$ was sent to the lp solver
-PyGLPK and checked for feasibility. If feasible, the checker returned
-a concrete counter-example.
 
-PWA-Rel uses S3CAM to discover the abstraction graph $G$, which is
-then filtered to remove the nodes from which error nodes are not
-reachable. In all our experiments we used $1$-relational modeling to
-create the transition system from $G$. This was determined to be a
-good trade-off between longer simulations and increase in precision,
-with respect to the mentioned benchmarks.
+PWA-Rel is implemented in Python. It uses S3CAM to generate the graph
+abstraction and regression routines from
+Scikit-learn~\cite{pedregosa2011scikit} to compute
+$\RTSAbstraction{\epsilon}{\System}$ of the given system $\System$.
+It then constructs relational abstraction and uses a bounded model
+checker to find a counter-example to the given property in
+$\RTSAbstraction{\epsilon}{\System}$. Finally, using simulations, it
+confirms if the counter-example is valid for $\System$, in which case
+a successfull falsification run is concluded.
 
-Using the BMC, we checked for the given safety property. If a concrete
+To check the transition system, PWA-Rel can either invoke symbolic
+bounded model checkers or explicit model checkers. For symbolic BMC,
+the off-the-shelf SAL modelchecker~\cite{SAL-SRI} is used. It is
+configured to encode the problem as a single query for a given depth
+$k$, where $k$ is the bound on the length of the counter-example. It
+was computed by the length of the abstract counter-examples found. SAL
+uses the SMT solver Yices2~\cite{dutertre2014yices} to solve the
+encoded SMT constraints.
+
+% Two symbolic BMC were tried to compare scalability; the off-the-shelf
+% SAL model checker~\cite{SAL-SRI} and SatExBMC. Both model checkers
+% were configured to encode the problem as a single query for the given
+% depth. SAL uses the SMT solver Yices2~\cite{dutertre2014yices}, while
+% SatExBMC uses SatEx~\cite{shoukry2017smc}. SatEx differs from Yices2
+% (and other sound SMT solvers) in two aspects, (a) it is a lazy SMT
+% solver and (b) uses approximate convex optimization routines (via
+% CPLEX). Although (b) makes it unsound, it is not a concern for our
+% falsification procedure as it is based off approximate models.
+
+Explicit model checking was implemented out using a naive DFS
+(depth-first-exploration) stratergy, wherein, each abstract path is
+enumerated and checked for feasibility using a an optimization
+routine. Intefaces to various solvers were implemented, including GLPK
+and Ipopt. If feasible, the returned concrete counter-example is
+simulated and checked for existance in $\System$. Also, PWA-Rel
+extracts the bounds on the initial parameters by formulating multiple
+optimization problems. The bounds can be regarded as an over-appr
+
+% If the existance check fails, multiple
+% parameter values can be sampled within the determined bounds to search
+% for counter-examples in the neighbhourhood of the returned concrete
+% counter-example.
+
+% PWA-Rel uses S3CAM to discover the abstraction graph $G$, which is
+% then filtered to remove the nodes from which error nodes are not
+% reachable. In all our experiments we used $1$-relational modeling to
+% create the transition system from $G$. This was determined to be a
+% good trade-off between longer simulations and increase in precision,
+% with respect to the mentioned benchmarks.
+% \todo{$1$-relational modeling was used}
+
+Using BMC, we checked for the given safety property. If a concrete
 trace was obtained, it was further checked for reproducibility by
 sampling and simulating its `neighborhood' with the $\simulate$
 function. We define `neighborhood' as the abstract states
@@ -40,19 +72,29 @@ model checker by requesting distinct counter-examples.
 % model checker.
 
 \subsection{Evaluation}
-We tabulate our preliminary evaluation in \tabref{res-rel}. We used
-the more difficult benchmarks described in \cite{zutshi2014multiple},
-including the Van der Pol oscillator, Brusselator, Lorenz attractor
-and the Navigation benchmark. PWA-Rel and S3CAM were tested $10$ times
-with different seeds and their running times were averaged. We tabulate
-both the total time taken by PWA-Rel+SAL and PWA-Rel+LP to compute the
-counter-example and compare against an implementation of S3CAM.
-Different abstraction parameters are used for S3CAM and PWA-Rel, due
-to the differences in which they operate. PWA-Rel requires a finer
-abstraction to begin with in order to minimize the modeling errors.
-On the other hand, a coarser abstraction as the initial abstraction is
-works better for S3CAM due to the expensive refinement procedure
-involved.
+
+We benchmarked our implementation and compared it with S3CAM.  The
+preliminary results are tabulated in~\tabref{res-rel}. We used few of
+the benchmarks described in \cite{zutshi2014multiple}, including the
+Van der Pol oscillator, Brusselator, Lorenz attractor and the
+Navigation benchmark. We also tried PWA-Rel on the insulin
+benchmark~\cite{chenformal} and lane change maneuver
+benchmark~\cite{althoff2012reachability}. PWA-Rel was compared with
+S3CAM by running both $10$ times with different seeds (as both use
+randomized algorithms), and their running times were averaged. PWA-Rel
+was evluated with both the symbolic BMC SAL (PWA-Rel+SAL) and the
+explicit BMC (PWA-Rel+OPT).  \todo{SatEx was also tried, but ...}. We
+tabulate both the total time taken by PWA-Rel+SAL and PWA-Rel+OPT to
+compute the counter-example and compare against an implementation of
+S3CAM.  Different abstraction parameters are used for S3CAM and
+PWA-Rel, due to the differences in which they operate. PWA-Rel
+requires a finer abstraction to begin with in order to minimize the
+modeling errors. On the other hand, a coarser abstraction as the
+initial abstraction works better for S3CAM due to the expensive
+refinement procedure involved.~\footnote{In all our experiments we
+used $1$-relational modeling to create the transition system from $G$.
+This was determined to be a good trade-off between longer simulations
+and increase in precision, with respect to the mentioned benchmarks.}
 
 \begin{table}[!htbp]
 \centering
