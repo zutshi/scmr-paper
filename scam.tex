@@ -152,7 +152,7 @@ initial cells.}{vdp-abs}
 We now describe $\epsilon$-TS abstraction using the Van der Pol
     oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
     generated using uniformly random samples are shown in
-    \figref{vdp-cont}. We want to check the property $P_3$:
+    \figref{vdp-abs}. We want to check the property $P_3$:
     $x_{unsafe}\in[-1,-6.5]$ and $y_{unsafe}\in[-0.7, -5.6]$, given
     the initial set indicated $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$.
     We consider the $\epsilon$-TS abstraction defined by the
@@ -166,22 +166,6 @@ We now describe $\epsilon$-TS abstraction using the Van der Pol
     initial cells.
 \end{example}
 
-\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
-abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
-initial cells.}{vdp-abs}
-
-\begin{example}[Van der Pol Oscillator]~\label{ex:vdp}
-We use the Van der Pol oscillator benchmark
-from~\cite{zutshi2014multiple} to demonstrate our falsification
-approach. We want to falsify property $P_3$, $x_{unsafe}\in[-1,
--6.5]$ and $y_{unsafe}\in[-0.7, -5.6]$, given the initial set
-indicated $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$. The abstraction
-is defined by $\epsilon=0.2$, which results in an evenly gridded
-state-space, where each cell is of size $0.2 \times 0.2$ units.
-$ScatterAndSimulate$ is then used to construct the abstraction,
-using $2$ samples per cell and the time step $\Delta = 0.1s$. The
-result is plotted in ~\figref{vdp-abs}.
-\end{example}
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
@@ -244,22 +228,6 @@ rather than increasing $\epsilon$.
 %
 \begin{example}
 \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{
-Abstract trajectories discovered by $\mathsf{ScatterAndSimulate}$. Each
-rectangle denotes a cell which is uniquely identified  by the
-tuple against it.
-%Cells and trajectory segments used by $1$-relational modeling.
-}{vdp-abs-paths}
-
-    Going back to the~\exref{vdp}, $\mathsf{ScatterAndSimulate}$ is able to
-    find several abstract trajectories as shown
-    in~\figref{vdp-abs-paths}. However, typically, the refinement by
-    increasing the quantization precision requires $4$ refinement
-    iterations and finally finds a concrete counter-example for
-    $\epsilon=0.125$.
-\end{example}
-=======
-\begin{example}
-\inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{
 Abstract trajectories discovered by $ScatterAndSimulate$. Each
     rectangle denotes a cell which is uniquely identified  by the
     tuple against it.
@@ -272,6 +240,3 @@ Going back to the~\exref{vdp}, $ScatterAndSimulate$ is able to find
     concrete counter-example for $\epsilon=0.125$.
 
 \end{example}
-
-
->>>>>>> 0f58819553f7787e85e6c62be5b8f736bde821e9
