@@ -219,6 +219,38 @@ or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
 
+\section{An Example: Van der Pol Oscillator}
+\inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
+Pol: continuous trajectories. Red and green boxes indicate unsafe and
+initial sets.}{vdp-cont}
+\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
+abstraction $\scr{H}(0.1)$. Red cells are unsafe cells and green cells are
+initial cells.}{vdp-abs}
+
+We now describe the presented technique using the Van der Pol
+oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
+generated using uniformly random samples are shown in
+\figref{vdp-cont}. We want to check the property $P_3$, indicated by
+the red box, given the initial set indicated by the green box. The
+abstraction is defined by $\quant_{0.2}(\x)$, which results in an
+evenly gridded state-space, where each cell is of size $0.2 \times
+0.2$ units.  Scatter-and-simulate is then used to construct the
+abstract graph $G$, using $2$ samples per cell and the time step
+$\Delta = 0.1s$. The complete process follows.
+
+\mypara{Abstract}: Assume an implicit abstraction using the quantization
+        function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
+    graph is $\scr{H}(\Delta=0.1)$.
+
+\mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
+    of cells (vertices) and the relations (edges) of the graph
+    $\scr{H}(0.1)$. Associate the set of generated trajectory
+    segments with their respective originating cells using a map $\ds:C
+        \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
+    abstraction is show in \figref{vdp-abs}. The red cells
+    are unsafe and green cells are initial cells.
+
+
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
 We remark that our abstraction is {\em neither an overapproximation
@@ -272,6 +304,12 @@ next section, we propose an alternative abstraction that enriches the
 basic abstraction proposed here by adding labels to the transitions.
 We can then perform refinement by enriching the transition relation,
 rather than increasing $\epsilon$.
+
+\section{An Example: Van der Pol Oscillator}
+\todo{takes four iterations}
+\inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{Cells and
+trajectory segments used by $1$-relational modeling.}{vdp-map}
+
 
 % The abstraction of the hybrid dynamical system is a partitioning of
 % the hybrid state space $\HybridStates$ into hyper-rectangles or cells
