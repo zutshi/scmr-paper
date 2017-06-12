@@ -1,44 +1,48 @@
-The approach in \cite{zutshi2014multiple} uses the forward simulation
-map to explore a fixed number of tuples in the reachability relation
-$\reach{t,\vu}$ specified by a user-provided budget.  In general, the
-budget required to adequately explore the transition space requires
-exploring an exponential (in the dimension of $\HybridStates$) number
-of such tuples. This can cause undue burden in terms of computation
+The $\mathsf{ScatterAndSimulate}$ procedure helps in constructing the
+$\epsilon$-TS abstraction using a user-specified budget of trajectory
+fragments (obtained using simulation).  In general, the budget
+required to adequately explore the transition space requires exploring
+a number of states that is exponential in the dimension of
+$\HybridStates$.  This can cause undue burden in terms of computation
 time as well as storage.  The central idea in this paper is to {\em
-summarize} several tuples as a single map obtained using parametric
-regression.  In other words, we can replace several ``proximal''
-tuples $(\vx,\vx')$ in $\reach{t,u}$ by a map $F$ of the form $\vx' =
-F(\vx, \vu) + \delta$, where $\delta$ is a worst-case error estimate. The
-form of $F$ depends on the kernel used for regression. For the special
-case of linear regression, the kernel is affine and the resulting map
-can be represented by a matrices $A$ and $B$ as $\vx' = A\vx + B\vu +
-\delta$.
+summarize} enrich the transitions in the $\epsilon$-TS abstraction
+using relations to obtain an $\epsilon$-RTS. 
+
+In other words, suppose there is an edge from cell $C$ to $C'$, and if
+$\vx \in C$ and $\vx' \in C'$, then we can consider all concrete
+trajectories that go from $C$ to $C'$, and use these to replace
+several ``proximal'' tuples $(\vx,\vxp)$ by a map $F$ of the form
+$\vxp = F(\vx, \vu) \pm \delta$, where $\delta$ is a worst-case error
+estimate. The form of $F$ depends on the basis function used for
+regression. We focus on linear regression with different basis
+functions such as affine and polynomial. For the special case of
+linear regression, the resulting update relation can be represented by
+matrices $A$ and $B$, \ie, $r(\vx,\vxp) = \setof{(\vx,\vxp) \mid |\vxp
+- (A\vx + B\vu)| < \delta}$.
 
 In statistics, parametric regression is the problem of finding the
 paremters of a function or \textit{predictor}, which can `best'
 summarize the relationship between the given set of observed input
-$\x$ and output $\x'$ vectors. The model or the kernel for the
-predictor is fixed beforehand and the paramters are searched for.  The
-notion of `best' is formally captured using a loss function which can
-be non-linear. We use the commonly used loss function \textit{ordinary
-least squares} (OLS) to fit affine and polynomial kernels of fixed
-degree.  ~\footnote{The choice of loss function and regression
-analysis affects the quality of the learnt models. As the procss of
-selecting an appropriate heuristic is not straightforward, we just use
-the simplest one.} OLS defines its loss function as the sum of squares
-of the errors in prediction. The task is then to determine the
-parameters, such that the least square error of the predictor is
-minimized for the given data set.
+$\x$ and output $\x'$ vectors. The basis functions used for the
+predictor are fixed beforehand and the paramters are searched for.
+The notion of `best' is formally captured using a loss function which
+can be non-linear. We use the commonly used loss function
+\textit{ordinary least squares} (OLS) to fit affine and polynomial
+kernels of fixed degree.  ~\footnote{The choice of loss function and
+regression analysis affects the quality of the learnt models. As the
+procss of selecting an appropriate heuristic is not straightforward,
+we just use the simplest one.} OLS defines its loss function as the
+sum of squares of the errors in prediction. The task is then to
+determine the parameters, such that the least square error of the
+predictor is minimized for the given data set.  The details on
+performing linear regressoin can be found in standard texts on
+learning and statistics~\cite{friedman2001elements}.
 
-For rest of the section, we elide the discrete mode from the hybrid
-state of the system, and only focus on the continuous state. Note that
-we can do this because of our assumption that the system is a
-switched-mode dynamical system.  Suppose we have $N$ tuples of the
-form $(\x,\x')$ in the reachability relation that we have explored,
-where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn a
-function described as $\x' = F(\vx, \vu)$.  The details can be found
-in standard texts on learning and
-statistics~\cite{friedman2001elements}.
+% Suppose we have $N$ tuples of the
+% form $(\vx,\vxp)$ in the reachability relation that we have explored,
+% where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn a
+% function described as $\x' = F(\vx, \vu)$.  
+
 
 % In this fashion, we can we can use OLS to approximate its trajectories
 % of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
@@ -48,27 +52,26 @@ We note that regression tools are often able to provide an
 $n\times 1$ vector $\vec{\delta}$ of error intervals, where the
 $i^{th}$ entry of the form $[{\delta_i}_{\min},{\delta_i}_{\max}]$
 indicates the best and worst possible error in computation of the
-$i^{th}$ state in $\x'$.
+in $\vxp_i$.
 
-The choice of kernels for the relational abstraction involves a
-tradeoff between computing precise local models and efficiency of the
-analysis of the resulting relational abstraction. Affine kernels are
-poor approximations for complex dynamics and will result in large
-errors, but they can be very efficiently analyzed in practice.  On the
-other hand, analysis of arbitrary non-linear functions is still not
-tractable. Hence, we restrict ourselves to affine and quadratic
-polynomial kernels.  Moreover, as we use a collection of relations to
-approximate the local behaviors (in state-space) of the system
-$\System$, we can often do away with simple kernels. This however,
-results in a piece wise approximation, as described in the next
-section.
+The choice of basis functions for constructing an $\epsilon$-RTS
+involves a tradeoff between computing precise local models and
+efficiency of the analysis of the resulting relational abstraction.
+Affine basis functions can be poor approximations for complex dynamics
+and can result in large errors, but they can be very efficiently
+analyzed in practice.  On the other hand, analysis of arbitrary
+non-linear functions is not generally tractable. We restrict ourselves
+to affine and quadratic polynomial basis functions.  Moreover, as we
+use a collection of relations to approximate the local behaviors (in
+state-space) of the system $\System$, we can often do so with simple
+basis functions. 
 
 \begin{example}
     For the~\exref{vdp}, for every abstract relation between two cells
     $C, C'$, linear regression analysis is performed on the respective
     set of trajectory segments, and the affine relation is computed.
-    \figref{vdp-abs-paths} shows the cells and the trajectory segments, which
-    are part of the data sets constructed using the $1$-relational
-    modeling. Against each cell, its unique identifier (integer
-    co-ordinate) is mentioned.
+    \figref{vdp-abs-paths} shows the cells and the trajectory
+    segments, which are part of the data sets constructed using the
+    $1$-relational modeling. Against each cell, its unique identifier
+    (integer co-ordinate) is mentioned.
 \end{example}
