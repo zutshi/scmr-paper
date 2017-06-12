@@ -508,17 +508,22 @@ in the same cells.
 
 \begin{algorithm}[t]
 \DontPrintSemicolon
-\caption{PWA-Rel\label{algo:pwa-rel}}
-\KwIn{$\System$, $\simmap_\Delta$, $\epsilon_0$ , Smallest Precision $\epsilonmin$}
-$\epsilon \assign \epsilon_0$ \;
-\While{$\epsilon \ge \epsilonmin$}{
-    $\TSAbstraction{\epsilon}{\System}$ $\assign$
-    $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
-    \nllabel{algoline:construct} \;
-    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\TSAbstraction{\epsilon}{\System}$)
-    \nllabel{algoline:bmc} \;
+\caption{PW-Rel\label{algo:pwa-rel}}
+\KwIn{$\System$, $\simmap_\Delta$, $\epsilon$ , regression kernel $F$}
+    $\TSAbstraction{\epsilon}{\System}$ $\assign$ $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$) \nllabel{algoline:construct} \;
+    $\RTSAbstraction{\epsilon}{\System}$ $\assign$
+    $\mathsf{k-RelationalAbstraction}$($\TSAbstraction{\epsilon}{\System},
+    F$) \nllabel{algoline:relabs} \;
+    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\RTSAbstraction{\epsilon}{\System}$) \nllabel{algoline:bmc} \;
     \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} }
-    \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION \nllabel{algoline:checkspurious} }
+    \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION
+    \nllabel{algoline:checkspurious} }
+\end{algorithm}
+
+\begin{algorithm}[t]
+\DontPrintSemicolon
+    \caption{$\mathsf{k-RelationalAbstraction}$\label{algo:relabs}}
+\While{$\epsilon \ge \epsilonmin$}{
     $\epsilon$ $\assign$ $\frac{\epsilon}{10}$ \nllabel{algoline:refine} \;
 }
 \end{algorithm}
