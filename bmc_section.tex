@@ -170,26 +170,25 @@ of abstract paths that must be visited) by learning conflict clauses.
 Van der Pol abstraction. Each edge corresponds to an affine map $F$
 and summarizes the transition relation.}{vdp-graph}
 \begin{example}
-    Coming back to~\exref{vdp}, \figref{vdp-graph} %and\tabref{vdp-pwa}
+    Coming back to~\exref{vdp}, \figref{vdp-graph}
     shows the abstract reachability graph with its transition
     relations. The relational maps are omitted for brevity.
     Note that self loops result when an observed trajectory
-    segment begins and ends in the same cell.
-    The graph $\scr{H}(0.1)$ can now be viewed as a
-    transition system $\tupleof{C,\x,\scrT,C_0,\HybridStates_0}$,
-    where $C \in vertices(\scr{H}(0.1))$ and $\x \in
-    \HybridStates$. A transition $\tau \in \scrT$ is of the form
-    $\tupleof{C, C',\rho_{\tau}}$, where $\rho_{\tau}(\x,\x')
-    \subseteq \setof{R_{(C,C')}(\x,\x') |( C,C') \in
-    edge(\scr{H}(0.1))}$.
+    segment begins and ends in the same cell. This graph can now be
+    model checked for counter-examples. Note that each path in the
+    graph corresponds to a conunction of affine constraints (when the
+    maps are affine). A counter-example exists if any of the
+    linear programs (paths) are feasible. The over all BMC problem
+    involves reasoning over disjunctions due to the presence of
+    multiple paths.
 
-\mypara{\emph{Check Counter-example}}: The infinite state (but finite location) transition system can
-    be model checked to find a concrete counter-example, which if
-    exists, can indicate the existence of a similar trace in the
-    original black-box system $\System$. The latter check is carried
-    out as before, using the numerical simulation function
-        $\simulate$~\footnote{For the given example, the model checker is unable to
-        find a counter-example.}.
+% \mypara{\emph{Check Counter-example}}: The infinite state (but finite location) transition system can
+%     be model checked to find a concrete counter-example, which if
+%     exists, can indicate the existence of a similar trace in the
+%     original black-box system $\System$. The latter check is carried
+%     out as before, using the numerical simulation function
+%         $\simulate$~\footnote{For the given example, the model checker is unable to
+%         find a counter-example.}.
 \end{example}
 
 
