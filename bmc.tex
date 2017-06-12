@@ -22,22 +22,6 @@ concluded. In all other cases the falsification results in an
 %         violations to safety properties.
 % \end{enumerate}
 
-\begin{algorithm}[t]
-\DontPrintSemicolon
-\caption{PWA-Rel\label{algo:pwa-rel}}
-\KwIn{$\System$, $\simmap_\Delta$, $\epsilon_0$ , Smallest Precision $\epsilonmin$}
-$\epsilon \assign \epsilon_0$ \;
-\While{$\epsilon \ge \epsilonmin$}{
-    $\TSAbstraction{\epsilon}{\System}$ $\assign$
-    $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
-    \nllabel{algoline:construct} \;
-    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\TSAbstraction{\epsilon}{\System}$)
-    \nllabel{algoline:bmc} \;
-    \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} }
-    \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION \nllabel{algoline:checkspurious} }
-    $\epsilon$ $\assign$ $\frac{\epsilon}{10}$ \nllabel{algoline:refine} \;
-}
-\end{algorithm}
 
 
 
