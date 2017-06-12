@@ -219,18 +219,15 @@ or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
 
+\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
+abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
+initial cells.}{vdp-abs}
 \begin{example}[Van der Pol Oscillator]~\label{ex:vdp}
-
 % \inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
 % Pol: continuous trajectories. Red and green boxes indicate unsafe and
 % initial sets.}{vdp-cont}
 %Simulations generated using uniformly random samples are shown in
 %    \figref{vdp-cont}.
-
-\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
-abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
-initial cells.}{vdp-abs}
-
 We use the Van der Pol oscillator benchmark
 from~\cite{zutshi2014multiple} to demonstrate our falsification
 approach. We want to falsify property $P_3$, $x_{unsafe}\in[-1,

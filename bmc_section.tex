@@ -166,16 +166,23 @@ On the other hand, the symbolic BMC implicitly exploits SMT solvers,
 that automatically prune the search space (and intuitively, also the number
 of abstract paths that must be visited) by learning conflict clauses.
 
-
-
+\inclfig[width=0.50\linewidth]{vdp_graph.pdf}{Enriched
+graph $G^R$. The affine maps $f$ for the transition relations are show
+in \tabref{vdp-pwa}.}{vdp-graph}
 \begin{example}
-\mypara{\emph{Model Check}}: The graph $\scr{H}(0.1)$ can now be viewed as a
+    Coming back to~\exref{vdp}, \figref{vdp-graph} %and\tabref{vdp-pwa}
+    shows the abstract reachability graph with its transition
+    relations. The relational maps are omitted for brevity.
+    Note that self loops result when an observed trajectory
+    segment begins and ends in the same cell.
+    The graph $\scr{H}(0.1)$ can now be viewed as a
     transition system $\tupleof{C,\x,\scrT,C_0,\HybridStates_0}$,
     where $C \in vertices(\scr{H}(0.1))$ and $\x \in
     \HybridStates$. A transition $\tau \in \scrT$ is of the form
     $\tupleof{C, C',\rho_{\tau}}$, where $\rho_{\tau}(\x,\x')
     \subseteq \setof{R_{(C,C')}(\x,\x') |( C,C') \in
     edge(\scr{H}(0.1))}$.
+
 \mypara{\emph{Check Counter-example}}: The infinite state (but finite location) transition system can
     be model checked to find a concrete counter-example, which if
     exists, can indicate the existence of a similar trace in the
@@ -183,11 +190,8 @@ of abstract paths that must be visited) by learning conflict clauses.
     out as before, using the numerical simulation function
         $\simulate$~\footnote{For the given example, the model checker is unable to
         find a counter-example.}.
-
-\inclfig[width=0.50\linewidth]{vdp_graph.pdf}{Enriched
-graph $G^R$. The affine maps $f$ for the transition relations are show
-in \tabref{vdp-pwa}.}{vdp-graph}
 \end{example}
+
 
 %% Temporal properties of PWA transitions systems can be checked using
 %% off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason

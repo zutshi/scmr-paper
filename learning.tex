@@ -39,11 +39,7 @@ we can do this because of our assumption that the system is a
 switched-mode dynamical system.  Suppose we have $N$ tuples of the
 form $(\x,\x')$ in the reachability relation that we have explored,
 where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn an
-affine function described as
-\begin{equation}
-\label{eq:affinemap}
-\x' = A\x + B
-\end{equation}
+affine function described as $\x' = A\x + B$.
 Here, $A$ is a $n\times n$ matrix, and $B$ is a $n\times 1$ matrix.
 The details can be found in standard texts on learning and
 statistics~\cite{friedman2001elements}.
@@ -64,6 +60,24 @@ functions. Hence, we use a collection of affine maps to approximate
 the local behaviors (in state-space) of the system $\System$. This
 results in a piece wise approximation, as described in the next
 section.
+
+\begin{example}
+    For the~\exref{vdp}, for every abstract relation between two cells
+    $C, C'$, linear regression analysis is performed on the respective
+    set of trajectory segments, and the affine relation is computed.
+    \figref{vdp-abs-paths} shows the cells and the trajectory segments, which
+    are part of the data sets constructed using the $1$-relational
+    modeling. Against each cell, its unique identifier (integer
+    co-ordinate) is mentioned.
+    %Finally, \figref{vdp-graph} %and\tabref{vdp-pwa}
+    %show the enriched graph $G^R$ with its transition
+    %relations. Note that self loops result when an observed trajectory
+    %segment has its $start$ and $end$ states in the same cell.
+\end{example}
+    %$R_{C,C'}(\x,\x')$ between $\x
+    %\in C$ and $\x' \in C'$ s.t., $\text{edge} (C,C') \in
+    %\scr{H}(0.1)$. Annotate each edge in the graph $\scr{H}(0.1)$ with
+    %the respective relation.
 
 % \begin{equation}
 %     \operatornamewithlimits{argmin}_{A,B}\displaystyle\sum_{i=1}^{N}{\left(\x' - (A\x + B)\right)^2}
@@ -186,19 +200,3 @@ section.
 %%  case of linear systems with constant rate, real eigen values and
 %%  complex eigenvalues.
 
-\begin{example}
-    For the~\exref{vdp}, for each cell $C$, regression
-    analysis is performed on the respective set of trajectory segments $D(C)$, and
-    compute a set of affine relations $R_{C,C'}(\x,\x')$ between $\x
-    \in C$ and $\x' \in C'$ s.t., $\text{edge} (C,C') \in
-    \scr{H}(0.1)$. Annotate each edge in the graph $\scr{H}(0.1)$ with
-    the respective relation.
-
-    \figref{vdp-abs-paths} shows the cells and the trajectory segments, which
-    are part of the data sets constructed using the $1$-relational
-    modeling. Against each cell, its unique identifier (integer
-    co-ordinate) is mentioned.  Finally, \figref{vdp-graph} and
-    \tabref{vdp-pwa} show the enriched graph $G^R$ with its transition
-    relations. Note that self loops result when an observed trajectory
-    segment has its $start$ and $end$ states in the same cell.
-\end{example}
