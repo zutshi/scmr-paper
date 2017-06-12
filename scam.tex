@@ -219,7 +219,7 @@ or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
 
-\begin{example}[Van der Pol Oscillator]
+\begin{example}[Van der Pol Oscillator]~\label{ex:vdp}
 
 % \inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
 % Pol: continuous trajectories. Red and green boxes indicate unsafe and
@@ -305,10 +305,17 @@ basic abstraction proposed here by adding labels to the transitions.
 We can then perform refinement by enriching the transition relation,
 rather than increasing $\epsilon$.
 
-\section{An Example: Van der Pol Oscillator}
-\todo{takes four iterations}
+\begin{example}
 \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{Cells and
-trajectory segments used by $1$-relational modeling.}{vdp-map}
+trajectory segments used by $1$-relational modeling.}{vdp-abs-paths}
+
+Going back to the example~\exref{vdp}, $ScatterAndSimulate$ is able to
+    find several abstract trajectories as shown
+    in~\figref{vdp-abs-paths}. However, typically, the refinement by
+    increasing the quantization precision requires $4$ refinement
+    iterations and finally finds a concrete counter-example for
+    $\epsilon=0.125$.
+\end{example}
 
 
 % The abstraction of the hybrid dynamical system is a partitioning of

@@ -166,13 +166,9 @@ On the other hand, the symbolic BMC implicitly exploits SMT solvers,
 that automatically prune the search space (and intuitively, also the number 
 of abstract paths that must be visited) by learning conflict clauses.
 
-\todo{Tell that we use a DFS in the implementation section}
 
 
-
-\section{An Example: Van der Pol Oscillator}
-
-
+\begin{example}
 \mypara{\emph{Model Check}}: The graph $\scr{H}(0.1)$ can now be viewed as a
     transition system $\tupleof{C,\x,\scrT,C_0,\HybridStates_0}$,
     where $C \in vertices(\scr{H}(0.1))$ and $\x \in
@@ -191,7 +187,7 @@ of abstract paths that must be visited) by learning conflict clauses.
 \inclfig[width=0.50\linewidth]{vdp_graph.pdf}{Enriched
 graph $G^R$. The affine maps $f$ for the transition relations are show
 in \tabref{vdp-pwa}.}{vdp-graph}
-
+\end{example}
 
 %% Temporal properties of PWA transitions systems can be checked using
 %% off-the-shelf model checkers like SAL~\cite{SAL-SRI}, which can reason
