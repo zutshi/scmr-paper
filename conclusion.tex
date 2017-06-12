@@ -3,14 +3,14 @@ We have presented a model based methodology to find falsifications in
 black box dynamical systems. Combining the ideas from abstraction
 based search~\cite{zutshi2014multiple} with relational
 abstractions~\cite{sankaranarayanan2011relational}, we proposed
-$k$-relational modeling to compute PWA relational abstractions. Simple
+$k$-relational modeling to compute piecewise relational abstractions. Simple
 linear regression was used to estimate the local dynamics of the
 trajectory segments and compute relational models which were then
 interpreted as infinite state discrete transition system. These were
 model checked for safety violations using an off-the-shelf bounded
 model checkers and a naive linear programming based specialized model
 checker for comparison. Finally, the ideas were implemented as a tool
-chain: PWA-Rel and its performance was demonstrated on a few
+chain: PW-Rel and its performance was demonstrated on a few
 benchmarks.
 
 %\todo{memory required: pre-simulated data}
@@ -81,7 +81,7 @@ benchmarks.
 % Finally, we would like to mention that our approach is `simulation'
 % driven. It can be easily modified to be `data driven', by working with
 % a fixed set of data. Given a data set, we then need to automatically
-% find a good abstraction and a high fidelity PWA transition system
+% find a good abstraction and a high fidelity PW transition system
 % using which, we can summarize the black box hybrid dynamical system.
 % Apart from model checking the transition system, one can extend it to
 % the analysis of SDCS. More specifically, by combining the transition

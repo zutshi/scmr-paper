@@ -1,11 +1,11 @@
-The presented technique was prototyped as a tool: PWA-Rel.  We
+The presented technique was prototyped as a tool: PW-Rel.  We
 compared it against S3CAM~\cite{zutshi2014multiple} on several
 benchmarks. Below, we present the details of the implementation and
 the benchmarks used.
 
 \subsection{Implementation}
 
-PWA-Rel is implemented in Python. It uses S3CAM to generate the graph
+PW-Rel is implemented in Python. It uses S3CAM to generate the graph
 abstraction and regression routines from
 Scikit-learn~\cite{pedregosa2011scikit} to compute
 $\RTSAbstraction{\epsilon}{\System}$ of the given system $\System$.
@@ -15,7 +15,7 @@ $\RTSAbstraction{\epsilon}{\System}$. Finally, using simulations, it
 confirms if the counter-example is valid for $\System$, in which case
 a successfull falsification run is concluded.
 
-To check the transition system, PWA-Rel can either invoke symbolic
+To check the transition system, PW-Rel can either invoke symbolic
 bounded model checkers or explicit model checkers. For symbolic BMC,
 the off-the-shelf SAL modelchecker~\cite{SAL-SRI} is used. It is
 configured to encode the problem as a single query for a given depth
@@ -39,7 +39,7 @@ Explicit model checking was implemented out using a naive DFS
 enumerated and checked for feasibility using a an optimization
 routine. Intefaces to various solvers were implemented, including GLPK
 and Ipopt. If feasible, the returned concrete counter-example is
-simulated and checked for existance in $\System$. Also, PWA-Rel
+simulated and checked for existance in $\System$. Also, PW-Rel
 extracts the bounds on the initial parameters by formulating multiple
 optimization problems. The bounds can be regarded as an over-appr
 
@@ -48,7 +48,7 @@ optimization problems. The bounds can be regarded as an over-appr
 % for counter-examples in the neighbhourhood of the returned concrete
 % counter-example.
 
-% PWA-Rel uses S3CAM to discover the abstraction graph $G$, which is
+% PW-Rel uses S3CAM to discover the abstraction graph $G$, which is
 % then filtered to remove the nodes from which error nodes are not
 % reachable. In all our experiments we used $1$-relational modeling to
 % create the transition system from $G$. This was determined to be a
@@ -71,7 +71,7 @@ model checker by requesting distinct counter-examples.
 % different discrete sequences or discrete trace sequences from the
 % model checker.
 
-\mypara{The search parameters} for PWA-Rel include the parameters of
+\mypara{The search parameters} for PW-Rel include the parameters of
 S3CAM: $N$, $\epsilon$ and $\Delta$. Additionally, they also include
 the maximum error budget $\delta_{max}$ for OLS and the maximum length
 of segmented trajectory for building $k$-relational models.  The
@@ -100,18 +100,18 @@ We benchmarked our implementation and compared it with S3CAM.  The
 preliminary results are tabulated in~\tabref{res-rel}. We used few of
 the benchmarks described in \cite{zutshi2014multiple}, including the
 Van der Pol oscillator, Brusselator, Lorenz attractor and the
-Navigation benchmark. We also tried PWA-Rel on the insulin
+Navigation benchmark. We also tried PW-Rel on the insulin
 benchmark~\cite{chenformal} and lane change maneuver
-benchmark~\cite{althoff2012reachability}. PWA-Rel was compared with
+benchmark~\cite{althoff2012reachability}. PW-Rel was compared with
 S3CAM by running both $10$ times with different seeds (as both use
-randomized algorithms), and their running times were averaged. PWA-Rel
-was evluated with both the symbolic BMC SAL (PWA-Rel+SAL) and the
-explicit BMC (PWA-Rel+OPT). %\todo{SatEx was also tried, but ...}.
+randomized algorithms), and their running times were averaged. PW-Rel
+was evluated with both the symbolic BMC SAL (PW-Rel+SAL) and the
+explicit BMC (PW-Rel+OPT). %\todo{SatEx was also tried, but ...}.
 We
-tabulate both the total time taken by PWA-Rel+SAL and PWA-Rel+OPT to
+tabulate both the total time taken by PW-Rel+SAL and PW-Rel+OPT to
 compute the counter-example and compare against an implementation of
 S3CAM.  Different abstraction parameters are used for S3CAM and
-PWA-Rel, due to the differences in which they operate. PWA-Rel
+PW-Rel, due to the differences in which they operate. PW-Rel
 requires a finer abstraction to begin with in order to minimize the
 modeling errors. On the other hand, a coarser abstraction as the
 initial abstraction works better for S3CAM due to the expensive
@@ -124,12 +124,12 @@ and increase in precision, with respect to the mentioned benchmarks.}
 \centering
 \caption{Avg. timings for benchmarks. The \textbf{BMC} column lists
 time taken by the BMC engine. The total time in minutes is noted under
-    \textbf{PWA-Rel+BMC solver} and \textbf{S3CAM}.
+    \textbf{PW-Rel+BMC solver} and \textbf{S3CAM}.
 $TO$ signifies time $>5hr$, after which the search was killed.}
 \label{tab:res-rel}
 \begin{tabular}{@{}llll@{}}
 \toprule
-    Benchmark & PWA Rel + SAL & PWA Rel + LP & S3CAM\\
+    Benchmark & PW-Rel + SAL & PW-Rel + LP & S3CAM\\
 \midrule
     Van der Pol ($\prop_3$)   &$0.2$ & $0.34$ & $0.4$\\
     Brusselator               &$0.06$ & $0.06$ & $0.03$\\
@@ -155,19 +155,19 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 
 In all the runs of both the tools, a falsification was found. As
 apparent form the results, the performance is comparable in all
-benchmarks, but the last benchmark: bouncing ball. PWA-Rel determines
-it to be `safe' as it can not find a counter-example in the PWA
-relational model. Also, apparent from the results, PWA-Rel is more
-scalable with the LP solver and PWA-Rel+SAL times out on most of the
+benchmarks, but the last benchmark: bouncing ball. PW-Rel determines
+it to be `safe' as it can not find a counter-example in the piecewise
+relational model. Also, apparent from the results, PW-Rel is more
+scalable with the LP solver and PW-Rel+SAL times out on most of the
 benchmarks.  The efficiency of the naive LP solver can be attributed
 to the careful selection of the parameters for S3CAM (finer
 abstraction), resulting in a small subgraph which can be easily
 explored for all paths.
 
 However, we need to explore more benchmarks to be conclusive on the
-tool's performance on real world examples. Although, PWA-Rel does not
+tool's performance on real world examples. Although, PW-Rel does not
 need to refine like S3CAM, and should be more scalable, it is still
-constrained by the accuracy of the PWA models. Its performance can be
+constrained by the accuracy of the piecewise models. Its performance can be
 explained by the difficulty in finding an abstraction
 ($\quant_\epsilon$), which is fine enough, to result in accurate
 prediction models but coarse enough to be manageable by the current
