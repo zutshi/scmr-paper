@@ -233,13 +233,14 @@ initial cells.}{vdp-abs}
 
 We use the Van der Pol oscillator benchmark
 from~\cite{zutshi2014multiple} to demonstrate our falsification
-approach. We want to check the property $P_3$, indicated by
-the red box, given the initial set indicated by the green box. The
-abstraction is defined by $\epsilon=0.2$, which results in an
-evenly gridded state-space, where each cell is of size $0.2 \times
-0.2$ units. $ScatterAndSimulate$ is then used to construct the
-abstraction, using $2$ samples per cell and the time step
-$\Delta = 0.1s$. The result is plotted in ~\figref{vdp-abs}.
+approach. We want to falsify property $P_3$, $x_{unsafe}\in[-1,
+-6.5]$ and $y_{unsafe}\in[-0.7, -5.6]$, given the initial set
+indicated $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$. The abstraction
+is defined by $\epsilon=0.2$, which results in an evenly gridded
+state-space, where each cell is of size $0.2 \times 0.2$ units.
+$ScatterAndSimulate$ is then used to construct the abstraction,
+using $2$ samples per cell and the time step $\Delta = 0.1s$. The
+result is plotted in ~\figref{vdp-abs}.
 
 % \mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
 %     of cells (vertices) and the relations (edges) of the graph
