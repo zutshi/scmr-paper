@@ -15,7 +15,7 @@ that the system is {\em effectively black-box}. This means that we do not
 assume any knowledge of the symbolic dynamical equations describing the
 system behavior. We do assume some knowledge of the system: an {\em
 interface} view, in which we are allowed to stimulate the system with
-inputs and observe its outputs. 
+inputs and observe its outputs.
 
 We formally define a system-under-test $\System$ as a tuple $(\Modes,
 \ContStates, \InitModes, \InitStates, \Delta, \Inputs, \Outputs)$.
@@ -32,7 +32,7 @@ from the set $\Inputs$ which is a compact subset of $\Reals^m$. We
 assume that the system has $\ell \le n$ outputs, where $\Outputs
 \subseteq \HybridStates$. In this paper, we assume that the entire
 system state is observable.  In other words, $\Outputs =
-\HybridStates$. 
+\HybridStates$.
 
 Finally, we restrict our attention to switched-mode systems, \ie, those in
 which there is a partition imposed on $\ContStates$, and there is a
@@ -53,7 +53,7 @@ such as Simulink\textregistered.} $\simmap_\Delta$, which is a
 function that maps a time $t$, the current state of the system, and an
 input value in $\Inputs$ to the state of the system at time
 $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
-\times \Inputs \times \Reals^{\ge 0}$ to $\ContStates$. 
+\times \Inputs \times \Reals^{\ge 0}$ to $\ContStates$.
 
 % Let $\inputsignal$ = $(t_0, u_0)$, $\ldots$, $(t_N,u_N)$ be a
 % timed-sequence of inputs, where $t_0 = 0$, and for all $i > 0$, $t_i -
@@ -63,7 +63,7 @@ $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
 % $\simmap_\Delta(\initstate, \mathbf{u}) = \contState_N$, if for all $i
 % \in [0,N-1]$, $\simmap_\Delta(\contState_i, u_i,t_i) =
 % \contState_{i+1}$.
-% 
+%
 % An alternative view of the forward simulation-map is as a
 % parameterized reachability relation $\reach_\Delta{t,u} \subseteq
 % \ContStates \times \ContStates$ defined as below:
@@ -71,8 +71,8 @@ $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
 % (\contState,\contState') \in \reach_\Delta{t,u}\text{ iff } \contState' = \simmap_\Delta(\contState,t,u).
 % \]
 
-% inputs modeling an embedded control system. 
-% 
+% inputs modeling an embedded control system.
+%
 % we assume that the hybrid system is effectively a switched-mode
 % dynamical system, \ie, the mode of the system is completely determined
 % by its state.  An input to $\System$ is assumed to be a time-bounded
@@ -110,7 +110,7 @@ $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
 %     \end{equation}
 % \end{definition}
 
-% \mypara{System Assumptions:} 
+% \mypara{System Assumptions:}
 % We require that $\System$ can always be
 % simulated forward in time with deterministic results. This in turn
 % requires existence and uniqueness of trajectories over a finite time
@@ -130,7 +130,7 @@ $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
 % From here on, we drop the subscript $\System$ whenever it is clear
 % from the context. Also, to ease the presentation, we conflate the
 % inputs with the state and denote them by $\vx$.
-% 
+%
 \subsection{$\epsilon$-precision Transition System Abstraction}
 
 We now show how we can abstract a hybrid dynamical system $\System$
@@ -205,13 +205,13 @@ Add a set of random samples from the initial set of states to a queue
 \item
 Pop the head of the queue (say state $\contState$ at time $t$), identify
 the corresponding cell by applying $\quant_\epsilon$, and add it to
-$\Cells$. 
+$\Cells$.
 \item
 Obtain $\contState' = \simmap_\Delta(\contState, t, u)$. Obtain a a
 fixed number of states in the neighborhood of $\contState'$, and add
-$\contState'$ and these states (all time $t+\Delta$) to the queue. 
+$\contState'$ and these states (all time $t+\Delta$) to the queue.
 \item
-Add an edge between the cells corresponding to $\contState$ and 
+Add an edge between the cells corresponding to $\contState$ and
 $\contState'$.
 \item
 Go to step 2 till either the queue is empty or a fixed number of cells
@@ -219,37 +219,36 @@ or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
 
-\section{An Example: Van der Pol Oscillator}
-\inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
-Pol: continuous trajectories. Red and green boxes indicate unsafe and
-initial sets.}{vdp-cont}
+\begin{example}[Van der Pol Oscillator]
+
+% \inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
+% Pol: continuous trajectories. Red and green boxes indicate unsafe and
+% initial sets.}{vdp-cont}
+%Simulations generated using uniformly random samples are shown in
+%    \figref{vdp-cont}.
+
 \inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
-abstraction $\scr{H}(0.1)$. Red cells are unsafe cells and green cells are
+abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
 initial cells.}{vdp-abs}
 
-We now describe the presented technique using the Van der Pol
-oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
-generated using uniformly random samples are shown in
-\figref{vdp-cont}. We want to check the property $P_3$, indicated by
+We use the Van der Pol oscillator benchmark
+from~\cite{zutshi2014multiple} to demonstrate our falsification
+approach. We want to check the property $P_3$, indicated by
 the red box, given the initial set indicated by the green box. The
-abstraction is defined by $\quant_{0.2}(\x)$, which results in an
+abstraction is defined by $\epsilon=0.2$, which results in an
 evenly gridded state-space, where each cell is of size $0.2 \times
-0.2$ units.  Scatter-and-simulate is then used to construct the
-abstract graph $G$, using $2$ samples per cell and the time step
-$\Delta = 0.1s$. The complete process follows.
+0.2$ units. $ScatterAndSimulate$ is then used to construct the
+abstraction, using $2$ samples per cell and the time step
+$\Delta = 0.1s$. The result is plotted in ~\figref{vdp-abs}.
 
-\mypara{Abstract}: Assume an implicit abstraction using the quantization
-        function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
-    graph is $\scr{H}(\Delta=0.1)$.
-
-\mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
-    of cells (vertices) and the relations (edges) of the graph
-    $\scr{H}(0.1)$. Associate the set of generated trajectory
-    segments with their respective originating cells using a map $\ds:C
-        \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
-    abstraction is show in \figref{vdp-abs}. The red cells
-    are unsafe and green cells are initial cells.
-
+% \mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
+%     of cells (vertices) and the relations (edges) of the graph
+%     $\scr{H}(0.1)$. Associate the set of generated trajectory
+%     segments with their respective originating cells using a map $\ds:C
+%         \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
+%     abstraction is show in \figref{vdp-abs}. The red cells
+%     are unsafe and green cells are initial cells.
+\end{example}
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
@@ -279,18 +278,18 @@ concretization step by performing an actual simulation of the system
 trajectories are found to be spurious, then
 $\TSAbstraction{\epsilon}{\System}$ can be refined, basically by
 increasing $\epsilon$.
-\begin{algorithm}[t] 
+\begin{algorithm}[t]
 \DontPrintSemicolon
 \caption{CEGAR for $\TSAbstraction{\epsilon}{\System}$\label{algo:s3camBMC}}
-\KwIn{$\System$, $\simmap_\Delta$, $\epsilon_0$ , Smallest Precision $\epsilonmin$} 
+\KwIn{$\System$, $\simmap_\Delta$, $\epsilon_0$ , Smallest Precision $\epsilonmin$}
 $\epsilon \assign \epsilon_0$ \;
 \While{$\epsilon \ge \epsilonmin$}{
-    $\TSAbstraction{\epsilon}{\System}$ $\assign$ 
+    $\TSAbstraction{\epsilon}{\System}$ $\assign$
     $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
     \nllabel{algoline:construct} \;
-    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\TSAbstraction{\epsilon}{\System}$) 
+    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\TSAbstraction{\epsilon}{\System}$)
     \nllabel{algoline:bmc} \;
-    \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} } 
+    \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} }
     \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION \nllabel{algoline:checkspurious} }
     $\epsilon$ $\assign$ $\frac{\epsilon}{10}$ \nllabel{algoline:refine} \;
 }
@@ -325,7 +324,7 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 % time $(\Delta\in\Reals^+)$ relations obtained using
 % $\simulate(\vx)$~\footnote{$\simulate(\vx)$ is a fixed
 % parameterization of $\mathsc{sim}(\vx,\Delta)$}.
-% 
+%
 % % Such an abstraction is defined by partitioning the
 % % state-space of the system using a grid, and hence each abstract state
 % % is a hyper-rectangle. The relations between abstract states are
@@ -335,11 +334,11 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 % % (CEx) can be cast as finding a path in the graph. Such an abstraction
 % % can be explored on-the-fly by enumerating the abstract relations
 % % between a pair of states.
-% 
+%
 % \mypara{A discrete abstraction} over a continuous space uses relations
 % to describe the behavior of the system over time. Such relations
 % abstract the underlying dense-time trajectories of the given dynamical
-% system to a transition system. 
+% system to a transition system.
 
 
 % relation between concrete states, and concrete
@@ -390,9 +389,9 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 %     $(\vx) \in C$, $(\vx') \in C'$ such that $\vx' =
 %     \simulate(\vx)$.
 % \end{definition}
-% 
-% 
-% 
+%
+%
+%
 % Given a numerical simulator $\simulate$ and an initial abstraction
 % defined by a quantization function $\quant_\epsilon$ and a time step
 % $\Delta$, we pick samples and simulate them to explore the abstraction
@@ -411,7 +410,7 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 % H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
 
 
-% As 
+% As
 % Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
 % we use the generated trajectories to learn quantitative models
 % describing the local behavior of the system. These models are defined
@@ -421,9 +420,9 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 
 
 % \subsection{Enriched Abstraction}
-% 
+%
 % \input{figs/segtraj_rel_enriched.tex}
-% 
+%
 % Recall that each edge $(C,C')$ of the graph $G$ denotes an observed
 % trajectory between the respective cells. The graph abstraction $G$
 % only states that there exists a state $\x \in C$ from which the system
@@ -436,7 +435,7 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 % non-deterministically describe relations between $\x \in C$ and $\x'
 % \in C'$. This is illustrated in \figref{enriched-edge}.
 % %(compare with \figref{segtraj}).
-% 
+%
 % The enriched graph $G^R$ captures the underlying local forward
 % dynamics describing the evolution of the system in each abstract
 % state. We represent the dynamics using an affine model with an
@@ -449,12 +448,12 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 % $\simulate$, additional trajectories (or data) can be generated if
 % required. The data can be separated into a training set and testing
 % set to compute the map and the error respectively.
-% 
+%
 % %The latter case can be explored if
 % %the symbolic dynamics of the system are known. A tool like
 % %\flowstar~\cite{chen2013flow} can be used to find the reachable set
 % %map.
-% 
+%
 % Observe that $G^R$, a directed reachability graph, is rich enough to
 % search for concrete behaviors in the system. We call it a time
 % parameterized PWA relational abstraction. It can be interpreted as an
@@ -468,22 +467,22 @@ trajectory segments used by $1$-relational modeling.}{vdp-map}
 % \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
 % \tikzstyle{block} = [rectangle, minimum width=0.5cm, minimum height=1.0cm, text centered, draw=black, align=center]%, fill=blue!25]
 % \begin{tikzpicture}[scale=1.0, on grid, auto]
-% 
+%
 %     \node (G) at (-4,0) {$G$};
 %     \node (GR) at (0,0) {$G^R$};
 %     \node (CEX) at (4,0) {$CEx$};
-% 
+%
 %     \node (enrich) [block] at (-2, 0) {\scriptsize Enrich using \\ \scriptsize affine  maps};
 %     \node (BMC) [block] at (2, 0) {\scriptsize Find CEx \\ \scriptsize using BMC};
-% 
+%
 %     %\node[align=center] at (0, 0) {\scriptsize Enrich using \\ \scriptsize Regression \\ \scriptsize(OLS)};
-% 
+%
 %     %\draw [line] (-2.0,-0.5) rectangle (-1.0,0.5);
 %     \draw[arw] (G.east) -- (enrich.west);
 %     \draw[arw] (enrich.east) -- (GR.west);
 %     \draw[arw] (GR.east) -- (BMC.west);
 %     \draw[arw] (BMC.east) -- (CEX.west);
-% 
+%
 % \end{tikzpicture}
 % \end{center}
 % \vspace*{-.3cm}
