@@ -153,16 +153,16 @@ $\varphi$.
 We now give an example of a specific kind of transition system
 abstraction that we can build given $\System$ and the simulation map
 $\simmap_\Delta$.  We call the transition system an
-$\epsilon$-precision transition system and denote it by
-$\TSAbstraction{\epsilon}{\System}$.  Let $\epsilon  = 10^{-k}$, for
-some positive integer $k$.  We define a quantization function
-$\quant_\epsilon$ that maps a state $\contState$ in $\ContStates$ to
-$10^{-k}*\lfloor \contState*10^k \rfloor$. This transformation
-essentially truncates the decimal representation of the numeric value
-of the state $\state$ to at most $k$ digits after the decimal point.
-This function induces an equivalence relation $\contState_i
-\equiv_\epsilon \contState_j$ iff $\quant_\epsilon(\contState_i) =
-\quant_\epsilon(\contState_j)$.
+$\epsilon$-precision transition system ($\epsilon$-TS for short) and
+denote it by $\TSAbstraction{\epsilon}{\System}$.  Let $\epsilon  =
+10^{-k}$, for some positive integer $k$.  We define a quantization
+function $\quant_\epsilon$ that maps a state $\contState$ in
+$\ContStates$ to $10^{-k}*\lfloor \contState*10^k \rfloor$. This
+transformation essentially truncates the decimal representation of the
+numeric value of the state $\state$ to at most $k$ digits after the
+decimal point.  This function induces an equivalence relation
+$\contState_i \equiv_\epsilon \contState_j$ iff
+$\quant_\epsilon(\contState_i) = \quant_\epsilon(\contState_j)$.
 
 Using the equivalence relation $\equiv_\epsilon$, we can now define
 the tuple $(\Cells, \CellEdges, \CellLabelingFunction)$ for
@@ -193,12 +193,12 @@ In what follows, we review the procedure
 $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
 from \cite{zutshi2014multiple} that, given the $\System$, the forward
 simulation map $\simmap_\Delta$, and a precision $\epsilon$ creates an
-$\epsilon$-precision transition system abstraction of $\System$.  The
+$\epsilon$-TS abstraction of $\System$.  The
 essence of the procedure is a breadth-first exploration of
 $\ContStates$ to build $\TSAbstraction{\epsilon}{\System}$ =
 $(\Cells,\CellEdges,\CellLabelingFunction)$. It consists of the
 following steps:
-\begin{enumerate}
+\begin{enumerate}[leftmargin=1em,labelsep=1em,label={\arabic*.}]
 \item
 Add a set of random samples from the initial set of states to a queue
 (\ie some states $\contState$ at time $0$).
@@ -218,6 +218,36 @@ Go to step 2 till either the queue is empty or a fixed number of cells
 or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
+<<<<<<< HEAD
+\inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
+Pol: continuous trajectories. Red and green boxes indicate unsafe and
+initial sets.}{vdp-cont}
+\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
+$0.2$-TS abstraction. Red cells are unsafe cells and green cells are
+initial cells.}{vdp-abs}
+
+\begin{example} 
+We now describe $\epsilon$-TS abstraction using the Van der Pol
+oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
+generated using uniformly random samples are shown in
+\figref{vdp-cont}. We want to check the property $P_3$, indicated by
+the red box, given the initial set indicated by the green box. We
+consider the $\epsilon$-TS abstraction defined by the quantization
+function $\quant_{0.2}(\x)$. This results in an evenly gridded
+state-space, where each cell is of size $0.2 \times 0.2$ units.
+$\mathsf{ScatterAndSimulate}$ is then used to construct
+$\TSAbstraction{0.2}{\System}$ using $2$ samples per cell and a time
+step of $\Delta = 0.1s$. The complete process follows.  The
+$\epsilon$-TS abstraction thus discovered is shown in
+\figref{vdp-abs}. The red cells are unsafe and green cells are initial
+cells.
+\end{example}
+
+% \mypara{Abstract}: Assume an implicit abstraction using the quantization
+%         function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
+%     graph is $\scr{H}(\Delta=0.1)$.
+% 
+=======
 
 \inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
 abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
@@ -239,22 +269,28 @@ $ScatterAndSimulate$ is then used to construct the abstraction,
 using $2$ samples per cell and the time step $\Delta = 0.1s$. The
 result is plotted in ~\figref{vdp-abs}.
 
+>>>>>>> 616701974fe662da2ab3292e6ba97f90cf8bcb1c
 % \mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
 %     of cells (vertices) and the relations (edges) of the graph
 %     $\scr{H}(0.1)$. Associate the set of generated trajectory
 %     segments with their respective originating cells using a map $\ds:C
+<<<<<<< HEAD
+%         \mapsto \setof{(\vx,\vx') |\vx \in C}$. 
+        
+
+=======
 %         \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
 %     abstraction is show in \figref{vdp-abs}. The red cells
 %     are unsafe and green cells are initial cells.
 \end{example}
+>>>>>>> 616701974fe662da2ab3292e6ba97f90cf8bcb1c
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
 We remark that our abstraction is {\em neither an overapproximation
 nor an underapproximation} of the continuous-time continuous-space
-reachability relation between states. The purpose of the
-$\epsilon$-precision transition system is to discover falsifying
-trajectories. This can be accomplished by
+reachability relation between states. The purpose of the $\epsilon$-TS
+is to discover falsifying trajectories. This can be accomplished by
 Algorithm~\ref{algo:s3camBMC} that uses CounterExample-Guided
 Abstraction and Refinement (CEGAR).
 
@@ -302,6 +338,13 @@ basic abstraction proposed here by adding labels to the transitions.
 We can then perform refinement by enriching the transition relation,
 rather than increasing $\epsilon$.
 
+<<<<<<< HEAD
+% \subsection{Example: Van der Pol Oscillator}
+% \todo{Takes 4 iterations}
+% \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{Refinement of
+% $\epsilon$-TS.}{vdp-map}
+% 
+=======
 \begin{example}
 \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{
 Abstract trajectories discovered by $ScatterAndSimulate$. Each
@@ -499,3 +542,4 @@ Going back to the~\exref{vdp}, $ScatterAndSimulate$ is able to
 % \label{fig:overview}
 % \vspace*{-.3cm}
 % \end{figure}
+>>>>>>> 616701974fe662da2ab3292e6ba97f90cf8bcb1c
