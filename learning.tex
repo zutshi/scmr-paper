@@ -186,3 +186,19 @@ section.
 %%  case of linear systems with constant rate, real eigen values and
 %%  complex eigenvalues.
 
+\begin{example}
+    For the~\exref{vdp}, for each cell $C$, regression
+    analysis is performed on the respective set of trajectory segments $D(C)$, and
+    compute a set of affine relations $R_{C,C'}(\x,\x')$ between $\x
+    \in C$ and $\x' \in C'$ s.t., $\text{edge} (C,C') \in
+    \scr{H}(0.1)$. Annotate each edge in the graph $\scr{H}(0.1)$ with
+    the respective relation.
+
+    \figref{vdp-abs-paths} shows the cells and the trajectory segments, which
+    are part of the data sets constructed using the $1$-relational
+    modeling. Against each cell, its unique identifier (integer
+    co-ordinate) is mentioned.  Finally, \figref{vdp-graph} and
+    \tabref{vdp-pwa} show the enriched graph $G^R$ with its transition
+    relations. Note that self loops result when an observed trajectory
+    segment has its $start$ and $end$ states in the same cell.
+\end{example}

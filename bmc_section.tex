@@ -78,13 +78,13 @@ as the quantifier-free first-order logic formula:
 
 The formula
 $\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, k)$ is satisfiable
-if and only if there exists a path of length $k$ in 
+if and only if there exists a path of length $k$ in
 $\RTSAbstraction{\epsilon}{\System}$ that reaches a state in $\unsafebmc$.
 
 The procedure
 $\mathsf{BoundedModelCheck}(\RTSAbstraction{\epsilon}{\System})$
-checks the satisfiability of the sequence of formulas 
-$\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, 0)$, 
+checks the satisfiability of the sequence of formulas
+$\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, 0)$,
 $\ldots$,
 $\encbmc(\RTSAbstraction{\epsilon}{\System}, \unsafebmc, k)$
 with an SMT solver, returning a path $\Pi$ of
@@ -101,7 +101,7 @@ Such paths may not be real paths of
 $\RTSAbstraction{\epsilon}{\System}$, since they may not satisfy the
 conditions imposed by the labeling function $\CellLabelingFunction$
 and the relation $\EdgeLabelingFunction$, and hence the algorithm must
-further check, for each abstract path $\abspathbmc$, if there exists a 
+further check, for each abstract path $\abspathbmc$, if there exists a
 concrete path $\Pi$ of
 $\RTSAbstraction{\epsilon}{\System}$.
 
@@ -142,7 +142,7 @@ This can be proved by showing that each model of the formula
 $\concbmc{\abspathbmc}$  ``corresponds'' to a path of
 $\RTSAbstraction{\epsilon}{\System}$, and each path of
 $\RTSAbstraction{\epsilon}{\System}$ that traverses the sequence of
-cells of $\abspathbmc$ ``corresponds'' to a model of 
+cells of $\abspathbmc$ ``corresponds'' to a model of
 $\concbmc{\abspathbmc}$.
 
 The explicit path exploration enumerates all the abstract
@@ -151,19 +151,19 @@ be a depth-first search (DFS) or a breadth-first search (BFS). As soon
 as a $\abspathbmc$ is found, the algorithm checks the satisfiability
 of $\concbmc{\abspathbmc}$. If  $\concbmc{\abspathbmc}$ is
 satisfiable, the algorithm returns a concrete path $\Pi$, otherwise
-the search continues trying to enumerate another abstract path. 
+the search continues trying to enumerate another abstract path.
 The search is guaranteed to terminate, since the length of the
 abstract paths is at most $k$.
 
 On the one hand, a possible advantage of the explicit enumeration (2)
 over the symbolic BMC (1) is that it can explore the paths of
 $\RTSAbstraction{\epsilon}{\System}$ using different heuristics
-(e.g. a DFS instead of a BFS), and  
+(e.g. a DFS instead of a BFS), and
 that each concretization check is ``simpler'' than a single symbolic
 BMC query.
 %
 On the other hand, the symbolic BMC implicitly exploits SMT solvers,
-that automatically prune the search space (and intuitively, also the number 
+that automatically prune the search space (and intuitively, also the number
 of abstract paths that must be visited) by learning conflict clauses.
 
 
@@ -200,4 +200,4 @@ in \tabref{vdp-pwa}.}{vdp-graph}
 
 % To clarify:
 %  - is there a maximum k that we look at? Where do we guarnatee that?
-%    
+%
