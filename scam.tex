@@ -218,10 +218,9 @@ Go to step 2 till either the queue is empty or a fixed number of cells
 or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
-<<<<<<< HEAD
-\inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
-Pol: continuous trajectories. Red and green boxes indicate unsafe and
-initial sets.}{vdp-cont}
+% \inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
+% Pol: continuous trajectories. Red and green boxes indicate unsafe and
+% initial sets.}{vdp-cont}
 \inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
 $0.2$-TS abstraction. Red cells are unsafe cells and green cells are
 initial cells.}{vdp-abs}
@@ -243,50 +242,25 @@ $\epsilon$-TS abstraction thus discovered is shown in
 cells.
 \end{example}
 
-% \mypara{Abstract}: Assume an implicit abstraction using the quantization
-%         function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
-%     graph is $\scr{H}(\Delta=0.1)$.
+
+% \begin{example}[Van der Pol Oscillator]~\label{ex:vdp}
 % 
-=======
-
-\begin{example}[Van der Pol Oscillator]~\label{ex:vdp}
-
-% \inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
-% Pol: continuous trajectories. Red and green boxes indicate unsafe and
-% initial sets.}{vdp-cont}
-%Simulations generated using uniformly random samples are shown in
-%    \figref{vdp-cont}.
-
-\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
-abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
-initial cells.}{vdp-abs}
-
-We use the Van der Pol oscillator benchmark
-from~\cite{zutshi2014multiple} to demonstrate our falsification
-approach. We want to falsify property $P_3$, $x_{unsafe}\in[-1,
--6.5]$ and $y_{unsafe}\in[-0.7, -5.6]$, given the initial set
-indicated $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$. The abstraction
-is defined by $\epsilon=0.2$, which results in an evenly gridded
-state-space, where each cell is of size $0.2 \times 0.2$ units.
-$ScatterAndSimulate$ is then used to construct the abstraction,
-using $2$ samples per cell and the time step $\Delta = 0.1s$. The
-result is plotted in ~\figref{vdp-abs}.
-
->>>>>>> 616701974fe662da2ab3292e6ba97f90cf8bcb1c
-% \mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
-%     of cells (vertices) and the relations (edges) of the graph
-%     $\scr{H}(0.1)$. Associate the set of generated trajectory
-%     segments with their respective originating cells using a map $\ds:C
-<<<<<<< HEAD
-%         \mapsto \setof{(\vx,\vx') |\vx \in C}$. 
-        
-
-=======
-%         \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
-%     abstraction is show in \figref{vdp-abs}. The red cells
-%     are unsafe and green cells are initial cells.
-\end{example}
->>>>>>> 616701974fe662da2ab3292e6ba97f90cf8bcb1c
+% \inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
+% abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
+% initial cells.}{vdp-abs}
+% 
+% We use the Van der Pol oscillator benchmark
+% from~\cite{zutshi2014multiple} to demonstrate our falsification
+% approach. We want to falsify property $P_3$, $x_{unsafe}\in[-1, -6.5]$
+% and $y_{unsafe}\in[-0.7, -5.6]$, given the initial set indicated
+% $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$. The abstraction is defined by
+% $\epsilon=0.2$, which results in an evenly gridded state-space, where
+% each cell is of size $0.2 \times 0.2$ units.  $ScatterAndSimulate$ is
+% then used to construct the abstraction, using $2$ samples per cell and
+% the time step $\Delta = 0.1s$. The result is plotted in
+% ~\figref{vdp-abs}.
+% 
+% \end{example}
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
