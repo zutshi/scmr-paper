@@ -493,9 +493,9 @@ basically a $1$-relational $\epsilon$-RTS.
 \vspace*{-.3cm}
 \end{figure}
 
-\todo{Add ref to the refinement construction algo from previous
-section, and show where it varies. Explain how the look-ahead cells
-are used in the construction.}
+% \todo{Add ref to the refinement construction algo from previous
+% section, and show where it varies. Explain how the look-ahead cells
+% are used in the construction.}
 
 Basically, the transition updates in a $(k,\epsilon)$-RTS are
 constructed by using $k$ step trajectories which have their end points
@@ -522,7 +522,7 @@ in the same cells.
 
 \begin{algorithm}[t]
 \DontPrintSemicolon
-    \caption{$\mathsf{k-RelationalAbstraction}$\label{algo:relabs}}
+    \caption{$\mathsf{k-RelationalAbstraction}$\label{algo:krelabs}}
 \While{$\epsilon \ge \epsilonmin$}{
     $\epsilon$ $\assign$ $\frac{\epsilon}{10}$ \nllabel{algoline:refine} \;
 }

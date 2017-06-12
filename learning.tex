@@ -6,7 +6,7 @@ a number of states that is exponential in the dimension of
 $\HybridStates$.  This can cause undue burden in terms of computation
 time as well as storage.  The central idea in this paper is to {\em
 summarize} enrich the transitions in the $\epsilon$-TS abstraction
-using relations to obtain an $\epsilon$-RTS. 
+using relations to obtain an $\epsilon$-RTS.
 
 In other words, suppose there is an edge from cell $C$ to $C'$, and if
 $\vx \in C$ and $\vx' \in C'$, then we can consider all concrete
@@ -41,7 +41,7 @@ learning and statistics~\cite{friedman2001elements}.
 % Suppose we have $N$ tuples of the
 % form $(\vx,\vxp)$ in the reachability relation that we have explored,
 % where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn a
-% function described as $\x' = F(\vx, \vu)$.  
+% function described as $\x' = F(\vx, \vu)$.
 
 
 % In this fashion, we can we can use OLS to approximate its trajectories
@@ -54,6 +54,22 @@ $i^{th}$ entry of the form $[{\delta_i}_{\min},{\delta_i}_{\max}]$
 indicates the best and worst possible error in computation of the
 in $\vxp_i$.
 
+\begin{algorithm}[t]
+\DontPrintSemicolon
+\caption{RelationalAbstraction\label{algo:relabs}}
+\KwIn{$\simmap_\Delta$, $\TSAbstraction{\epsilon}{\System}$, regression kernel $F$}
+\KwOut{$\RTSAbstraction{\epsilon}{\System}$}
+    \ForAll{$(\Cells,\Cells') \in \CellEdges$}{
+    $r(\vx,\vx^+) = \mathsf{Regression(F, \simmap_\Delta, (\Cells,\Cells'))}$ \;
+    %$\RTSAbstraction{\epsilon}{\System}$ $\assign$
+    %$\mathsf{k-RelationalAbstraction}$($\TSAbstraction{\epsilon}{\System}, F$) \nllabel{algoline:relabs} \;
+    %$\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\RTSAbstraction{\epsilon}{\System}$) \nllabel{algoline:bmc} \;
+    %\lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} }
+    %\lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION
+    %\nllabel{algoline:checkspurious} }
+}
+\end{algorithm}
+
 The choice of basis functions for constructing an $\epsilon$-RTS
 involves a tradeoff between computing precise local models and
 efficiency of the analysis of the resulting relational abstraction.
@@ -64,7 +80,7 @@ non-linear functions is not generally tractable. We restrict ourselves
 to affine and quadratic polynomial basis functions.  Moreover, as we
 use a collection of relations to approximate the local behaviors (in
 state-space) of the system $\System$, we can often do so with simple
-basis functions. 
+basis functions.
 
 \begin{example}
     For the~\exref{vdp}, for every abstract relation between two cells
