@@ -153,16 +153,16 @@ $\varphi$.
 We now give an example of a specific kind of transition system
 abstraction that we can build given $\System$ and the simulation map
 $\simmap_\Delta$.  We call the transition system an
-$\epsilon$-precision transition system and denote it by
-$\TSAbstraction{\epsilon}{\System}$.  Let $\epsilon  = 10^{-k}$, for
-some positive integer $k$.  We define a quantization function
-$\quant_\epsilon$ that maps a state $\contState$ in $\ContStates$ to
-$10^{-k}*\lfloor \contState*10^k \rfloor$. This transformation
-essentially truncates the decimal representation of the numeric value
-of the state $\state$ to at most $k$ digits after the decimal point.
-This function induces an equivalence relation $\contState_i
-\equiv_\epsilon \contState_j$ iff $\quant_\epsilon(\contState_i) =
-\quant_\epsilon(\contState_j)$.
+$\epsilon$-precision transition system ($\epsilon$-TS for short) and
+denote it by $\TSAbstraction{\epsilon}{\System}$.  Let $\epsilon  =
+10^{-k}$, for some positive integer $k$.  We define a quantization
+function $\quant_\epsilon$ that maps a state $\contState$ in
+$\ContStates$ to $10^{-k}*\lfloor \contState*10^k \rfloor$. This
+transformation essentially truncates the decimal representation of the
+numeric value of the state $\state$ to at most $k$ digits after the
+decimal point.  This function induces an equivalence relation
+$\contState_i \equiv_\epsilon \contState_j$ iff
+$\quant_\epsilon(\contState_i) = \quant_\epsilon(\contState_j)$.
 
 Using the equivalence relation $\equiv_\epsilon$, we can now define
 the tuple $(\Cells, \CellEdges, \CellLabelingFunction)$ for
@@ -193,12 +193,12 @@ In what follows, we review the procedure
 $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$)
 from \cite{zutshi2014multiple} that, given the $\System$, the forward
 simulation map $\simmap_\Delta$, and a precision $\epsilon$ creates an
-$\epsilon$-precision transition system abstraction of $\System$.  The
+$\epsilon$-TS abstraction of $\System$.  The
 essence of the procedure is a breadth-first exploration of
 $\ContStates$ to build $\TSAbstraction{\epsilon}{\System}$ =
 $(\Cells,\CellEdges,\CellLabelingFunction)$. It consists of the
 following steps:
-\begin{enumerate}
+\begin{enumerate}[leftmargin=1em,labelsep=1em,label={\arabic*.}]
 \item
 Add a set of random samples from the initial set of states to a queue
 (\ie some states $\contState$ at time $0$).
@@ -218,46 +218,48 @@ Go to step 2 till either the queue is empty or a fixed number of cells
 or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \end{enumerate}
 
-
-\section{An Example: Van der Pol Oscillator}
 \inclfig[width=0.95\linewidth]{vdp_cont_traces.pdf}{Van der
 Pol: continuous trajectories. Red and green boxes indicate unsafe and
 initial sets.}{vdp-cont}
 \inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
-abstraction $\scr{H}(0.1)$. Red cells are unsafe cells and green cells are
+$0.2$-TS abstraction. Red cells are unsafe cells and green cells are
 initial cells.}{vdp-abs}
 
-We now describe the presented technique using the Van der Pol
+\begin{example} 
+We now describe $\epsilon$-TS abstraction using the Van der Pol
 oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
 generated using uniformly random samples are shown in
 \figref{vdp-cont}. We want to check the property $P_3$, indicated by
-the red box, given the initial set indicated by the green box. The
-abstraction is defined by $\quant_{0.2}(\x)$, which results in an
-evenly gridded state-space, where each cell is of size $0.2 \times
-0.2$ units.  Scatter-and-simulate is then used to construct the
-abstract graph $G$, using $2$ samples per cell and the time step
-$\Delta = 0.1s$. The complete process follows.
+the red box, given the initial set indicated by the green box. We
+consider the $\epsilon$-TS abstraction defined by the quantization
+function $\quant_{0.2}(\x)$. This results in an evenly gridded
+state-space, where each cell is of size $0.2 \times 0.2$ units.
+$\mathsf{ScatterAndSimulate}$ is then used to construct
+$\TSAbstraction{0.2}{\System}$ using $2$ samples per cell and a time
+step of $\Delta = 0.1s$. The complete process follows.  The
+$\epsilon$-TS abstraction thus discovered is shown in
+\figref{vdp-abs}. The red cells are unsafe and green cells are initial
+cells.
+\end{example}
 
-\mypara{Abstract}: Assume an implicit abstraction using the quantization
-        function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
-    graph is $\scr{H}(\Delta=0.1)$.
-
-\mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
-    of cells (vertices) and the relations (edges) of the graph
-    $\scr{H}(0.1)$. Associate the set of generated trajectory
-    segments with their respective originating cells using a map $\ds:C
-        \mapsto \setof{(\vx,\vx') |\vx \in C}$. The discovered
-    abstraction is show in \figref{vdp-abs}. The red cells
-    are unsafe and green cells are initial cells.
+% \mypara{Abstract}: Assume an implicit abstraction using the quantization
+%         function $\quant_{\epsilon=0.2}(\x)$. The corresponding reachability
+%     graph is $\scr{H}(\Delta=0.1)$.
+% 
+% \mypara{Discover}: Using scatter-and-simulate, enumerate a finite number
+%     of cells (vertices) and the relations (edges) of the graph
+%     $\scr{H}(0.1)$. Associate the set of generated trajectory
+%     segments with their respective originating cells using a map $\ds:C
+%         \mapsto \setof{(\vx,\vx') |\vx \in C}$. 
+        
 
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
 We remark that our abstraction is {\em neither an overapproximation
 nor an underapproximation} of the continuous-time continuous-space
-reachability relation between states. The purpose of the
-$\epsilon$-precision transition system is to discover falsifying
-trajectories. This can be accomplished by
+reachability relation between states. The purpose of the $\epsilon$-TS
+is to discover falsifying trajectories. This can be accomplished by
 Algorithm~\ref{algo:s3camBMC} that uses CounterExample-Guided
 Abstraction and Refinement (CEGAR).
 
@@ -305,189 +307,8 @@ basic abstraction proposed here by adding labels to the transitions.
 We can then perform refinement by enriching the transition relation,
 rather than increasing $\epsilon$.
 
-\section{An Example: Van der Pol Oscillator}
-\todo{takes four iterations}
-\inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{Cells and
-trajectory segments used by $1$-relational modeling.}{vdp-map}
-
-
-% The abstraction of the hybrid dynamical system is a partitioning of
-% the hybrid state space $\HybridStates$ into hyper-rectangles or cells
-% $C_i \in \Cells$. The cells are pairwise disjoint $C_i \cap C_j \neq
-% \emptyset$ iff $i \neq j$ and their union $\bigcup_{C_i\in\Cells}C_i$
-% is the state space $\HybridStates$. The partitions over the continuous
-% state space are implicitly defined using a quantization function
-% $\quant_\epsilon$ parameterized by the precision $\epsilon$.  This further
-% defines an equivalence relations such that $(\vx_i) \equiv (\vx_j)
-% \;\text{iff}\; \quant_\epsilon(\vx_i) = \quant_\epsilon(\vx_j)$.  In other
-% words, $(\vx_i) \in C_i \; \text{iff} \; C_i = \quant_\epsilon(\vx_i)$. The
-% abstraction can be interpreted as a graph and explored using fixed
-% time $(\Delta\in\Reals^+)$ relations obtained using
-% $\simulate(\vx)$~\footnote{$\simulate(\vx)$ is a fixed
-% parameterization of $\mathsc{sim}(\vx,\Delta)$}.
+% \subsection{Example: Van der Pol Oscillator}
+% \todo{Takes 4 iterations}
+% \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{Refinement of
+% $\epsilon$-TS.}{vdp-map}
 % 
-% % Such an abstraction is defined by partitioning the
-% % state-space of the system using a grid, and hence each abstract state
-% % is a hyper-rectangle. The relations between abstract states are
-% % obtained by suitably lifting $(\vx,\vx') \in\reach{t,u}$. Considering
-% % the abstract states as vertices of a graph and the relations as edges
-% % between nodes, the problem of finding an abstract counter-example
-% % (CEx) can be cast as finding a path in the graph. Such an abstraction
-% % can be explored on-the-fly by enumerating the abstract relations
-% % between a pair of states.
-% 
-% \mypara{A discrete abstraction} over a continuous space uses relations
-% to describe the behavior of the system over time. Such relations
-% abstract the underlying dense-time trajectories of the given dynamical
-% system to a transition system. 
-
-
-% relation between concrete states, and concrete
-% paths can no longer be constructed directly. Instead, search
-% procedures like Counter-Example Guided Refinement (CEGAR) must be used
-% to find concrete paths. In general, such search techniques are based
-% on refinement of the state-space and exponential with respect to
-% computational resources and memory. As an alternative, we introduce
-% data driven `enrichment' of abstractions to approximate the concrete
-% relations underlying the abstract relations.  Specifically, we use
-% linear regression to compute affine maps associated with the relations
-% between two abstract states. We then show how associating the computed
-% maps with the relations transforms a discrete abstraction into a PWA
-% transition system.
-
-% The abstraction of the hybrid dynamical system is a a
-% partitioning of the combined state-input space $\HybridStates \times
-% \Inputs$ into hyper-rectangles or cells $C_i \in \Cells$. The cells are
-% pairwise disjoint $C_i \cap C_j \neq \emptyset$ iff $i \neq j$ and
-% their union $\bigcup_{C_i\in\Cells}C_i$ is the state-input
-% space $\HybridStates \times \Inputs$. The partitions over
-% the continuous input-state space are implicitly defined using a quantization
-% function $\quant_\epsilon$ parameterized by the precision $\epsilon$.
-% This further defines an equivalence relations such that
-% \[
-%     (\vx_i, \vu_i) \equiv (\vx_j, \vu_j) \;\text{iff}\; \quant_\epsilon(\vx_i,
-%     \vu_i) = \quant_\epsilon(\vx_j, \vu_j)
-% \]
-% In other words, $(\vx_i, \vu_i) \in C_i \; \text{iff} \; C_i =
-% \quant_\epsilon(\vx_i, \vu_i)$.
-
-% \begin{definition}[Graph Abstraction]
-%     The quantization function $\quant_\epsilon$ induces a DAG on the discrete
-%     abstraction given by a graph $G(V, E)$, where each vertex
-%     corresponds to a cell $V_i = C$, and an edge exists between two
-%     cells $(C, C') \in E_i$ iff there exist state-input pairs
-%     $(\vx,\vu) \in C$, $(\vx', \vu) \in C'$ such that $\vx' =
-%     \simulate(\vx, \vu )$.
-% \end{definition}
-
-
-% \begin{definition}[Graph Abstraction]
-%     The quantization function $\quant_\epsilon$ induces a directed acyclic
-%     graph (DAG) on the discrete
-%     abstraction given by a graph $G(V, E)$, where each vertex
-%     corresponds to a cell $V_i = C$, and an edge exists between two
-%     cells $(C, C') \in E_i$ iff there exist state-input pairs
-%     $(\vx) \in C$, $(\vx') \in C'$ such that $\vx' =
-%     \simulate(\vx)$.
-% \end{definition}
-% 
-% 
-% 
-% Given a numerical simulator $\simulate$ and an initial abstraction
-% defined by a quantization function $\quant_\epsilon$ and a time step
-% $\Delta$, we pick samples and simulate them to explore the abstraction
-% on the fly to obtain a graph $G$, which has a finite number of
-% abstract states $C$ (or cells) and edges $(C,C')$ iff $C
-% \areach{\Delta} C'$.
-
-
-% \begin{definition}[Abstract State Graph]. Let ∆ > 0 be a fixed time
-%     step. The abstract state graph H(∆) for time step ∆ is defined by
-%     the set of vertices C, and edges (Ci, Cj ) whenever Ci ∆ Cj . Let
-%     C0 denote the collection of initial cells in C, i.e., cells Ci
-%     such that Ci ∩ X0 6= ∅. Further, let Cu denote the set of unsafe
-%     cells, or cells Cj such that there is a state xj ∈ Cj that reaches
-%     an unsafe state y ∈ Xf within time 0 ≤ tj < ∆. The abstraction
-% H(∆) is given by D C, ∆ , C0, Cu E .  \end{definition}
-
-
-% As 
-% Instead of using a CEGAR like loop (used in~\cite{zutshi2014multiple}),
-% we use the generated trajectories to learn quantitative models
-% describing the local behavior of the system. These models are defined
-% by a set of relations $R \subseteq \HybridStates \times \HybridStates$
-% for each edge of the reachability graph. In the next section, we
-% summarize this idea.
-
-
-% \subsection{Enriched Abstraction}
-% 
-% \input{figs/segtraj_rel_enriched.tex}
-% 
-% Recall that each edge $(C,C')$ of the graph $G$ denotes an observed
-% trajectory between the respective cells. The graph abstraction $G$
-% only states that there exists a state $\x \in C$ from which the system
-% can evolve to a future state $\x' \in C'$. To increase the precision,
-% iterative refinement of the abstraction by state splitting was
-% proposed in~\cite{zutshi2014multiple}. Due to the curse of
-% dimensionality, state splitting is not scalable. Instead, we propose
-% an `enrichment' $G^R$ of $G$ by computing a set of local relations
-% $R_{(C,C')}(\x,\x')$ for every edge $(C,C')$, which
-% non-deterministically describe relations between $\x \in C$ and $\x'
-% \in C'$. This is illustrated in \figref{enriched-edge}.
-% %(compare with \figref{segtraj}).
-% 
-% The enriched graph $G^R$ captures the underlying local forward
-% dynamics describing the evolution of the system in each abstract
-% state. We represent the dynamics using an affine model with an
-% interval error. Such a model can either be approximated using learning
-% methods or computed as a sound (over) approximation using reachability
-% set computation methods. Because we assume black box semantics, we
-% only present the former. Using regression analysis on a witnessed
-% trajectory between two cells, we compute an approximate discrete map
-% along with an error estimate.  Moreover, using the simulation function
-% $\simulate$, additional trajectories (or data) can be generated if
-% required. The data can be separated into a training set and testing
-% set to compute the map and the error respectively.
-% 
-% %The latter case can be explored if
-% %the symbolic dynamics of the system are known. A tool like
-% %\flowstar~\cite{chen2013flow} can be used to find the reachable set
-% %map.
-% 
-% Observe that $G^R$, a directed reachability graph, is rich enough to
-% search for concrete behaviors in the system. We call it a time
-% parameterized PWA relational abstraction. It can be interpreted as an
-% infinite state discrete transition system, and we can use
-% off-the-shelf bounded model checkers to find concrete violations of a
-% given safety property, and even other temporal properties.
-
-% \begin{figure}[!htbp]
-% \begin{center}
-% \tikzstyle{line} = [thick]
-% \tikzstyle{arw} = [->, thick,>=stealth,shorten <=2pt, shorten >=2pt]
-% \tikzstyle{block} = [rectangle, minimum width=0.5cm, minimum height=1.0cm, text centered, draw=black, align=center]%, fill=blue!25]
-% \begin{tikzpicture}[scale=1.0, on grid, auto]
-% 
-%     \node (G) at (-4,0) {$G$};
-%     \node (GR) at (0,0) {$G^R$};
-%     \node (CEX) at (4,0) {$CEx$};
-% 
-%     \node (enrich) [block] at (-2, 0) {\scriptsize Enrich using \\ \scriptsize affine  maps};
-%     \node (BMC) [block] at (2, 0) {\scriptsize Find CEx \\ \scriptsize using BMC};
-% 
-%     %\node[align=center] at (0, 0) {\scriptsize Enrich using \\ \scriptsize Regression \\ \scriptsize(OLS)};
-% 
-%     %\draw [line] (-2.0,-0.5) rectangle (-1.0,0.5);
-%     \draw[arw] (G.east) -- (enrich.west);
-%     \draw[arw] (enrich.east) -- (GR.west);
-%     \draw[arw] (GR.east) -- (BMC.west);
-%     \draw[arw] (BMC.east) -- (CEX.west);
-% 
-% \end{tikzpicture}
-% \end{center}
-% \vspace*{-.3cm}
-% \caption{Finding counter-examples (CEx) in a graph abstraction using PWA models.}
-% \label{fig:overview}
-% \vspace*{-.3cm}
-% \end{figure}
