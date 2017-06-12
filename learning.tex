@@ -5,48 +5,50 @@ budget required to adequately explore the transition space requires
 exploring an exponential (in the dimension of $\HybridStates$) number
 of such tuples. This can cause undue burden in terms of computation
 time as well as storage.  The central idea in this paper is to {\em
-summarize} several tuples as a single map obtained using regression.
-In other words, we can replace several ``proximal'' tuples
-$(\vx,\vx')$ in $\reach{t,u}$ by a map $F$ of the form $\vx' = F(\vx)
-+ \delta$, where $\delta$ is a worst-case error estimate. The form of
-$F$ depends on the kernel used for regression. For the special case of
-linear regression, the kernel is affine and the resulting map can be
-represented by a matrix $A$ as $\vx' = A\vx + \delta$.
+summarize} several tuples as a single map obtained using parametric
+regression.  In other words, we can replace several ``proximal''
+tuples $(\vx,\vx')$ in $\reach{t,u}$ by a map $F$ of the form $\vx' =
+F(\vx, \vu) + \delta$, where $\delta$ is a worst-case error estimate. The
+form of $F$ depends on the kernel used for regression. For the special
+case of linear regression, the kernel is affine and the resulting map
+can be represented by a matrices $A$ and $B$ as $\vx' = A\vx + B\vu +
+\delta$.
 
-In statistics, regression is the problem of finding an affine
-function or \textit{predictor}, which can `best' summarize the
-relationship between the given set of observed input $\x$ and output
-$\x'$ vectors. The notion of `best' is formally captured using a loss
-function which can be non-linear. We use the commonly used loss
-function \textit{ordinary least squares} (OLS) for this presentation.
+In statistics, parametric regression is the problem of finding the
+paremters of a function or \textit{predictor}, which can `best'
+summarize the relationship between the given set of observed input
+$\x$ and output $\x'$ vectors. The model or the kernel for the
+predictor is fixed beforehand and the paramters are searched for.  The
+notion of `best' is formally captured using a loss function which can
+be non-linear. We use the commonly used loss function \textit{ordinary
+least squares} (OLS) to fit affine and polynomial kernels of fixed degree.
+~\footnote{The choice of loss function and regression analysis affects the quality of
+the learnt models. As the procss of selecting an appropriate heuristic
+is not straightforward, we just use the simplest one.}
 
 If $N>n$, which is the case in the current context of \textit{finding
 the best fit}, the problem is over-determined: there are more
-equations than unknowns. Hence, a single affine function cannot be
-found which satisfies the equation \eqref{eq:affinemap}. Instead, we
-need to find the `best' choice for $\vec{a}$ and $b$. This choice is
-formally defined using a loss function. For the case of simple linear
-regression or OLS, the loss function is the sum of squares of the
-errors in prediction.  The task is then to determine $A$ and $B$, such
-that the least square error of the affine predictor is minimized for
-the given data set.
+equations than unknowns. Hence, a single set of parameters cannot be
+found which fits all the data. Instead, we need to find the `best'
+choice. This choice is formally defined using a loss function. For the
+case of simple linear regression or OLS, the loss function is the sum
+of squares of the errors in prediction.  The task is then to determine
+$A$ and $B$, such that the least square error of the affine predictor
+is minimized for the given data set.
 
-
-\mypara{Ordinary Least Squares (OLS)}
 For rest of the section, we elide the discrete mode from the hybrid
 state of the system, and only focus on the continuous state. Note that
 we can do this because of our assumption that the system is a
 switched-mode dynamical system.  Suppose we have $N$ tuples of the
 form $(\x,\x')$ in the reachability relation that we have explored,
-where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn an
-affine function described as $\x' = A\x + B$.
-Here, $A$ is a $n\times n$ matrix, and $B$ is a $n\times 1$ matrix.
-The details can be found in standard texts on learning and
+where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn a
+function described as $\x' = F(\vx, \vu)$.  The details can be found
+in standard texts on learning and
 statistics~\cite{friedman2001elements}.
 
-In this fashion, we can we can use OLS to approximate its trajectories
-of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
-= \vec{A}\hat{\x}$.
+% In this fashion, we can we can use OLS to approximate its trajectories
+% of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
+% = F(\hat{\x})$.
 
 We note that linear regression tools are often able to provide an
 $n\times 1$ vector $\vec{\delta}$ of error intervals, where the
