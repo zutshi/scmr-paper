@@ -44,15 +44,22 @@ statistics~\cite{friedman2001elements}.
 % of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
 % = F(\hat{\x})$.
 
-We note that linear regression tools are often able to provide an
+We note that regression tools are often able to provide an
 $n\times 1$ vector $\vec{\delta}$ of error intervals, where the
 $i^{th}$ entry of the form $[{\delta_i}_{\min},{\delta_i}_{\max}]$
 indicates the best and worst possible error in computation of the
 $i^{th}$ state in $\x'$.
 
-Affine maps are poor approximations for arbitrary non-linear
-functions. Hence, we use a collection of affine maps to approximate
-the local behaviors (in state-space) of the system $\System$. This
+The choice of kernels for the relational abstraction involves a
+tradeoff between computing precise local models and efficiency of the
+analysis of the resulting relational abstraction. Affine kernels are
+poor approximations for complex dynamics and will result in large
+errors, but they can be very efficiently analyzed in practice.  On the
+other hand, analysis of arbitrary non-linear functions is still not
+tractable. Hence, we restrict ourselves to affine and quadratic
+polynomial kernels.  Moreover, as we use a collection of relations to
+approximate the local behaviors (in state-space) of the system
+$\System$, we can often do away with simple kernels. This however,
 results in a piece wise approximation, as described in the next
 section.
 
