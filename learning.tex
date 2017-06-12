@@ -5,33 +5,20 @@ budget required to adequately explore the transition space requires
 exploring an exponential (in the dimension of $\HybridStates$) number
 of such tuples. This can cause undue burden in terms of computation
 time as well as storage.  The central idea in this paper is to {\em
-summarize} several tuples as a single affine map obtained using linear
-regression.  In other words, we can replace several ``proximal''
-tuples $(\vx,\vx')$ in $\reach{t,u}$ by an affine map of the form
-$\vx' = A\vx + B\vu + \delta$, where $A$ and $B$ are matrices and
-$\delta$ is a worst-case error estimate.
+summarize} several tuples as a single map obtained using regression.
+In other words, we can replace several ``proximal'' tuples
+$(\vx,\vx')$ in $\reach{t,u}$ by a map $F$ of the form $\vx' = F(\vx)
++ \delta$, where $\delta$ is a worst-case error estimate. The form of
+$F$ depends on the kernel used for regression. For the special case of
+linear regression, the kernel is affine and the resulting map can be
+represented by a matrix $A$ as $\vx' = A\vx + \delta$.
 
-In statistics, linear regression is the problem of finding an affine
+In statistics, regression is the problem of finding an affine
 function or \textit{predictor}, which can `best' summarize the
 relationship between the given set of observed input $\x$ and output
 $\x'$ vectors. The notion of `best' is formally captured using a loss
 function which can be non-linear. We use the commonly used loss
 function \textit{ordinary least squares} (OLS) for this presentation.
-
-\mypara{Ordinary Least Squares (OLS)}
-For rest of the section, we elide the discrete mode from the hybrid
-state of the system, and only focus on the continuous state. Note that
-we can do this because of our assumption that the system is a
-switched-mode dynamical system.  Suppose we have $N$ tuples of the
-form $(\x,\x')$ in the reachability relation that we have explored,
-where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn an
-affine function described as 
-\begin{equation}
-\label{eq:affinemap}
-\x' = A\x + B
-\end{equation}
-Here, $A$ is a $n\times n$ matrix, and $B$ is a $n\times 1$ matrix.
-
 
 If $N>n$, which is the case in the current context of \textit{finding
 the best fit}, the problem is over-determined: there are more
@@ -44,34 +31,26 @@ errors in prediction.  The task is then to determine $A$ and $B$, such
 that the least square error of the affine predictor is minimized for
 the given data set.
 
+
+\mypara{Ordinary Least Squares (OLS)}
+For rest of the section, we elide the discrete mode from the hybrid
+state of the system, and only focus on the continuous state. Note that
+we can do this because of our assumption that the system is a
+switched-mode dynamical system.  Suppose we have $N$ tuples of the
+form $(\x,\x')$ in the reachability relation that we have explored,
+where $\x\in\reals^n$ and $\x'\in\reals^n$. Then, we wish to learn an
+affine function described as
 \begin{equation}
-    \operatornamewithlimits{argmin}_{A,B}\displaystyle\sum_{i=1}^{N}{\left(\x' - (A\x + B)\right)^2}
-\label{reg}
+\label{eq:affinemap}
+\x' = A\x + B
 \end{equation}
-
-To ease the presentation, we can rewrite the above as a homogeneous
-expression by using $\hat{\x} = [\x^T\ 1]^T$ and replacing $A$ and $B$ by the vector
-$\vec{A} = [A\ B]$. The equation~\ref{reg} now becomes
-\[
-\operatornamewithlimits{argmin}_{\vec{A}}\displaystyle\sum_{i=1}^{N}{(\x' - \vec{A}^T \hat{\x})^2}
-\]
-
-The solution of OLS can be analytically computed as the Moore-Penrose
-pseudo-inverse: $\vec{A} = (X^TX)^{-1}X^T X'$, where $X$ is the matrix
-representing the horizontal stacking of all $\hat{\x}$ and $X'$
-represents the stacking of all $\x'$ values.  The details can be found
-in standard texts on learning and statistics
-\cite{friedman2001elements}. Alternative methods based on gradient
-descent can also be used to find a suitable $A$ matrix.
+Here, $A$ is a $n\times n$ matrix, and $B$ is a $n\times 1$ matrix.
+The details can be found in standard texts on learning and
+statistics~\cite{friedman2001elements}.
 
 In this fashion, we can we can use OLS to approximate its trajectories
 of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
 = \vec{A}\hat{\x}$.
-
-% where
-% $A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T
-% \end{bmatrix}$ and $\vb = \begin{bmatrix}b_1 \\ \vdots \\ b_n
-% \end{bmatrix}$. 
 
 We note that linear regression tools are often able to provide an
 $n\times 1$ vector $\vec{\delta}$ of error intervals, where the
@@ -85,6 +64,41 @@ functions. Hence, we use a collection of affine maps to approximate
 the local behaviors (in state-space) of the system $\System$. This
 results in a piece wise approximation, as described in the next
 section.
+
+% \begin{equation}
+%     \operatornamewithlimits{argmin}_{A,B}\displaystyle\sum_{i=1}^{N}{\left(\x' - (A\x + B)\right)^2}
+% \label{reg}
+% \end{equation}
+
+% To ease the presentation, we can rewrite the above as a homogeneous
+% expression by using $\hat{\x} = [\x^T\ 1]^T$ and replacing $A$ and $B$ by the vector
+% $\vec{A} = [A\ B]$. The equation~\ref{reg} now becomes
+% \[
+% \operatornamewithlimits{argmin}_{\vec{A}}\displaystyle\sum_{i=1}^{N}{(\x' - \vec{A}^T \hat{\x})^2}
+% \]
+
+% The solution of OLS can be analytically computed as the Moore-Penrose
+% pseudo-inverse: $\vec{A} = (X^TX)^{-1}X^T X'$, where $X$ is the matrix
+% representing the horizontal stacking of all $\hat{\x}$ and $X'$
+% represents the stacking of all $\x'$ values.  The details can be found
+% in standard texts on learning and statistics
+% \cite{friedman2001elements}. Alternative methods based on gradient
+% descent can also be used to find a suitable $A$ matrix.
+
+% In this fashion, we can we can use OLS to approximate its trajectories
+% of system $\System$ at fixed time step $\Delta$ by a discrete map $\x'
+% = \vec{A}\hat{\x}$.
+
+% where
+% $A = \begin{bmatrix}\vec{a}_1^T \\ \vdots \\ \vec{a}_n^T
+% \end{bmatrix}$ and $\vb = \begin{bmatrix}b_1 \\ \vdots \\ b_n
+% \end{bmatrix}$.
+
+% We note that linear regression tools are often able to provide an
+% $n\times 1$ vector $\vec{\delta}$ of error intervals, where the
+% $i^{th}$ entry of the form $[{\delta_i}_{\min},{\delta_i}_{\max}]$
+% indicates the best and worst possible error in computation of the
+% $i^{th}$ state in $\x'$.
 
 
 % \mypara{Regression Analysis}
