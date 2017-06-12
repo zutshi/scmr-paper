@@ -55,82 +55,6 @@ input value in $\Inputs$ to the state of the system at time
 $t+\Delta$, \ie, $\simmap_\Delta$ is a function from $\ContStates
 \times \Inputs \times \Reals^{\ge 0}$ to $\ContStates$.
 
-% Let $\inputsignal$ = $(t_0, u_0)$, $\ldots$, $(t_N,u_N)$ be a
-% timed-sequence of inputs, where $t_0 = 0$, and for all $i > 0$, $t_i -
-% t_{i-1} = \Delta$, and $u_i \in \Inputs$.  We can extend the forward
-% simulation map to a sequence of states to describe the application of
-% an input signal to excite the system as follows:
-% $\simmap_\Delta(\initstate, \mathbf{u}) = \contState_N$, if for all $i
-% \in [0,N-1]$, $\simmap_\Delta(\contState_i, u_i,t_i) =
-% \contState_{i+1}$.
-%
-% An alternative view of the forward simulation-map is as a
-% parameterized reachability relation $\reach_\Delta{t,u} \subseteq
-% \ContStates \times \ContStates$ defined as below:
-% \[
-% (\contState,\contState') \in \reach_\Delta{t,u}\text{ iff } \contState' = \simmap_\Delta(\contState,t,u).
-% \]
-
-% inputs modeling an embedded control system.
-%
-% we assume that the hybrid system is effectively a switched-mode
-% dynamical system, \ie, the mode of the system is completely determined
-% by its state.  An input to $\System$ is assumed to be a time-bounded
-% {\em signal}, \ie, a function from $[0,T]$ to $\Inputs$, with $T$ as
-% the time horizon, and $\Inputs \subseteq \Reals^k$.  In this paper, we
-% view $\System$ as effectively black-box equipped with a forward
-% simulation map, in a simulation time-step of $\Delta_t$ from time $t$,
-% allows computing the unique reachable state $\vx \in \HybridStates$
-% given state-input pair $(\vx,\vu)$.
-
-% time and input parameterized reachability relation $\reach{t,
-% \vu}_\System \subseteq \HybridStates \times \HybridStates$ as follows:
-% $\simulate^{\System}:
-% (\vx, \vu, t) \mapsto \vx$, where $\vx \in \HybridStates$, $\vu \in
-% \Inputs$ and $t \in [0,T]$.
-
-
-% Given the hybrid state space $\vx\in\HybridStates$ and input space $u
-% \in\Inputs$ and time step $t$, it computes the unique successor state
-% $\vy=\simulate^{\System}(\vx,u,t)$ such that $\vx \reach{t,u} \vy$.
-
-
-% \begin{definition}[System Evolution]
-%     The behavior of system $\System$ at time $t$ is described as an
-%     evolution in the hybrid state-space $\HybridStates$ under the
-%     effect of the input $\vu \in \Inputs$ at time $t$. The forward
-%     simulation map $\mathsc{sim}^\System : \HybridStates \times \Inputs
-%     \times \Reals^+ \mapsto \HybridStates$, maps a state $\x\in\HybridStates$ at time
-%     $t$ to a new state $\x'\in\HybridStates$ at time $t+\Delta\in\Reals^+$, under a constant
-%     input $\vu$.  Finally, we define the time and input parameterized
-%     reachability relation $\reach{t,u} \subseteq \HybridStates \times
-%     \HybridStates$ such that
-%     \begin{equation}
-%         (\vx,\vx') \in \reach{t,u} \;\text{iff}\; \vx'=\mathsc{sim}^{\System}(\vx,u,t).
-%     \end{equation}
-% \end{definition}
-
-% \mypara{System Assumptions:}
-% We require that $\System$ can always be
-% simulated forward in time with deterministic results. This in turn
-% requires existence and uniqueness of trajectories over a finite time
-% horizon $[0,T]$, which can be guaranteed by Lipschitz continuity of
-% the vector field in each underlying hybrid mode, ruling away issues
-% such as finite escape times~\cite{Meiss/2007/Differential}, and having
-% well-defined semantics for simulations at switching boundaries. While
-% these assumptions hold for the dynamical system examples which we
-% consider in this paper, such assumptions can be restrictive for
-% general control system models. When analyzing a system that does not
-% obey theoretical conditions that allow deterministic simulation, we
-% assume that the underlying tool used for numerical approximations of
-% system behaviors uses deterministic simulation semantics.  Finally, we
-% assume full observability of the system state, validate our results
-% only against the $\mathsc{sim}^\System$ function (as the analytic closed-form
-% representation of the system dynamics is assumed to be unavailable).
-% From here on, we drop the subscript $\System$ whenever it is clear
-% from the context. Also, to ease the presentation, we conflate the
-% inputs with the state and denote them by $\vx$.
-%
 \subsection{$\epsilon$-precision Transition System Abstraction}
 
 We now show how we can abstract a hybrid dynamical system $\System$
@@ -224,41 +148,24 @@ or edges is added to $\TSAbstraction{\epsilon}{\System}$.
 \inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
 $0.2$-TS abstraction. Red cells are unsafe cells and green cells are
 initial cells.}{vdp-abs}
-
-\begin{example} 
-We now describe $\epsilon$-TS abstraction using the Van der Pol
-oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
-generated using uniformly random samples are shown in
-\figref{vdp-cont}. We want to check the property $P_3$, indicated by
-the red box, given the initial set indicated by the green box. We
-consider the $\epsilon$-TS abstraction defined by the quantization
-function $\quant_{0.2}(\x)$. This results in an evenly gridded
-state-space, where each cell is of size $0.2 \times 0.2$ units.
-$\mathsf{ScatterAndSimulate}$ is then used to construct
-$\TSAbstraction{0.2}{\System}$ using $2$ samples per cell and a time
-step of $\Delta = 0.1s$. The complete process follows.  The
-$\epsilon$-TS abstraction thus discovered is shown in
-\figref{vdp-abs}. The red cells are unsafe and green cells are initial
-cells.
-\end{example}
-
-
-\inclfig[width=0.95\linewidth]{vdp_abs.pdf}{The discovered
-abstraction $\epsilon=0.2$. Red cells are unsafe cells and green cells are
-initial cells.}{vdp-abs}
-
 \begin{example}[Van der Pol Oscillator]~\label{ex:vdp}
-We use the Van der Pol oscillator benchmark
-from~\cite{zutshi2014multiple} to demonstrate our falsification
-approach. We want to falsify property $P_3$, $x_{unsafe}\in[-1,
--6.5]$ and $y_{unsafe}\in[-0.7, -5.6]$, given the initial set
-indicated $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$. The abstraction
-is defined by $\epsilon=0.2$, which results in an evenly gridded
-state-space, where each cell is of size $0.2 \times 0.2$ units.
-$ScatterAndSimulate$ is then used to construct the abstraction,
-using $2$ samples per cell and the time step $\Delta = 0.1s$. The
-result is plotted in ~\figref{vdp-abs}.
+We now describe $\epsilon$-TS abstraction using the Van der Pol
+    oscillator benchmark from~\cite{zutshi2014multiple}. Simulations
+    generated using uniformly random samples are shown in
+    \figref{vdp-abs}. We want to check the property $P_3$:
+    $x_{unsafe}\in[-1,-6.5]$ and $y_{unsafe}\in[-0.7, -5.6]$, given
+    the initial set indicated $x0\in[-0.4, -0.4],\; y_0\in[0.4, 0.4]$.
+    We consider the $\epsilon$-TS abstraction defined by the
+    quantization function $\quant_{0.2}(\x)$. This results in an
+    evenly gridded state-space, where each cell is of size $0.2 \times
+    0.2$ units.  $\mathsf{ScatterAndSimulate}$ is then used to
+    construct $\TSAbstraction{0.2}{\System}$ using $2$ samples per
+    cell and a time step of $\Delta = 0.1s$. The complete process
+    follows.  The $\epsilon$-TS abstraction thus discovered is shown
+    in \figref{vdp-abs}. The red cells are unsafe and green cells are
+    initial cells.
 \end{example}
+
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
@@ -313,6 +220,12 @@ basic abstraction proposed here by adding labels to the transitions.
 We can then perform refinement by enriching the transition relation,
 rather than increasing $\epsilon$.
 
+<<<<<<< HEAD
+% \subsection{Example: Van der Pol Oscillator}
+% \todo{Takes 4 iterations}
+% \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{Refinement of
+% $\epsilon$-TS.}{vdp-map}
+%
 \begin{example}
 \inclfig[width=0.90\linewidth]{vdp_disc_map.pdf}{
 Abstract trajectories discovered by $ScatterAndSimulate$. Each
@@ -327,5 +240,3 @@ Going back to the~\exref{vdp}, $ScatterAndSimulate$ is able to find
     concrete counter-example for $\epsilon=0.125$.
 
 \end{example}
-
-

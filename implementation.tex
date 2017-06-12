@@ -106,7 +106,8 @@ benchmark~\cite{althoff2012reachability}. PWA-Rel was compared with
 S3CAM by running both $10$ times with different seeds (as both use
 randomized algorithms), and their running times were averaged. PWA-Rel
 was evluated with both the symbolic BMC SAL (PWA-Rel+SAL) and the
-explicit BMC (PWA-Rel+OPT).  \todo{SatEx was also tried, but ...}. We
+explicit BMC (PWA-Rel+OPT). %\todo{SatEx was also tried, but ...}.
+We
 tabulate both the total time taken by PWA-Rel+SAL and PWA-Rel+OPT to
 compute the counter-example and compare against an implementation of
 S3CAM.  Different abstraction parameters are used for S3CAM and
@@ -115,7 +116,7 @@ requires a finer abstraction to begin with in order to minimize the
 modeling errors. On the other hand, a coarser abstraction as the
 initial abstraction works better for S3CAM due to the expensive
 refinement procedure involved.~\footnote{In all our experiments we
-used $1$-relational modeling to create the transition system from $G$.
+used $1$-relational modeling to create the transition system.
 This was determined to be a good trade-off between longer simulations
 and increase in precision, with respect to the mentioned benchmarks.}
 
