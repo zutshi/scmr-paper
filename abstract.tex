@@ -1,17 +1,32 @@
 Models of embedded control systems are often so complex that
 falsification and testing approaches can scale only by numerically
-simulating them, and hence treating the systems as black-boxes. Common
-approaches like sampling-based falsification, use numerical
-simulations to search for violations of safety properties. However,
-this relegates them to the `best effort' category. On the other hand,
-\emph{rigorous} verification (and falsification) techniques require
-symbolic models and are comparatively less scalable. We try to bridge
-this gap by incorporating data-driven models in a sampling based
-search. Using an efficient, on-the-fly discrete abstraction
-search procedure, we compute models only for selective regions of the state
-space, thus `enriching' the abstraction. We then show how the
-`enriched' abstraction can be used to guide the search for violations
-without refinement.
+simulating them, and hence treat the systems as black-boxes. Common
+approaches like sampling-based falsification use numerical simulations
+to search for violations of safety properties. However, this relegates
+them to the `best effort' category. On the other hand, \emph{rigorous}
+verification (and falsification) techniques require symbolic models
+and are comparatively less scalable. We try to bridge this gap by
+incorporating data-driven models in a sampling based search. Using an
+efficient, on-the-fly discrete abstraction search procedure and
+regression, we selectively model the behavior of the system in
+sub-regions of the state space. We then incorporate the model in the
+discrete abstractio, thus, `enriching' the abstraction. We show how
+this `enriched' abstraction can be used to guide the search for
+violations without refinement.  The automatic falsification proceeds
+by (a) randomly exploring the state-space abstraction using
+numerically computed trajectories and enumerating abstract violations,
+(b) modeling the behavior of the system along these abstract
+violations by using discrete-time piecewise \emph{relational} models,
+and finally, (c) encoding the search for a concrete violation as a
+bounded model checking (BMC) problem.  The BMC query is a disjunction
+of conjunctions of constraints (i.e. a combination of constraint
+problems over real arithmetic). It can be solved using off-the-shelf
+SMT solvers or by multiple runs of an optimization solver (which
+checks feasibility). For any counter-example found in this `enriched'
+abstraction, we check the existence of a corresponding violation in
+the original system. We demonstrate the technique on a few benchmarks.
+
+
 %We use grid-based discrete abstractions to partition
 %the state-space of the black-box hybrid dynamical system. We then use
 %an efficient search procedure to find abstract violations of safety
@@ -20,19 +35,6 @@ without refinement.
 %state-space of the black-box hybrid dynamical system, we enumerate
 %abstract violations of the safety property. We then model the system
 %behavior along these violations and search for concrete violations.
-The automatic falsification proceeds by (a) randomly exploring the
-state-space abstraction using numerically computed trajectories and
-enumerating abstract violations, (b) modeling the behavior of the
-system along these abstract violations by using discrete-time
-piecewise affine (PWA) \emph{relational} models, and finally, (c)
-encoding the search for a concrete violation as a bounded model
-checking (BMC) problem.  The BMC query is then a disjunction of
-conjunctions of linear constraints (i.e. combinations of linear
-programs). It can be solved using off-the-shelf SMT solvers or by
-multiple runs of a linear programming solver. For any counter-example
-found in this `enriched' abstraction, we check the existence of a
-corresponding violation in the original system. We demonstrate the
-efficacy of our technique on a few benchmarks.
 
 % Models of embedded control systems are often so complex that they can
 % be treated as effectively black-box systems. Sampling-based methods
