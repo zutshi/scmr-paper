@@ -13,11 +13,11 @@ It then constructs relational abstraction and uses a bounded model
 checker to find a counter-example to the given property in
 $\RTSAbstraction{\epsilon}{\System}$. Finally, using simulations, it
 confirms if the counter-example is valid for $\System$, in which case
-a successfull falsification run is concluded.
+a successful falsification run is concluded.
 
 To check the transition system, PW-Rel can either invoke symbolic
 bounded model checkers or explicit model checkers. For symbolic BMC,
-the off-the-shelf SAL modelchecker~\cite{SAL-SRI} is used. It is
+the off-the-shelf SAL model checker~\cite{SAL-SRI} is used. It is
 configured to encode the problem as a single query for a given depth
 $k$, where $k$ is the bound on the length of the counter-example. It
 was computed by the length of the abstract counter-examples found. SAL
@@ -35,17 +35,17 @@ encoded SMT constraints.
 % falsification procedure as it is based off approximate models.
 
 Explicit model checking was implemented out using a naive DFS
-(depth-first-exploration) stratergy, wherein, each abstract path is
+(depth-first-exploration) strategy, wherein, each abstract path is
 enumerated and checked for feasibility using a an optimization
-routine. Intefaces to various solvers were implemented, including GLPK
+routine. Interfaces to various solvers were implemented, including GLPK
 and Ipopt. If feasible, the returned concrete counter-example is
-simulated and checked for existance in $\System$. Also, PW-Rel
+simulated and checked for existence in $\System$. Also, PW-Rel
 extracts the bounds on the initial parameters by formulating multiple
 optimization problems. The bounds can be regarded as an over-appr
 
-% If the existance check fails, multiple
+% If the existence check fails, multiple
 % parameter values can be sampled within the determined bounds to search
-% for counter-examples in the neighbhourhood of the returned concrete
+% for counter-examples in the neighborhood of the returned concrete
 % counter-example.
 
 % PW-Rel uses S3CAM to discover the abstraction graph $G$, which is
@@ -100,15 +100,25 @@ We benchmarked our implementation and compared it with S3CAM.  The
 preliminary results are tabulated in~\tabref{res-rel}. We used few of
 the benchmarks described in \cite{zutshi2014multiple}, including the
 Van der Pol oscillator, Brusselator, Lorenz attractor and the
-Navigation benchmark. We also tried PW-Rel on the insulin
-benchmark~\cite{chenformal} and lane change maneuver
-benchmark~\cite{althoff2012reachability}. PW-Rel was compared with
+Navigation benchmark.
+%We also tried PW-Rel on the insulin
+%benchmark~\cite{chenformal} and lane change maneuver
+%benchmark~\cite{althoff2012reachability}.
+PW-Rel was compared with
 S3CAM by running both $10$ times with different seeds (as both use
 randomized algorithms), and their running times were averaged. PW-Rel
-was evluated with both the symbolic BMC SAL (PW-Rel+SAL) and the
+was evaluated with both the symbolic BMC SAL (PW-Rel+SAL) and the
 explicit BMC (PW-Rel+OPT). %\todo{SatEx was also tried, but ...}.
-We
-tabulate both the total time taken by PW-Rel+SAL and PW-Rel+OPT to
+An affine kernel was used for modeling and the linear programming
+solver GLPK was used for checking feasibility of the constraints.
+We also tried polynomial kernels, and used Z3 SMT
+solver~\cite{DeMoura+Bjorner/08/Z3} to check the symbolic BMC.
+Unfortunately, Z3 does not scale well on polynomial constraints and
+consistently timed out. For explicit BMC, several non-linear
+optimization engines were tried, but the results were inconsistent due
+to sensitivity towards the initial guess.
+
+We tabulate both the total time taken by PW-Rel+SAL and PW-Rel+OPT to
 compute the counter-example and compare against an implementation of
 S3CAM.  Different abstraction parameters are used for S3CAM and
 PW-Rel, due to the differences in which they operate. PW-Rel
@@ -129,7 +139,7 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
 \label{tab:res-rel}
 \begin{tabular}{@{}llll@{}}
 \toprule
-    Benchmark & PW-Rel + SAL & PW-Rel + LP & S3CAM\\
+    Benchmark & PW-Rel + SAL & PW-Rel + OPT & S3CAM\\
 \midrule
     Van der Pol ($\prop_3$)   &$0.2$ & $0.34$ & $0.4$\\
     Brusselator               &$0.06$ & $0.06$ & $0.03$\\
@@ -141,10 +151,10 @@ $TO$ signifies time $>5hr$, after which the search was killed.}
     Nav ($\prop_S$)           &$TO$ & $71$  & $35$\\
     Bouncing Ball             &$Safe$ & $Safe$  & $7.5$\\
 
-    insulin-st-1             &$Safe$ & $Safe$  & $0.0$\\
-    insulin-st-2             &$Safe$ & $Safe$  & $0.0$\\
-    lane change              &$Safe$ & $Safe$  & $0.0$\\
-    HVAC                     &$Safe$ & $Safe$  & $0.0$\\
+    %insulin-st-1             &$Safe$ & $Safe$  & $0.0$\\
+    %insulin-st-2             &$Safe$ & $Safe$  & $0.0$\\
+    %lane change              &$Safe$ & $Safe$  & $0.0$\\
+    %HVAC                     &$Safe$ & $Safe$  & $0.0$\\
 
 \bottomrule
 \end{tabular}
@@ -171,7 +181,7 @@ constrained by the accuracy of the piecewise models. Its performance can be
 explained by the difficulty in finding an abstraction
 ($\quant_\epsilon$), which is fine enough, to result in accurate
 prediction models but coarse enough to be manageable by the current
-bmc tools.  To obtain a reproducible counter-example from the model
+BMC tools.  To obtain a reproducible counter-example from the model
 checker (and avoid false positives), the transition system should be
 created from models with high accuracy, for which a finer abstraction
 is required.  However, the exploration of a finer abstraction is

@@ -6,7 +6,7 @@ under test, and the background for PWA relational abstractions.
 
 We assume that the system-under-test is a hybrid dynamical system, \ie, a
 system which has discrete modes and a continuous state-space, and which
-evolvution is either (1) continuous in time according to the dynamics
+evolution is either (1) continuous in time according to the dynamics
 associated with its current discrete mode (typically described using
 differential equations over its continuous state), or (2) through
 discrete jumps that possibly change the discrete mode of the system and
@@ -27,7 +27,7 @@ representing the set of continuous states.  The sets $\InitModes
 initial modes and states respectively.  We assume that the system is
 {\em initialized} to some initial mode $\initmode \in \InitModes$ and
 an initial state $\initstate \in \InitStates$ at time $t=0$.  We
-assume that the system has $m$ exogenuous inputs which take values
+assume that the system has $m$ exogenous inputs which take values
 from the set $\Inputs$ which is a compact subset of $\Reals^m$. We
 assume that the system has $\ell \le n$ outputs, where $\Outputs
 \subseteq \HybridStates$. In this paper, we assume that the entire
@@ -169,8 +169,8 @@ We now describe $\epsilon$-TS abstraction using the Van der Pol
 
 \subsection{CEGAR for falsifying $\TSAbstraction{\epsilon}{\System}$}
 
-We remark that our abstraction is {\em neither an overapproximation
-nor an underapproximation} of the continuous-time continuous-space
+We remark that our abstraction is {\em neither an over-approximation
+nor an under-approximation} of the continuous-time continuous-space
 reachability relation between states. The purpose of the $\epsilon$-TS
 is to discover falsifying trajectories. This can be accomplished by
 Algorithm~\ref{algo:s3camBMC} that uses CounterExample-Guided

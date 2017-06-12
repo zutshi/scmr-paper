@@ -21,21 +21,21 @@ matrices $A$ and $B$, \ie, $r(\vx,\vxp) = \setof{(\vx,\vxp) \mid |\vxp
 - (A\vx + B\vu)| < \delta}$.
 
 In statistics, parametric regression is the problem of finding the
-paremters of a function or \textit{predictor}, which can `best'
+parameters of a function or \textit{predictor}, which can `best'
 summarize the relationship between the given set of observed input
 $\x$ and output $\x'$ vectors. The basis functions used for the
-predictor are fixed beforehand and the paramters are searched for.
+predictor are fixed beforehand and the parameters are searched for.
 The notion of `best' is formally captured using a loss function which
 can be non-linear. We use the commonly used loss function
 \textit{ordinary least squares} (OLS) to fit affine and polynomial
 kernels of fixed degree.  ~\footnote{The choice of loss function and
 regression analysis affects the quality of the learnt models. As the
-procss of selecting an appropriate heuristic is not straightforward,
+process of selecting an appropriate heuristic is not straightforward,
 we just use the simplest one.} OLS defines its loss function as the
 sum of squares of the errors in prediction. The task is then to
 determine the parameters, such that the least square error of the
 predictor is minimized for the given data set.  The details on
-performing linear regressoin can be found in standard texts on
+performing linear regression can be found in standard texts on
 learning and statistics~\cite{friedman2001elements}.
 
 % Suppose we have $N$ tuples of the
@@ -57,10 +57,12 @@ in $\vxp_i$.
 \begin{algorithm}[t]
 \DontPrintSemicolon
 \caption{RelationalAbstraction\label{algo:relabs}}
-\KwIn{$\simmap_\Delta$, $\TSAbstraction{\epsilon}{\System}$, regression kernel $F$}
+\KwIn{$\simmap_\Delta$, $\TSAbstraction{\epsilon}{\System}$,
+    regression kernel $F_k$}
 \KwOut{$\RTSAbstraction{\epsilon}{\System}$}
     \ForAll{$(\Cells,\Cells') \in \CellEdges$}{
-    $r(\vx,\vx^+) = \mathsf{Regression(F, \simmap_\Delta, (\Cells,\Cells'))}$ \;
+    $F, \delta = \mathsf{Regression(F_k, \simmap_\Delta, (\Cells,\Cells'))}$ \;
+    $r(\vx,\vx^+) = F, \delta$
     %$\RTSAbstraction{\epsilon}{\System}$ $\assign$
     %$\mathsf{k-RelationalAbstraction}$($\TSAbstraction{\epsilon}{\System}, F$) \nllabel{algoline:relabs} \;
     %$\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\RTSAbstraction{\epsilon}{\System}$) \nllabel{algoline:bmc} \;

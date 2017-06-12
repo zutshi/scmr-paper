@@ -37,67 +37,27 @@ Comments
    discrete transitions and that the environment is a continuous model with
    no discrete events or discontinuities?
 
-   ============
-   The systems under test are assumed to be switched-mode to ease the
-   presentation, but it is not a limitation of the presented
-   technique. Black box systems which have hybrid dynamics due to
-   multiple modes, are dealt in the same fashion.
-   [TODO: $K$-refinement to differentiate the dynamics of different modes.
-   We have added a benchmark to showcase this.
-   [TODO: which one?]
-   [TODO: clarify the absence of any controllers]
-   [TODO: remove or clarify switched-mode systems]
-   [TODO: add a hybrid benchmark]
-   ============
-
-   I imagine that the idea is to combine the generated discrete abstraction
-   with a discrete controller model to verify both together. It would be
-   good to state this clearly and to treat the resulting issues throughout
-   the paper. I note that the experimental results do not treat this issue.
-   Otherwise, why not change the title and focus the text on what you
-   actually did?
-
-   ============
-   We will explore this in the future, but the current presentation
-   only works with the plant, which is itself a hybrid dynamical
-   system.
-   [TODO: Add this in the conclusion/future work]
-   ============
-
-
-   (Similar remarks hold at a smaller scale. The discussion often describes
-    what "can be" done, e.g., in sections 3.2 and 4.1. I would rather read
-    about what "has been" done and what the result was!)
-
-   ============
-   [TODO]
-   ============
+>> The systems under test are assumed to be switched-mode to ease the
+>> presentation, but it is not a limitation of the presented
+>> technique. Black box systems which have hybrid dynamics due to
+>> multiple modes, are dealt in the same fashion.
 
 2. Why do you need a bounded model checker to check safety invariants when
    you already enumerate and characterize the reachable states? That is, why
    not just test the invariant on the convex hulls as they are generated?
 
+>> BMC is required to find a concrete counter-example. The invariants
+>> found through clustering (which has been since removed due to the
+>> impending confusion) can not be used to conclude the presence of a
+>> concrete coutner-examples by themselves as they are just an
+>> approximation.
+
    My guess is that you later want to restrict the state-space by composing
-   your abstraction with a controller model. Is that right? This probably
-   seems obvious to you, but please put yourself in the place of someone who
-   is new to the work and not an expert in the domain! In any case, this
-   idea is not clearly stated, not addressed by the text, and not considered
-   in the experimental evaluation.
+   your abstraction with a controller model. Is that right?
 
-   ============
-   [TODO: I don't understand this comment, but it is related to
-   point (iii) of the summary]
-   Although we enumerate the abstract space, we require the model
-   checker to find a concrete counter-example.
-   ============
+>> This is a very important idea which we plan to explore in future
+>> work. But it is not being presented in the paper as of now.
 
-   Is this why the PWA transition system characterizes states by a valuation
-   function v and not simply as tuples? If yes, how will this work? I do not
-   understand why you have a valuation function when the system only has one
-   variable (x).
-   ============
-   [TODO]
-   ============
 ======================================
                             REVIEWER 2
 ======================================
@@ -126,7 +86,7 @@ a good number of PWA / affine approximations? I feel that this could lead to a
 nice results which the authors can easily cast in optimization (2).
 
 >> In general, finding the `optimal' number of PWA models can be
->> framed as a multiobjective optimization problem, where a small
+>> framed as a multi-objective optimization problem, where a small
 >> number of clusters and an accurate affine map is desired. This is a
 >> hard problem for arbitrary non-linear systems.
 >> Hence, in this paper, we presented a scalable falsification approach
@@ -154,6 +114,10 @@ specific goal. Again, this is not a criticism, but I feel that the
 investigation in section 6 could be described in a few more sentences to
 connect with embedded control.
 
+>> Current examples include generic dynamical systems. But the same
+>> procedure can be used to find falsifications in closed loop control
+>> systems. We plan to do extensive case studies in the future.
+
 
 ======================================
                             REVIEWER 3
@@ -178,9 +142,18 @@ Comments
 A comparison with S3CAM is interesting, but is less informative than a
 comparison with simulation-based validation tools.
 
+>> In earlier works, S3CAM was shown to be better than S-Taliro.
+>> Hence, for now only S3CAM was compared. In the future we plan to have
+>> extensive case-studies and comparison with other tools.
+
 I also recommend using relations more complex than affine, such as
 polynomial, for which Z3 can be used (nonlinear relations may reduce
 the number of hyper-rectangles).
+
+>> We tried polynomial kernels but Z3 can not scale even on small
+>> number of polynomial constraints. Instead we used non-linear
+>> optimization solvers. But, they were very sensitive to the initial
+>> guess.
 
 
 ======================================
@@ -217,7 +190,7 @@ yield a better result.
 
 >> As the choice of loss function and type of regression analysis
 >> depends on the problem at hand, we show our methodology using the
->> simplest one. In practice, sophesticated statistical tests can be used
+>> simplest one. In practice, sophisticated statistical tests can be used
 >> to find the a good analysis.
 
 

@@ -190,7 +190,7 @@ Thus, based on the cell of eventual destination, we can split the cell
 $C$ into two cells: $(C,C',C_1'')$ and $(C,C',C_2'')$. Furthermore, we
 can identify different guard/update relation on the transition from
 these cells to cells of the form $(C',*,*)$ as shown in
-Figure~\ref{fig:krelb}. Here $*$ denotes any arbitrary cell. In other
+Figure~\ref{fig:k2}. Here $*$ denotes any arbitrary cell. In other
 words the ``trajectory bundle'' corresponding to simulations from cell
 $C$ to $C'$ now is split into two bundles, based on where the
 trajectories from each bundle may end up in two steps.
@@ -423,7 +423,7 @@ basically a $1$-relational $\epsilon$-RTS.
 % relations are constructed. The resulting $1$-relational model
 % is at least as precise as the corresponding $0$-relational model.
 
-\mypara{$k$-Relational Model}
+\mypara{$k$-relational $\epsilon$-RTS ($(k,\epsilon)$-RTS)}
 
 \begin{figure}[!htbp]
 \begin{center}
@@ -506,24 +506,35 @@ in the same cells.
 \]
 
 
-\begin{algorithm}[t]
-\DontPrintSemicolon
-\caption{PW-Rel\label{algo:pwa-rel}}
-\KwIn{$\System$, $\simmap_\Delta$, $\epsilon$ , regression kernel $F$}
-    $\TSAbstraction{\epsilon}{\System}$ $\assign$ $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$) \nllabel{algoline:construct} \;
-    $\RTSAbstraction{\epsilon}{\System}$ $\assign$
-    $\mathsf{k-RelationalAbstraction}$($\TSAbstraction{\epsilon}{\System},
-    F$) \nllabel{algoline:relabs} \;
-    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\RTSAbstraction{\epsilon}{\System}$) \nllabel{algoline:bmc} \;
-    \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} }
-    \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION
-    \nllabel{algoline:checkspurious} }
-\end{algorithm}
+The algorithm for constructing $(k,\epsilon)$-RTS is shown
+in~\algoref{krelabs}. The overall algorithm for computing piecewise
+relational abstractions is presented in~\algoref{pwa-rel}.
 
 \begin{algorithm}[t]
 \DontPrintSemicolon
     \caption{$\mathsf{k-RelationalAbstraction}$\label{algo:krelabs}}
-\While{$\epsilon \ge \epsilonmin$}{
-    $\epsilon$ $\assign$ $\frac{\epsilon}{10}$ \nllabel{algoline:refine} \;
+    \KwIn{$\System$, $\simmap_\Delta$, $\delta_{max}$ , regression kernel $F_k$}
+    \KwOut{$\RTSAbstraction{\epsilon}{\System}$}
+    \ForAll{$(\Cells,\Cells') \in \CellEdges$}{
+    \While{$k \le k_{max}$ \and $\delta \ge \delta_{max}$}{
+        $F, \delta = \mathsf{Regression(F_k, \simmap_\Delta, (\Cells,\Cells'))}$ \;
+    }
+    $r(\vx,\vx^+) = F, \delta$
 }
+\end{algorithm}
+
+
+
+
+\begin{algorithm}[t]
+\DontPrintSemicolon
+\caption{PW-Rel\label{algo:pwa-rel}}
+\KwIn{$\System$, $\simmap_\Delta$, $\epsilon$ , regression kernel $F_k$}
+    $\TSAbstraction{\epsilon}{\System}$ $\assign$ $\mathsf{ScatterAndSimulate}$($\System$,$\simmap_\Delta$,$\epsilon$) \nllabel{algoline:construct} \;
+    $\RTSAbstraction{\epsilon}{\System}$ $\assign$
+    $\mathsf{k-RelationalAbstraction}$($\TSAbstraction{\epsilon}{\System}, F_k$) \nllabel{algoline:relabs} \;
+    $\Pi$ $\assign$ $\mathsf{BoundedModelCheck}$($\RTSAbstraction{\epsilon}{\System}$) \nllabel{algoline:bmc} \;
+    \lIf {$\Pi = \emptyset$}{ return FAIL \nllabel{algoline:nocex} }
+    \lIf {$\mathsf{checkIfConcretizable}(\Pi)$}{ return VIOLATION
+    \nllabel{algoline:checkspurious} }
 \end{algorithm}
