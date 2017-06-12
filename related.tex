@@ -2,7 +2,7 @@
 
 \mypara{Sampling based falsification techniques for hybrid systems}
 improve upon the commonly used testing approaches. However, a wide gap
-between falsification and verification approaches. The current
+exists between falsification and verification approaches. The current
 state-of-the-art approaches (Cf. related work~\cite{nghiem2010monte})
 for testing hybrid systems are based on numerical simulations and are
 guided by robustness: S-Taliro~\cite{annpureddy2011s} and
@@ -42,34 +42,61 @@ methods~\cite{vidal2003algebraic}. We propose a simpler approach based
 on fixed hyper-rectangular domains, also explored
 in~\cite{billings1987piecewise}, but parameterized by the size of the
 rectangles $\epsilon$ and the time discretization step $\Delta$.
-%\todo{other tech.}
-%Other identification approaches have been explored in~\cite{saha2015alchemist}.
-%nimit singhania
 
-\mypara{Formal analysis of PWA systems.} Formal verification of PWA
-systems using reachability analysis has been proposed
-in~\cite{yordanov2010formal, koutsoukos2003safety,
-asarin2000approximate}, and extended to model checking temporal
-properties in~\cite{yordanov2007model, batt2007model}. PWA systems can
-be equivalently translated to non-deterministic infinite state
-transition systems and then model checked.  Related approaches using a
-bisimilar quotient have been proposed in~\cite{pappas2003bisimilar,
-tabuada2006linear, yordanov2007model}. Finally, because hybrid
-automata models can equivalently represent PWA systems, existing
-falsification and verification tools can be used for their analysis.
+% \mypara{Identification of hybrid systems.} Discrete time - continuous
+% state piece-wise affine models are often used to model both continuous
+% and hybrid dynamical systems. They are very expressive and can model
+% non-linear continuous dynamics (with arbitrary
+% accuracy)~\cite{wen2008basis} and a large family of hybrid
+% systems~\cite{heemels2001equivalence}. In the past, several approaches
+% have been put forth for the identification of PWA
+% models~\cite{paoletti2007identification}.  They are based on Bayesian
+% methods~\cite{juloski2005bayesian}, bounded-error
+% methods~\cite{bemporad2003greedy, bemporad2005bounded,
+% roll2004identification, alur2014precise}, clustering based
+% methods~\cite{ferrari2003clustering} and algebraic
+% methods~\cite{vidal2003algebraic}. We propose a simpler approach based
+% on fixed hyper-rectangular domains, also explored
+% in~\cite{billings1987piecewise}, but parameterized by the size of the
+% rectangles $\epsilon$ and the time discretization step $\Delta$.
+% %\todo{other tech.}
+% %Other identification approaches have been explored in~\cite{saha2015alchemist}.
+% %nimit singhania
+
+% \mypara{Formal analysis of PWA systems.} Formal verification of PWA
+% systems using reachability analysis has been proposed
+% in~\cite{yordanov2010formal, koutsoukos2003safety,
+% asarin2000approximate}, and extended to model checking temporal
+% properties in~\cite{yordanov2007model, batt2007model}. PWA systems can
+% be equivalently translated to non-deterministic infinite state
+% transition systems and then model checked.  Related approaches using a
+% bisimilar quotient have been proposed in~\cite{pappas2003bisimilar,
+% tabuada2006linear, yordanov2007model}. Finally, because hybrid
+% automata models can equivalently represent PWA systems, existing
+% falsification and verification tools can be used for their analysis.
 
 \mypara{Relational abstractions} were first introduced
-by~\cite{Sankaranarayanan+Tiwari/2011/Relational} for abstracting away the
-continuous dynamics in hybrid automata by discrete relations, %using suitable abstractions,
-resulting in an infinite state transition system.  Both time
-independent~\cite{Sankaranarayanan+Tiwari/2011/Relational} and time
-dependent relations~\cite{zutshi2012timed, mover2013time} have been
-proposed; the former captures all reachable states over all time,
-whereas, the latter explicitly includes time by relating reachable
-states to time. Thus it can prove timing properties whereas, time
-independent relational abstractions can not. Properties of relational
-abstractions can be verified using $k$-induction or falsified
-using bounded model checkers.
+in~\cite{Sankaranarayanan+Tiwari/2011/Relational} and subsequently
+followed by~\cite{zutshi2012timed, mover2013time}. They were used for
+abstracting away the continuous dynamics in hybrid automata by
+discrete relations, resulting in an infinite state transition system.
+Properties of relational abstractions can be checked using bounded
+model checkers. In our work, instead of constructing sound relational
+abstractions from white-box models, we compute approximate relational
+abstractions of black-box systems.
+
+% \mypara{Relational abstractions} were first introduced
+% by~\cite{Sankaranarayanan+Tiwari/2011/Relational} for abstracting away the
+% continuous dynamics in hybrid automata by discrete relations, %using suitable abstractions,
+% resulting in an infinite state transition system.  Both time
+% independent~\cite{Sankaranarayanan+Tiwari/2011/Relational} and time
+% dependent relations~\cite{zutshi2012timed, mover2013time} have been
+% proposed; the former captures all reachable states over all time,
+% whereas, the latter explicitly includes time by relating reachable
+% states to time. Thus it can prove timing properties whereas, time
+% independent relational abstractions can not. Properties of relational
+% abstractions can be verified using $k$-induction or falsified
+% using bounded model checkers.
 
 %For general hybrid dynamical
 %systems, algorithmically computing analytical solutions do not exist.
