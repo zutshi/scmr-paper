@@ -175,25 +175,13 @@ Account of prior work and references (1-3): 2
 Comments
 --------------------------------------
 
-The paper presents a method for falsifying safety properties of hybrid systems.
-The method first constructs a relational abstraction of the system (which is
-considered as a black box) from a set of simulation traces. The relations in
-the abstraction are affine with uncertainty. The approach is quite interesting,
-however the examples used for demonstration are unfortunately not black boxes,
-although these examples are treated as black boxes, since it would be of great
-interest to show its usefulness for complex models for which traditional
-verification tools cannot be applied. A comparison with S3CAM is interesting,
-but is less informative than a comparison with simulation-based validation
-tools.
-I also recommend using relations more complex than affine, such as polynomial,
-for which Z3 can be used (nonlinear relations may reduce the number of
-hyper-rectangles).
+A comparison with S3CAM is interesting, but is less informative than a
+comparison with simulation-based validation tools.
 
-The method is of heuristic nature and thus convincing experimental results
-would be needed. The paper compares with previous work (S3CAM) using a similar
-approach. This approach has been tested on more real-life examples from
-automative control. I am wondering why there are no comparisons on these
-examples.
+I also recommend using relations more complex than affine, such as
+polynomial, for which Z3 can be used (nonlinear relations may reduce
+the number of hyper-rectangles).
+
 
 ======================================
                             REVIEWER 4
